@@ -1,0 +1,54 @@
+name: assets_client
+description: "A new Flutter project."
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.5
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+
+  # State Management
+  flutter_bloc: ^9.1.1
+  equatable: ^2.0.0
+
+  # Networking
+  dio: ^5.0.0
+  retrofit: ^4.9.2
+
+  # Local Storage
+  hive: ^2.2.0
+  hive_flutter: ^1.1.0
+
+  # Data Visualization
+  fl_chart: ^1.2.0
+  intl: ^0.20.2
+
+  # UI & UX
+  google_fonts: ^8.0.2
+  flutter_native_splash: ^2.3.0
+
+  # Utilities
+  freezed_annotation: ^3.1.0
+  json_annotation: ^4.9.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+
+  flutter_lints: ^6.0.0
+
+  # Code Generation
+  freezed: ^3.2.5
+
+  retrofit_generator: ^10.0.1
+  build_runner: ^2.6.0
+  json_serializable: ^6.10.0
+
+flutter:
+  uses-material-design: true
