@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'portfolio_entity.freezed.dart';
 
 @freezed
-class PortfolioEntity with _$PortfolioEntity {
+abstract class PortfolioEntity with _$PortfolioEntity {
   const factory PortfolioEntity({
     required int id,
     required int userId,

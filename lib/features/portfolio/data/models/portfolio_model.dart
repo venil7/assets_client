@@ -1,11 +1,11 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:assets_client/features/profile/data/models/summary_model.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'portfolio_model.freezed.dart';
 part 'portfolio_model.g.dart';
 
 @freezed
-class PortfolioMetaModel with _$PortfolioMetaModel {
+abstract class PortfolioMetaModel with _$PortfolioMetaModel {
   const factory PortfolioMetaModel({
     required String range,
     @JsonKey(name: 'validRanges') required List<String> validRanges,
@@ -23,7 +23,7 @@ class PortfolioMetaModel with _$PortfolioMetaModel {
 }
 
 @freezed
-class PortfolioModel with _$PortfolioModel {
+abstract class PortfolioModel with _$PortfolioModel {
   const factory PortfolioModel({
     required int id,
     @JsonKey(name: 'user_id') required int userId,
@@ -50,7 +50,7 @@ class PortfolioModel with _$PortfolioModel {
 }
 
 @freezed
-class CreatePortfolioRequestModel with _$CreatePortfolioRequestModel {
+abstract class CreatePortfolioRequestModel with _$CreatePortfolioRequestModel {
   const factory CreatePortfolioRequestModel({
     required String name,
     required String description,
@@ -61,7 +61,7 @@ class CreatePortfolioRequestModel with _$CreatePortfolioRequestModel {
 }
 
 @freezed
-class UpdatePortfolioRequestModel with _$UpdatePortfolioRequestModel {
+abstract class UpdatePortfolioRequestModel with _$UpdatePortfolioRequestModel {
   const factory UpdatePortfolioRequestModel({
     required String name,
     required String description,
@@ -72,10 +72,8 @@ class UpdatePortfolioRequestModel with _$UpdatePortfolioRequestModel {
 }
 
 @freezed
-class IdResponseModel with _$IdResponseModel {
-  const factory IdResponseModel({
-    required int id,
-  }) = _IdResponseModel;
+abstract class IdResponseModel with _$IdResponseModel {
+  const factory IdResponseModel({required int id}) = _IdResponseModel;
 
   factory IdResponseModel.fromJson(Map<String, Object?> json) =>
       _$IdResponseModelFromJson(json);

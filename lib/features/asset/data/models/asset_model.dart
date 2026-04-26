@@ -1,11 +1,11 @@
-import 'package:freezed_annotation/freezed_annotation.dart';
 import 'package:assets_client/features/profile/data/models/summary_model.dart';
+import 'package:freezed_annotation/freezed_annotation.dart';
 
 part 'asset_model.freezed.dart';
 part 'asset_model.g.dart';
 
 @freezed
-class AssetMetaModel with _$AssetMetaModel {
+abstract class AssetMetaModel with _$AssetMetaModel {
   const factory AssetMetaModel({
     required String range,
     @JsonKey(name: 'validRanges') required List<String> validRanges,
@@ -20,7 +20,7 @@ class AssetMetaModel with _$AssetMetaModel {
 }
 
 @freezed
-class AssetCurrencyDataModel with _$AssetCurrencyDataModel {
+abstract class AssetCurrencyDataModel with _$AssetCurrencyDataModel {
   const factory AssetCurrencyDataModel({
     required List<ChartDataModel> chart,
     required ChangesModel changes,
@@ -32,7 +32,7 @@ class AssetCurrencyDataModel with _$AssetCurrencyDataModel {
 }
 
 @freezed
-class AssetBaseDataModel with _$AssetBaseDataModel {
+abstract class AssetBaseDataModel with _$AssetBaseDataModel {
   const factory AssetBaseDataModel({
     required bool domestic,
     required double invested,
@@ -51,7 +51,7 @@ class AssetBaseDataModel with _$AssetBaseDataModel {
 }
 
 @freezed
-class AssetModel with _$AssetModel {
+abstract class AssetModel with _$AssetModel {
   const factory AssetModel({
     required int id,
     @JsonKey(name: 'portfolio_id') required int portfolioId,
@@ -82,7 +82,7 @@ class AssetModel with _$AssetModel {
 }
 
 @freezed
-class CreateAssetRequestModel with _$CreateAssetRequestModel {
+abstract class CreateAssetRequestModel with _$CreateAssetRequestModel {
   const factory CreateAssetRequestModel({
     required String ticker,
     required String name,
@@ -93,7 +93,7 @@ class CreateAssetRequestModel with _$CreateAssetRequestModel {
 }
 
 @freezed
-class UpdateAssetRequestModel with _$UpdateAssetRequestModel {
+abstract class UpdateAssetRequestModel with _$UpdateAssetRequestModel {
   const factory UpdateAssetRequestModel({
     required String ticker,
     required String name,

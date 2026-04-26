@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'profile_entity.freezed.dart';
 
 @freezed
-class ProfileEntity with _$ProfileEntity {
+abstract class ProfileEntity with _$ProfileEntity {
   const factory ProfileEntity({
     required int id,
     required String username,
@@ -16,7 +16,7 @@ class ProfileEntity with _$ProfileEntity {
 }
 
 @freezed
-class UserPreferencesEntity with _$UserPreferencesEntity {
+abstract class UserPreferencesEntity with _$UserPreferencesEntity {
   const factory UserPreferencesEntity({
     required int id,
     required String baseCcy,
@@ -25,7 +25,7 @@ class UserPreferencesEntity with _$UserPreferencesEntity {
 }
 
 @freezed
-class SummaryEntity with _$SummaryEntity {
+abstract class SummaryEntity with _$SummaryEntity {
   const factory SummaryEntity({
     required int numPortfolios,
     required double invested,
@@ -36,7 +36,7 @@ class SummaryEntity with _$SummaryEntity {
 }
 
 @freezed
-class UserEntity with _$UserEntity {
+abstract class UserEntity with _$UserEntity {
   const factory UserEntity({
     required int id,
     required String username,

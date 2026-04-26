@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'asset_entity.freezed.dart';
 
 @freezed
-class AssetEntity with _$AssetEntity {
+abstract class AssetEntity with _$AssetEntity {
   const factory AssetEntity({
     required int id,
     required int portfolioId,
@@ -25,7 +25,7 @@ class AssetEntity with _$AssetEntity {
 }
 
 @freezed
-class TransactionEntity with _$TransactionEntity {
+abstract class TransactionEntity with _$TransactionEntity {
   const factory TransactionEntity({
     required int id,
     required int assetId,

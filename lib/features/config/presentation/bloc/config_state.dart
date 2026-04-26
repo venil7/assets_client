@@ -21,10 +21,15 @@ class ConfigNotFound extends ConfigState {
 
 class ConfigFound extends ConfigState {
   final String apiUrl;
-  const ConfigFound({required this.apiUrl});
+  final String? username;
+
+  const ConfigFound({
+    required this.apiUrl,
+    this.username,
+  });
 
   @override
-  List<Object?> get props => [apiUrl];
+  List<Object?> get props => [apiUrl, username];
 }
 
 class ConfigError extends ConfigState {
@@ -41,4 +46,33 @@ class ApiUrlSaved extends ConfigState {
 
   @override
   List<Object?> get props => [apiUrl];
+}
+
+class AuthLoading extends ConfigState {
+  const AuthLoading();
+}
+
+class AuthSuccess extends ConfigState {
+  final String apiUrl;
+  final String username;
+  final String token;
+  final int refreshBefore;
+
+  const AuthSuccess({
+    required this.apiUrl,
+    required this.username,
+    required this.token,
+    required this.refreshBefore,
+  });
+
+  @override
+  List<Object?> get props => [apiUrl, username, token, refreshBefore];
+}
+
+class AuthFailure extends ConfigState {
+  final String message;
+  const AuthFailure({required this.message});
+
+  @override
+  List<Object?> get props => [message];
 }

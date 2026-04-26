@@ -4,7 +4,7 @@ part 'change_password_request_model.freezed.dart';
 part 'change_password_request_model.g.dart';
 
 @freezed
-class ChangePasswordRequestModel with _$ChangePasswordRequestModel {
+abstract class ChangePasswordRequestModel with _$ChangePasswordRequestModel {
   const factory ChangePasswordRequestModel({
     required String oldPassword,
     required String newPassword,

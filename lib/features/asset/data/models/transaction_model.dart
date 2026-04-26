@@ -4,7 +4,7 @@ part 'transaction_model.freezed.dart';
 part 'transaction_model.g.dart';
 
 @freezed
-class TransactionModel with _$TransactionModel {
+abstract class TransactionModel with _$TransactionModel {
   const factory TransactionModel({
     required int id,
     @JsonKey(name: 'asset_id') required int assetId,
@@ -25,8 +25,7 @@ class TransactionModel with _$TransactionModel {
     required double contribution,
     @JsonKey(name: 'running_holding') required double runningHolding,
     @JsonKey(name: 'running_cost') required double runningCost,
-    @JsonKey(name: 'running_average_price')
-    required double runningAveragePrice,
+    @JsonKey(name: 'running_average_price') required double runningAveragePrice,
     @JsonKey(name: 'running_break_even') required double runningBreakEven,
     @JsonKey(name: 'running_contribution') required double runningContribution,
     @JsonKey(name: 'asset_name') required String assetName,
@@ -46,7 +45,7 @@ class TransactionModel with _$TransactionModel {
 }
 
 @freezed
-class TransactionListItemModel with _$TransactionListItemModel {
+abstract class TransactionListItemModel with _$TransactionListItemModel {
   const factory TransactionListItemModel({
     required int id,
     @JsonKey(name: 'asset_id') required int assetId,
@@ -65,7 +64,8 @@ class TransactionListItemModel with _$TransactionListItemModel {
 }
 
 @freezed
-class CreateTransactionRequestModel with _$CreateTransactionRequestModel {
+abstract class CreateTransactionRequestModel
+    with _$CreateTransactionRequestModel {
   const factory CreateTransactionRequestModel({
     required String type,
     required double quantity,
@@ -79,7 +79,8 @@ class CreateTransactionRequestModel with _$CreateTransactionRequestModel {
 }
 
 @freezed
-class UpdateTransactionRequestModel with _$UpdateTransactionRequestModel {
+abstract class UpdateTransactionRequestModel
+    with _$UpdateTransactionRequestModel {
   const factory UpdateTransactionRequestModel({
     required String type,
     required double quantity,
@@ -93,7 +94,7 @@ class UpdateTransactionRequestModel with _$UpdateTransactionRequestModel {
 }
 
 @freezed
-class BulkTransactionRequestModel with _$BulkTransactionRequestModel {
+abstract class BulkTransactionRequestModel with _$BulkTransactionRequestModel {
   const factory BulkTransactionRequestModel({
     required bool replace,
     required List<CreateTransactionRequestModel> txs,
@@ -104,10 +105,10 @@ class BulkTransactionRequestModel with _$BulkTransactionRequestModel {
 }
 
 @freezed
-class BulkTransactionResponseModel with _$BulkTransactionResponseModel {
-  const factory BulkTransactionResponseModel({
-    required int id,
-  }) = _BulkTransactionResponseModel;
+abstract class BulkTransactionResponseModel
+    with _$BulkTransactionResponseModel {
+  const factory BulkTransactionResponseModel({required int id}) =
+      _BulkTransactionResponseModel;
 
   factory BulkTransactionResponseModel.fromJson(Map<String, Object?> json) =>
       _$BulkTransactionResponseModelFromJson(json);

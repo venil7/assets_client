@@ -10,11 +10,8 @@ class NetworkErrorInterceptor extends Interceptor {
       case DioExceptionType.sendTimeout:
         throw NetworkException('Connection timeout. Check your internet.');
       case DioExceptionType.badResponse:
-        if (err.response?.statusCode == 401) {
-          throw InvalidCredentialsException();
-        }
-        if (err.response?.statusCode == 403) {
-          throw AuthException('Access denied');
+        if (err.response?.statusCode == 401 || err.response?.statusCode == 403) {
+          throw TokenExpiredException();
         }
         if (err.response?.statusCode == 404) {
           throw NotFoundException('Resource not found');

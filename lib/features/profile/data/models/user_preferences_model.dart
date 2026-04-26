@@ -4,7 +4,7 @@ part 'user_preferences_model.freezed.dart';
 part 'user_preferences_model.g.dart';
 
 @freezed
-class UserPreferencesModel with _$UserPreferencesModel {
+abstract class UserPreferencesModel with _$UserPreferencesModel {
   const factory UserPreferencesModel({
     required int id,
     @JsonKey(name: 'base_ccy') required String baseCcy,

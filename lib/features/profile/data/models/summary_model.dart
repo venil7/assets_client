@@ -4,7 +4,7 @@ part 'summary_model.freezed.dart';
 part 'summary_model.g.dart';
 
 @freezed
-class SummaryMetaModel with _$SummaryMetaModel {
+abstract class SummaryMetaModel with _$SummaryMetaModel {
   const factory SummaryMetaModel({
     required String range,
     @JsonKey(name: 'validRanges') required List<String> validRanges,
@@ -22,7 +22,7 @@ class SummaryMetaModel with _$SummaryMetaModel {
 }
 
 @freezed
-class ChartDataModel with _$ChartDataModel {
+abstract class ChartDataModel with _$ChartDataModel {
   const factory ChartDataModel({
     required int timestamp,
     required double price,
@@ -35,7 +35,7 @@ class ChartDataModel with _$ChartDataModel {
 }
 
 @freezed
-class ChangesModel with _$ChangesModel {
+abstract class ChangesModel with _$ChangesModel {
   const factory ChangesModel({
     @JsonKey(name: 'startPrice') required double startPrice,
     @JsonKey(name: 'endPrice') required double endPrice,
@@ -50,7 +50,7 @@ class ChangesModel with _$ChangesModel {
 }
 
 @freezed
-class TotalsModel with _$TotalsModel {
+abstract class TotalsModel with _$TotalsModel {
   const factory TotalsModel({
     @JsonKey(name: 'returnValue') required double returnValue,
     @JsonKey(name: 'returnPct') required double returnPct,
@@ -61,7 +61,7 @@ class TotalsModel with _$TotalsModel {
 }
 
 @freezed
-class SummaryModel with _$SummaryModel {
+abstract class SummaryModel with _$SummaryModel {
   const factory SummaryModel({
     required int numPortfolios,
     required SummaryMetaModel meta,

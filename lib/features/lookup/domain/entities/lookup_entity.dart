@@ -3,7 +3,7 @@ import 'package:freezed_annotation/freezed_annotation.dart';
 part 'lookup_entity.freezed.dart';
 
 @freezed
-class QuoteItemEntity with _$QuoteItemEntity {
+abstract class QuoteItemEntity with _$QuoteItemEntity {
   const factory QuoteItemEntity({
     required String symbol,
     required String exchange,
@@ -14,7 +14,7 @@ class QuoteItemEntity with _$QuoteItemEntity {
 }
 
 @freezed
-class PriceQuoteEntity with _$PriceQuoteEntity {
+abstract class PriceQuoteEntity with _$PriceQuoteEntity {
   const factory PriceQuoteEntity({
     required int timestamp,
     required double price,
@@ -23,7 +23,7 @@ class PriceQuoteEntity with _$PriceQuoteEntity {
 }
 
 @freezed
-class FxRateEntity with _$FxRateEntity {
+abstract class FxRateEntity with _$FxRateEntity {
   const factory FxRateEntity({
     required String ccy,
     required String base,

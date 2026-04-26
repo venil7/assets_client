@@ -11,10 +11,25 @@ class ConfigRepositoryImpl implements ConfigRepository {
   Future<void> saveApiUrl(String url) => localDataSource.saveApiUrl(url);
 
   @override
+  Future<void> saveCredentials(String url, String username, String token, int refreshBefore) async {
+    await localDataSource.saveApiUrl(url);
+    await localDataSource.saveUsername(username);
+    await localDataSource.saveJwtToken(token, refreshBefore);
+  }
+
+  @override
   Future<AppConfigEntity?> getConfig() async {
     final url = await localDataSource.getApiUrl();
     if (url == null) return null;
-    return AppConfigEntity(apiBaseUrl: url);
+    final username = await localDataSource.getUsername();
+    final token = await localDataSource.getJwtToken();
+    final refreshBefore = await localDataSource.getTokenRefreshBefore();
+    return AppConfigEntity(
+      apiBaseUrl: url,
+      username: username,
+      jwtToken: token,
+      tokenRefreshBefore: refreshBefore,
+    );
   }
 
   @override

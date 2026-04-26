@@ -19,6 +19,21 @@ class SaveApiUrlEvent extends ConfigEvent {
   List<Object?> get props => [apiUrl];
 }
 
+class LoginWithCredentialsEvent extends ConfigEvent {
+  final String apiUrl;
+  final String username;
+  final String password;
+
+  const LoginWithCredentialsEvent({
+    required this.apiUrl,
+    required this.username,
+    required this.password,
+  });
+
+  @override
+  List<Object?> get props => [apiUrl, username, password];
+}
+
 class ClearConfigEvent extends ConfigEvent {
   const ClearConfigEvent();
 }

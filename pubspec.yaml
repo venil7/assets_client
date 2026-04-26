@@ -35,7 +35,7 @@ dependencies:
 
   # Utilities
   freezed_annotation: ^3.1.0
-  json_annotation: ^4.9.0
+  json_annotation: ^4.11.0
 
 dev_dependencies:
   flutter_test:
@@ -43,7 +43,6 @@ dev_dependencies:
 
   flutter_lints: ^6.0.0
 
-  # Code Generation
   freezed: ^3.2.5
 
   retrofit_generator: ^10.0.1
@@ -52,3 +51,7 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+
+analyzer:
+  errors:
+    invalid_annotation_target: ignore

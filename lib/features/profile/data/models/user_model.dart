@@ -4,7 +4,7 @@ part 'user_model.freezed.dart';
 part 'user_model.g.dart';
 
 @freezed
-class UserModel with _$UserModel {
+abstract class UserModel with _$UserModel {
   const factory UserModel({
     required int id,
     required String username,
@@ -20,7 +20,7 @@ class UserModel with _$UserModel {
 }
 
 @freezed
-class CreateUserRequestModel with _$CreateUserRequestModel {
+abstract class CreateUserRequestModel with _$CreateUserRequestModel {
   const factory CreateUserRequestModel({
     required String username,
     required bool admin,
@@ -33,7 +33,7 @@ class CreateUserRequestModel with _$CreateUserRequestModel {
 }
 
 @freezed
-class UpdateUserRequestModel with _$UpdateUserRequestModel {
+abstract class UpdateUserRequestModel with _$UpdateUserRequestModel {
   const factory UpdateUserRequestModel({
     required String username,
     required bool admin,

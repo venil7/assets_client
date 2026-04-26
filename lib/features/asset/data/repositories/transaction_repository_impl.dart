@@ -1,4 +1,5 @@
 import 'package:assets_client/features/asset/data/datasources/transaction_remote_data_source.dart';
+import 'package:assets_client/features/asset/data/models/transaction_model.dart';
 import 'package:assets_client/features/asset/domain/entities/asset_entity.dart';
 import 'package:assets_client/features/asset/domain/repositories/transaction_repository.dart';
 
@@ -8,39 +9,52 @@ class TransactionRepositoryImpl implements TransactionRepository {
   TransactionRepositoryImpl({required this.remoteDataSource});
 
   @override
-  Future<List<TransactionEntity>> getTransactions(int portfolioId, int assetId) async {
+  Future<List<TransactionEntity>> getTransactions(
+    int portfolioId,
+    int assetId,
+  ) async {
     final models = await remoteDataSource.getTransactions(portfolioId, assetId);
     return models
-        .map((m) => TransactionEntity(
-              id: m.id,
-              assetId: m.assetId,
-              type: m.type,
-              quantity: m.quantity,
-              price: m.price,
-              date: m.date,
-              comments: m.comments,
-              realizedPnl: 0,
-              cost: m.price * m.quantity,
-              costBasis: m.price * m.quantity,
-              contribution: 0,
-              runningHolding: 0,
-              runningCost: 0,
-              runningAveragePrice: 0,
-              runningBreakEven: 0,
-              runningContribution: 0,
-              assetName: m.assetName,
-              assetTicker: m.assetTicker,
-              portfolioName: '',
-              timestamp: 0,
-              created: '',
-              modified: '',
-            ))
+        .map(
+          (m) => TransactionEntity(
+            id: m.id,
+            assetId: m.assetId,
+            type: m.type,
+            quantity: m.quantity,
+            price: m.price,
+            date: m.date,
+            comments: m.comments,
+            realizedPnl: 0,
+            cost: m.price * m.quantity,
+            costBasis: m.price * m.quantity,
+            contribution: 0,
+            runningHolding: 0,
+            runningCost: 0,
+            runningAveragePrice: 0,
+            runningBreakEven: 0,
+            runningContribution: 0,
+            assetName: m.assetName,
+            assetTicker: m.assetTicker,
+            portfolioName: '',
+            timestamp: 0,
+            created: '',
+            modified: '',
+          ),
+        )
         .toList();
   }
 
   @override
-  Future<TransactionEntity> getTransaction(int portfolioId, int assetId, int txId) async {
-    final model = await remoteDataSource.getTransaction(portfolioId, assetId, txId);
+  Future<TransactionEntity> getTransaction(
+    int portfolioId,
+    int assetId,
+    int txId,
+  ) async {
+    final model = await remoteDataSource.getTransaction(
+      portfolioId,
+      assetId,
+      txId,
+    );
     return TransactionEntity(
       id: model.id,
       assetId: model.assetId,
@@ -171,13 +185,15 @@ class TransactionRepositoryImpl implements TransactionRepository {
     List<Map<String, dynamic>> txs,
   ) async {
     final requests = txs
-        .map((tx) => CreateTransactionRequestModel(
-              type: tx['type'] as String,
-              quantity: tx['quantity'] as double,
-              price: tx['price'] as double,
-              date: tx['date'] as String,
-              comments: tx['comments'] as String?,
-            ))
+        .map(
+          (tx) => CreateTransactionRequestModel(
+            type: tx['type'] as String,
+            quantity: tx['quantity'] as double,
+            price: tx['price'] as double,
+            date: tx['date'] as String,
+            comments: tx['comments'] as String?,
+          ),
+        )
         .toList();
     final responses = await remoteDataSource.bulkUploadTransactions(
       portfolioId,

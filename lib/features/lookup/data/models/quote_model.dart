@@ -4,7 +4,7 @@ part 'quote_model.freezed.dart';
 part 'quote_model.g.dart';
 
 @freezed
-class QuoteItemModel with _$QuoteItemModel {
+abstract class QuoteItemModel with _$QuoteItemModel {
   const factory QuoteItemModel({
     required String symbol,
     required String exchange,
@@ -18,7 +18,7 @@ class QuoteItemModel with _$QuoteItemModel {
 }
 
 @freezed
-class QuoteSearchResponseModel with _$QuoteSearchResponseModel {
+abstract class QuoteSearchResponseModel with _$QuoteSearchResponseModel {
   const factory QuoteSearchResponseModel({
     required List<QuoteItemModel> quotes,
   }) = _QuoteSearchResponseModel;
@@ -28,7 +28,7 @@ class QuoteSearchResponseModel with _$QuoteSearchResponseModel {
 }
 
 @freezed
-class PriceQuoteModel with _$PriceQuoteModel {
+abstract class PriceQuoteModel with _$PriceQuoteModel {
   const factory PriceQuoteModel({
     required int timestamp,
     required double price,
@@ -41,7 +41,7 @@ class PriceQuoteModel with _$PriceQuoteModel {
 }
 
 @freezed
-class FxRateModel with _$FxRateModel {
+abstract class FxRateModel with _$FxRateModel {
   const factory FxRateModel({
     required String ccy,
     required String base,
