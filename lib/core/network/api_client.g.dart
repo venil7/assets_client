@@ -20,11 +20,12 @@ class _ApiClient implements ApiClient {
   final ParseErrorLogger? errorLogger;
 
   @override
-  Future<AuthResponseModel> login(LoginRequestModel request) async {
+  Future<AuthResponseModel> login(Map<String, dynamic> request) async {
     final _extra = <String, dynamic>{};
     final queryParameters = <String, dynamic>{};
     final _headers = <String, dynamic>{};
-    final _data = request;
+    final _data = <String, dynamic>{};
+    _data.addAll(request);
     final _options = _setStreamType<AuthResponseModel>(
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
@@ -83,7 +84,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/profile',
+            '/api/v1/profile',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -110,7 +111,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'PUT', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/profile',
+            '/api/v1/profile',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -139,7 +140,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/profile',
+            '/api/v1/profile',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -166,7 +167,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'DELETE', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/profile',
+            '/api/v1/profile',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -193,7 +194,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/prefs',
+            '/api/v1/prefs',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -222,7 +223,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'PUT', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/prefs',
+            '/api/v1/prefs',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -249,7 +250,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/users',
+            '/api/v1/users',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -278,7 +279,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/users/${userId}',
+            '/api/v1/users/${userId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -305,7 +306,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/users',
+            '/api/v1/users',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -335,7 +336,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'PUT', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/users/${userId}',
+            '/api/v1/users/${userId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -362,7 +363,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'DELETE', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/users/${userId}',
+            '/api/v1/users/${userId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -390,7 +391,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/summary',
+            '/api/v1/summary',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -419,7 +420,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/portfolios',
+            '/api/v1/portfolios',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -447,7 +448,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/portfolios',
+            '/api/v1/portfolios',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -479,7 +480,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/portfolios/${portfolioId}',
+            '/api/v1/portfolios/${portfolioId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -509,7 +510,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'PUT', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/portfolios/${portfolioId}',
+            '/api/v1/portfolios/${portfolioId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -536,7 +537,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'DELETE', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/portfolios/${portfolioId}',
+            '/api/v1/portfolios/${portfolioId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -566,7 +567,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/portfolios/${portfolioId}/assets',
+            '/api/v1/portfolios/${portfolioId}/assets',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -594,7 +595,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/portfolios/${portfolioId}/assets',
+            '/api/v1/portfolios/${portfolioId}/assets',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -628,7 +629,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/portfolios/${portfolioId}/assets/${assetId}',
+            '/api/v1/portfolios/${portfolioId}/assets/${assetId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -659,7 +660,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'PUT', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/portfolios/${portfolioId}/assets/${assetId}',
+            '/api/v1/portfolios/${portfolioId}/assets/${assetId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -686,7 +687,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'DELETE', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/portfolios/${portfolioId}/assets/${assetId}',
+            '/api/v1/portfolios/${portfolioId}/assets/${assetId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -717,7 +718,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'PATCH', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/portfolios/${portfolioId}/assets/${assetId}/move/${newPortfolioId}',
+            '/api/v1/portfolios/${portfolioId}/assets/${assetId}/move/${newPortfolioId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -748,7 +749,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/portfolios/${portfolioId}/assets/${assetId}/tx',
+            '/api/v1/portfolios/${portfolioId}/assets/${assetId}/tx',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -778,7 +779,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/portfolios/${portfolioId}/assets/${assetId}/tx',
+            '/api/v1/portfolios/${portfolioId}/assets/${assetId}/tx',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -814,7 +815,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/portfolios/${portfolioId}/assets/${assetId}/tx/${txId}',
+            '/api/v1/portfolios/${portfolioId}/assets/${assetId}/tx/${txId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -846,7 +847,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'PUT', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/portfolios/${portfolioId}/assets/${assetId}/tx/${txId}',
+            '/api/v1/portfolios/${portfolioId}/assets/${assetId}/tx/${txId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -877,7 +878,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'DELETE', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/portfolios/${portfolioId}/assets/${assetId}/tx/${txId}',
+            '/api/v1/portfolios/${portfolioId}/assets/${assetId}/tx/${txId}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -908,7 +909,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/portfolios/${portfolioId}/assets/${assetId}/txs',
+            '/api/v1/portfolios/${portfolioId}/assets/${assetId}/txs',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -944,7 +945,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'DELETE', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/portfolios/${portfolioId}/assets/${assetId}/txs',
+            '/api/v1/portfolios/${portfolioId}/assets/${assetId}/txs',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -971,7 +972,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/lookup/ticker',
+            '/api/v1/lookup/ticker',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -998,7 +999,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/lookup/quote/${base}',
+            '/api/v1/lookup/quote/${base}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -1025,7 +1026,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/lookup/quote/${base}/${date}',
+            '/api/v1/lookup/quote/${base}/${date}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -1052,7 +1053,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/lookup/fx/${base}/${ccy}',
+            '/api/v1/lookup/fx/${base}/${ccy}',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -1083,7 +1084,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/lookup/fx/${base}/${ccy}/${date}',
+            '/api/v1/lookup/fx/${base}/${ccy}/${date}',
             queryParameters: queryParameters,
             data: _data,
           )

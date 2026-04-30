@@ -19,14 +19,25 @@ class ConfigNotFound extends ConfigState {
   const ConfigNotFound();
 }
 
+class ApiUrlMissing extends ConfigState {
+  const ApiUrlMissing();
+}
+
+class CredentialsMissing extends ConfigState {
+  final String apiUrl;
+  final String? savedUsername;
+
+  const CredentialsMissing({required this.apiUrl, this.savedUsername});
+
+  @override
+  List<Object?> get props => [apiUrl, savedUsername];
+}
+
 class ConfigFound extends ConfigState {
   final String apiUrl;
   final String? username;
 
-  const ConfigFound({
-    required this.apiUrl,
-    this.username,
-  });
+  const ConfigFound({required this.apiUrl, this.username});
 
   @override
   List<Object?> get props => [apiUrl, username];

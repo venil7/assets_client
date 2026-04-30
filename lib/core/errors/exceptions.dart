@@ -7,7 +7,7 @@ abstract class AppException implements Exception {
 }
 
 class AuthException extends AppException {
-  AuthException(String message) : super(message);
+  AuthException(super.message);
 }
 
 class InvalidCredentialsException extends AuthException {
@@ -19,17 +19,17 @@ class TokenExpiredException extends AuthException {
 }
 
 class NetworkException extends AppException {
-  NetworkException(String message) : super(message);
+  NetworkException(super.message);
 }
 
 class ServerException extends AppException {
-  ServerException(String message) : super(message);
+  ServerException(super.message);
 }
 
 class ValidationException extends AppException {
   final List<ValidationError> errors;
   ValidationException({required String message, required this.errors})
-      : super(message);
+    : super(message);
 }
 
 class ValidationError {
@@ -40,5 +40,5 @@ class ValidationError {
 }
 
 class NotFoundException extends AppException {
-  NotFoundException(String message) : super(message);
+  NotFoundException(super.message);
 }

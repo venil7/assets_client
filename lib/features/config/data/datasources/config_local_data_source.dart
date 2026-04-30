@@ -9,6 +9,8 @@ abstract class ConfigLocalDataSource {
   Future<String?> getJwtToken();
   Future<int?> getTokenRefreshBefore();
   Future<void> clear();
+  Future<void> clearApiUrl();
+  Future<void> clearCredentials();
 }
 
 class ConfigLocalDataSourceImpl implements ConfigLocalDataSource {
@@ -66,6 +68,20 @@ class ConfigLocalDataSourceImpl implements ConfigLocalDataSource {
   Future<void> clear() async {
     final box = await Hive.openBox<String>(_boxName);
     await box.delete(_apiUrlKey);
+    await box.delete(_usernameKey);
+    await box.delete(_jwtTokenKey);
+    await box.delete(_tokenRefreshBeforeKey);
+  }
+
+  @override
+  Future<void> clearApiUrl() async {
+    final box = await Hive.openBox<String>(_boxName);
+    await box.delete(_apiUrlKey);
+  }
+
+  @override
+  Future<void> clearCredentials() async {
+    final box = await Hive.openBox<String>(_boxName);
     await box.delete(_usernameKey);
     await box.delete(_jwtTokenKey);
     await box.delete(_tokenRefreshBeforeKey);

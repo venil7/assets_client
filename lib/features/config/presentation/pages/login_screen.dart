@@ -2,18 +2,17 @@ import 'package:assets_client/features/config/presentation/bloc/config_bloc.dart
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class InitScreen extends StatefulWidget {
+class LoginScreen extends StatefulWidget {
   final String? prefilledUrl;
   final String? prefilledUsername;
 
-  const InitScreen({super.key, this.prefilledUrl, this.prefilledUsername});
+  const LoginScreen({super.key, this.prefilledUrl, this.prefilledUsername});
 
   @override
-  State<InitScreen> createState() => _InitScreenState();
+  State<LoginScreen> createState() => _LoginScreenState();
 }
 
-class _InitScreenState extends State<InitScreen> {
-  late TextEditingController _urlController;
+class _LoginScreenState extends State<LoginScreen> {
   late TextEditingController _usernameController;
   late TextEditingController _passwordController;
   bool _showPassword = false;
@@ -21,7 +20,17 @@ class _InitScreenState extends State<InitScreen> {
   @override
   void initState() {
     super.initState();
-    _urlController = TextEditingController(text: widget.prefilledUrl ?? '');
+    // If prefilledUrl is empty, show error and navigate to API URL screen
+    if (widget.prefilledUrl == null || widget.prefilledUrl!.isEmpty) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text('No API URL configured. Please enter API URL first.'),
+          ),
+        );
+        Navigator.of(context).pushReplacementNamed('/api-url');
+      });
+    }
     _usernameController = TextEditingController(
       text: widget.prefilledUsername ?? '',
     );
@@ -30,18 +39,25 @@ class _InitScreenState extends State<InitScreen> {
 
   @override
   void dispose() {
-    _urlController.dispose();
     _usernameController.dispose();
     _passwordController.dispose();
     super.dispose();
   }
 
   void _login() {
-    final url = _urlController.text.trim();
+    final url = widget.prefilledUrl ?? '';
     final username = _usernameController.text.trim();
     final password = _passwordController.text.trim();
 
-    if (url.isEmpty || username.isEmpty || password.isEmpty) {
+    if (url.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('No API URL configured. Please enter API URL first.'),
+        ),
+      );
+      return;
+    }
+    if (username.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(
         context,
       ).showSnackBar(const SnackBar(content: Text('Fill all fields')));
@@ -59,14 +75,8 @@ class _InitScreenState extends State<InitScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final isReauth =
-        widget.prefilledUrl != null || widget.prefilledUsername != null;
-
     return Scaffold(
-      appBar: AppBar(
-        title: Text(isReauth ? 'Re-authenticate' : 'Login'),
-        elevation: 0,
-      ),
+      appBar: AppBar(title: const Text('Login'), elevation: 0),
       body: BlocListener<ConfigBloc, ConfigState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
@@ -93,59 +103,36 @@ class _InitScreenState extends State<InitScreen> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const SizedBox(height: 40),
-                Text(
-                  isReauth ? 'Session Expired' : 'Connect to API',
-                  style: const TextStyle(
-                    fontSize: 28,
-                    fontWeight: FontWeight.bold,
-                  ),
+                const Text(
+                  'Welcome Back',
+                  style: TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  isReauth
-                      ? 'Your session has expired. Please re-authenticate.'
-                      : 'Enter credentials to authenticate',
+                  'Enter your credentials to continue',
                   style: TextStyle(fontSize: 16, color: Colors.grey[600]),
                 ),
                 const SizedBox(height: 40),
-                // API URL input
-                TextField(
-                  controller: _urlController,
-                  enabled: !isReauth,
-                  decoration: InputDecoration(
-                    labelText: 'API Server URL',
-                    hintText: 'https://api.example.com',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    prefixIcon: const Icon(Icons.link),
-                  ),
-                  keyboardType: TextInputType.url,
-                ),
-                const SizedBox(height: 16),
-                // Username input
                 TextField(
                   controller: _usernameController,
-                  enabled: !isReauth,
-                  decoration: InputDecoration(
+                  decoration: const InputDecoration(
                     labelText: 'Username',
                     hintText: 'your_username',
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
                     ),
-                    prefixIcon: const Icon(Icons.person),
+                    prefixIcon: Icon(Icons.person),
                   ),
                   keyboardType: TextInputType.text,
                 ),
                 const SizedBox(height: 16),
-                // Password input
                 TextField(
                   controller: _passwordController,
                   decoration: InputDecoration(
                     labelText: 'Password',
                     hintText: 'your_password',
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+                    border: const OutlineInputBorder(
+                      borderRadius: BorderRadius.all(Radius.circular(8)),
                     ),
                     prefixIcon: const Icon(Icons.lock),
                     suffixIcon: IconButton(
@@ -160,34 +147,7 @@ class _InitScreenState extends State<InitScreen> {
                   obscureText: !_showPassword,
                   keyboardType: TextInputType.visiblePassword,
                 ),
-                if (isReauth) ...[
-                  const SizedBox(height: 16),
-                  Container(
-                    padding: const EdgeInsets.all(12),
-                    decoration: BoxDecoration(
-                      color: Colors.blue[50],
-                      borderRadius: BorderRadius.circular(8),
-                      border: Border.all(color: Colors.blue[200]!),
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(Icons.info, color: Colors.blue[700]),
-                        const SizedBox(width: 12),
-                        Expanded(
-                          child: Text(
-                            'URL and username are pre-filled. Only password needed.',
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: Colors.blue[700],
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
                 const SizedBox(height: 32),
-                // Login button
                 SizedBox(
                   width: double.infinity,
                   height: 50,

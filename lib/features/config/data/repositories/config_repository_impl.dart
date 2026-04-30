@@ -11,7 +11,12 @@ class ConfigRepositoryImpl implements ConfigRepository {
   Future<void> saveApiUrl(String url) => localDataSource.saveApiUrl(url);
 
   @override
-  Future<void> saveCredentials(String url, String username, String token, int refreshBefore) async {
+  Future<void> saveCredentials(
+    String url,
+    String username,
+    String token,
+    int refreshBefore,
+  ) async {
     await localDataSource.saveApiUrl(url);
     await localDataSource.saveUsername(username);
     await localDataSource.saveJwtToken(token, refreshBefore);
@@ -34,4 +39,14 @@ class ConfigRepositoryImpl implements ConfigRepository {
 
   @override
   Future<void> clearConfig() => localDataSource.clear();
+
+  @override
+  Future<void> clearApiUrl() async {
+    await localDataSource.clearApiUrl();
+  }
+
+  @override
+  Future<void> clearCredentials() async {
+    await localDataSource.clearCredentials();
+  }
 }

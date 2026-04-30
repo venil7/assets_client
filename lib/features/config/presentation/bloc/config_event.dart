@@ -37,3 +37,7 @@ class LoginWithCredentialsEvent extends ConfigEvent {
 class ClearConfigEvent extends ConfigEvent {
   const ClearConfigEvent();
 }
+
+class ClearCredentialsEvent extends ConfigEvent {
+  const ClearCredentialsEvent();
+}

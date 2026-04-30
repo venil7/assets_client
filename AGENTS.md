@@ -135,9 +135,8 @@ flutter pub run build_runner watch --delete-conflicting-outputs
 
 ---
 
-## API Integration (Placeholder)
-
-The app communicates with an external API. Detailed API documentation will be provided separately. Key integration points:
+## API Integration
+the app communicates with the API using api_client.dart, most requests require JWT token , that is requested via login, and stored until it expires
 
 ### Authentication Endpoints
 - **Server Setup**: User provides API server base URL
@@ -166,14 +165,13 @@ The app communicates with an external API. Detailed API documentation will be pr
 - **Smooth Animations**: Use Flutter's animation widgets for polished transitions
 
 ### Key Screens
-1. **Splash/Init Screen**: Load API configuration
-2. **Server Setup Screen**: Input API server URL
-3. **Login Screen**: Username/password authentication
-4. **Dashboard**: Portfolio overview with key metrics
-5. **Portfolio Details**: Asset breakdown and composition
-6. **Charts**: Portfolio value over time (daily changes)
-7. **Transactions**: Transaction history with filters
-8. **Settings**: API URL, logout, app preferences
+1. **Server Setup Screen**: Input API server URL
+2. **Login Screen**: Username/password authentication
+3. **Dashboard**: Portfolio overview with key metrics
+4. **Portfolio Details**: Asset breakdown and composition
+5. **Charts**: Portfolio value over time (daily changes)
+6. **Transactions**: Transaction history with filters
+7. **Settings**: API URL, logout, app preferences
 
 ### Chart Implementation
 Use `fl_chart` for:

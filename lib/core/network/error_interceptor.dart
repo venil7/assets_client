@@ -1,5 +1,5 @@
-import 'package:dio/dio.dart';
 import 'package:assets_client/core/errors/exceptions.dart';
+import 'package:dio/dio.dart';
 
 class NetworkErrorInterceptor extends Interceptor {
   @override
@@ -8,24 +8,57 @@ class NetworkErrorInterceptor extends Interceptor {
       case DioExceptionType.connectionTimeout:
       case DioExceptionType.receiveTimeout:
       case DioExceptionType.sendTimeout:
-        throw NetworkException('Connection timeout. Check your internet.');
+        return handler.next(
+          err.copyWith(
+            error: NetworkException('Connection timeout. Check your internet.'),
+          ),
+        );
       case DioExceptionType.badResponse:
-        if (err.response?.statusCode == 401 || err.response?.statusCode == 403) {
-          throw TokenExpiredException();
+        final message =
+            err.response?.data['message'] ??
+            err.response?.statusMessage ??
+            'Unknown error';
+        if (err.response?.statusCode == 401 ||
+            err.response?.statusCode == 403) {
+          return handler.next(err.copyWith(error: TokenExpiredException()));
         }
         if (err.response?.statusCode == 404) {
-          throw NotFoundException('Resource not found');
+          return handler.next(
+            err.copyWith(error: NotFoundException('Resource not found')),
+          );
         }
-        if (err.response?.statusCode == 500) {
-          throw ServerException('Server error');
-        }
-        throw ServerException(
-          err.response?.data['message'] ?? 'Unknown error',
+        return handler.next(
+          err.copyWith(error: ServerException(message.toString())),
         );
       case DioExceptionType.cancel:
-        throw NetworkException('Request cancelled');
+        return handler.next(
+          err.copyWith(error: NetworkException('Request cancelled')),
+        );
+      case DioExceptionType.badCertificate:
+        return handler.next(
+          err.copyWith(error: NetworkException('Bad certificate')),
+        );
+      case DioExceptionType.unknown:
+        if (err.message?.contains('SocketException') ?? false) {
+          return handler.next(
+            err.copyWith(
+              error: NetworkException(
+                'Cannot connect to server. Check API URL and network.',
+              ),
+            ),
+          );
+        }
+        return handler.next(
+          err.copyWith(
+            error: NetworkException('Network error: ${err.message}'),
+          ),
+        );
       default:
-        throw NetworkException('Network error: ${err.message}');
+        return handler.next(
+          err.copyWith(
+            error: NetworkException('Network error: ${err.message}'),
+          ),
+        );
     }
   }
 }
