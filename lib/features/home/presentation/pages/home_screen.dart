@@ -90,47 +90,54 @@ class HomeScreen extends StatelessWidget {
             }
 
             if (state is HomeLoaded) {
-              return SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            'Portfolio Summary',
-                            style: Theme.of(context).textTheme.headlineSmall
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          const SizedBox(height: 8),
-                          _buildMetricsRow(context, state.summary),
-                          const SizedBox(height: 16),
-                          RangeSwitch(
-                            ranges: state.validRanges,
-                            currentRange: state.currentRange,
-                          ),
-                          const SizedBox(height: 16),
-                          SummaryChart(data: state.summary.chart),
-                        ],
-                      ),
-                    ),
-                    const Divider(height: 1),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 16,
-                        top: 16,
-                        right: 16,
-                      ),
-                      child: Text(
-                        'Portfolios',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
+              return RefreshIndicator(
+                onRefresh: () async {
+                  context.read<HomeBloc>().add(
+                    LoadHomeEvent(range: state.currentRange),
+                  );
+                  await Future.delayed(const Duration(milliseconds: 500));
+                },
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              'Portfolio Summary',
+                              style: Theme.of(context).textTheme.headlineSmall
+                                  ?.copyWith(fontWeight: FontWeight.bold),
+                            ),
+                            const SizedBox(height: 8),
+                            _buildMetricsRow(context, state.summary),
+                            const SizedBox(height: 16),
+                            RangeSwitch(
+                              ranges: state.validRanges,
+                              currentRange: state.currentRange,
+                            ),
+                            const SizedBox(height: 16),
+                            SummaryChart(data: state.summary.chart),
+                          ],
                         ),
                       ),
-                    ),
-                    PortfolioList(portfolios: state.portfolios),
-                  ],
+                      const Divider(height: 1),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 16,
+                          top: 16,
+                          right: 16,
+                        ),
+                        child: Text(
+                          'Portfolios',
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      PortfolioList(portfolios: state.portfolios),
+                    ],
+                  ),
                 ),
               );
             }
