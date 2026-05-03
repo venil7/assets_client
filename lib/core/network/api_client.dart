@@ -19,12 +19,10 @@ abstract class ApiClient {
   factory ApiClient(Dio dio, {String baseUrl}) = _ApiClient;
 
   // ============ Auth Endpoints ============
-  @POST('/login')
-  Future<AuthResponseModel> login(
-    @Body() Map<String, dynamic> request,
-  );
+  @POST('/api/v1/auth/login')
+  Future<AuthResponseModel> login(@Body() Map<String, dynamic> request);
 
-  @GET('/auth/refresh_token')
+  @GET('/api/v1/auth/refresh_token')
   Future<AuthResponseModel> refreshToken();
 
   // ============ Profile Endpoints ============
@@ -32,9 +30,7 @@ abstract class ApiClient {
   Future<ProfileModel> getProfile();
 
   @PUT('/api/v1/profile')
-  Future<ProfileModel> updateProfile(
-    @Body() UpdateProfileRequestModel request,
-  );
+  Future<ProfileModel> updateProfile(@Body() UpdateProfileRequestModel request);
 
   @POST('/api/v1/profile')
   Future<ProfileModel> changePassword(
@@ -58,14 +54,10 @@ abstract class ApiClient {
   Future<List<UserModel>> getAllUsers();
 
   @GET('/api/v1/users/{user_id}')
-  Future<UserModel> getUserById(
-    @Path('user_id') int userId,
-  );
+  Future<UserModel> getUserById(@Path('user_id') int userId);
 
   @POST('/api/v1/users')
-  Future<UserModel> createUser(
-    @Body() CreateUserRequestModel request,
-  );
+  Future<UserModel> createUser(@Body() CreateUserRequestModel request);
 
   @PUT('/api/v1/users/{user_id}')
   Future<UserModel> updateUser(
@@ -74,15 +66,11 @@ abstract class ApiClient {
   );
 
   @DELETE('/api/v1/users/{user_id}')
-  Future<IdResponseModel> deleteUser(
-    @Path('user_id') int userId,
-  );
+  Future<IdResponseModel> deleteUser(@Path('user_id') int userId);
 
   // ============ Summary Endpoint ============
   @GET('/api/v1/summary')
-  Future<SummaryModel> getSummary(
-    @Query('range') String? range,
-  );
+  Future<SummaryModel> getSummary(@Query('range') String? range);
 
   // ============ Portfolio Endpoints ============
   @POST('/api/v1/portfolios')
@@ -91,9 +79,7 @@ abstract class ApiClient {
   );
 
   @GET('/api/v1/portfolios')
-  Future<List<PortfolioModel>> getAllPortfolios(
-    @Query('range') String? range,
-  );
+  Future<List<PortfolioModel>> getAllPortfolios(@Query('range') String? range);
 
   @GET('/api/v1/portfolios/{portfolio_id}')
   Future<PortfolioModel> getPortfolio(
@@ -145,7 +131,9 @@ abstract class ApiClient {
     @Path('asset_id') int assetId,
   );
 
-  @PATCH('/api/v1/portfolios/{portfolio_id}/assets/{asset_id}/move/{new_portfolio_id}')
+  @PATCH(
+    '/api/v1/portfolios/{portfolio_id}/assets/{asset_id}/move/{new_portfolio_id}',
+  )
   Future<IdResponseModel> moveAsset(
     @Path('portfolio_id') int portfolioId,
     @Path('asset_id') int assetId,
@@ -203,14 +191,10 @@ abstract class ApiClient {
 
   // ============ Lookup/Search Endpoints ============
   @GET('/api/v1/lookup/ticker')
-  Future<QuoteSearchResponseModel> searchTicker(
-    @Query('term') String term,
-  );
+  Future<QuoteSearchResponseModel> searchTicker(@Query('term') String term);
 
   @GET('/api/v1/lookup/quote/{base}')
-  Future<PriceQuoteModel> getQuote(
-    @Path('base') String base,
-  );
+  Future<PriceQuoteModel> getQuote(@Path('base') String base);
 
   @GET('/api/v1/lookup/quote/{base}/{date}')
   Future<PriceQuoteModel> getQuoteForDate(

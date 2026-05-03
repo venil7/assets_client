@@ -68,7 +68,7 @@ class PortfolioList extends StatelessWidget {
                         crossAxisAlignment: CrossAxisAlignment.end,
                         children: [
                           Text(
-                            '${portfolio.changes.returnPct.toStringAsFixed(2)}%',
+                            '${(portfolio.changes.returnPct * 100).toStringAsFixed(2)}%',
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,

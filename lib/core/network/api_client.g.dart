@@ -30,7 +30,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'POST', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/login',
+            '/api/v1/auth/login',
             queryParameters: queryParameters,
             data: _data,
           )
@@ -57,7 +57,7 @@ class _ApiClient implements ApiClient {
       Options(method: 'GET', headers: _headers, extra: _extra)
           .compose(
             _dio.options,
-            '/auth/refresh_token',
+            '/api/v1/auth/refresh_token',
             queryParameters: queryParameters,
             data: _data,
           )

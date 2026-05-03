@@ -59,7 +59,7 @@ class AssetList extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.end,
                       children: [
                         Text(
-                          '${asset.returnPct?.toStringAsFixed(2) ?? '0.00'}%',
+                          '${((asset.returnPct ?? 0) * 100).toStringAsFixed(2)}%',
                           style: TextStyle(
                             fontSize: 18,
                             fontWeight: FontWeight.bold,

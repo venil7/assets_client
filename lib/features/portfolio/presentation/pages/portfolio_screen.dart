@@ -129,7 +129,9 @@ class PortfolioScreen extends StatelessWidget {
   }
 
   Widget _buildMetricsRow(
-      BuildContext context, PortfolioDetailEntity portfolio) {
+    BuildContext context,
+    PortfolioDetailEntity portfolio,
+  ) {
     final isPositive = portfolio.changes.returnPct >= 0;
     return Row(
       children: [
@@ -146,7 +148,7 @@ class PortfolioScreen extends StatelessWidget {
           child: _metricCard(
             context,
             'Return',
-            '${portfolio.changes.returnPct.toStringAsFixed(2)}%',
+            '${(portfolio.changes.returnPct * 100).toStringAsFixed(2)}%',
             Icons.percent,
             color: isPositive ? Colors.green : Colors.red,
           ),

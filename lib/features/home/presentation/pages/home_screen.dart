@@ -78,8 +78,9 @@ class HomeScreen extends StatelessWidget {
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (_) => BlocProvider(
-          create: (_) => PortfolioBloc(repository: repo)
-            ..add(LoadPortfolioEvent(portfolioId: portfolioId)),
+          create: (_) =>
+              PortfolioBloc(repository: repo)
+                ..add(LoadPortfolioEvent(portfolioId: portfolioId)),
           child: PortfolioScreen(portfolioId: portfolioId),
         ),
       ),
@@ -90,7 +91,7 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Assets Client'),
+        title: const Text('Summary'),
         elevation: 0,
         actions: [
           IconButton(
@@ -100,12 +101,7 @@ class HomeScreen extends StatelessWidget {
         ],
       ),
       body: BlocListener<HomeBloc, HomeState>(
-        listener: (context, state) {
-          // print(state);
-          // if (state is HomeInitial) {
-          //   context.read<HomeBloc>().add(const LoadHomeEvent());
-          // }
-        },
+        listener: (context, state) {},
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
             if (state is HomeLoading) {
@@ -223,7 +219,7 @@ class HomeScreen extends StatelessWidget {
           child: _metricCard(
             context,
             'Return',
-            '${summary.changes.returnPct.toStringAsFixed(2)}%',
+            '${(summary.changes.returnPct * 100).toStringAsFixed(2)}%',
             Icons.percent,
             color: isPositive ? Colors.green : Colors.red,
           ),
