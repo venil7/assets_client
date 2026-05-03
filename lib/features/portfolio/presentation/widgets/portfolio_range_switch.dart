@@ -1,15 +1,15 @@
+import 'package:assets_client/features/portfolio/presentation/bloc/portfolio_bloc.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
-class RangeSwitch extends StatelessWidget {
+class PortfolioRangeSwitch extends StatelessWidget {
   final List<String> ranges;
   final String currentRange;
-  final void Function(String range)? onRangeChanged;
 
-  const RangeSwitch({
+  const PortfolioRangeSwitch({
     super.key,
     required this.ranges,
     required this.currentRange,
-    this.onRangeChanged,
   });
 
   @override
@@ -23,7 +23,7 @@ class RangeSwitch extends StatelessWidget {
           selected: isSelected,
           onSelected: (selected) {
             if (selected) {
-              onRangeChanged?.call(range);
+              context.read<PortfolioBloc>().add(ChangeRangeEvent(range));
             }
           },
           selectedColor: Theme.of(context).primaryColor,

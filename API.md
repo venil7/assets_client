@@ -3,19 +3,16 @@
 ## Base URL Structure
 
 The API server uses the following endpoint structure:
-- **Authentication endpoints** (`/login`, `/auth/refresh_token`): No `/api/v1` prefix
-- **All other endpoints**: Prefixed with `/api/v1`
+- **All endpoints**: Prefixed with `/api/v1`
 
-Example:
-- `POST {baseUrl}/login` (no prefix)
-- `GET {baseUrl}/api/v1/profile` (with prefix)
+
 
 ## Authentication Endpoints
 
 | Method | Endpoint                   | Description                              | Request Body | Response Body |
 | ------ | -------------------------- | ---------------------------------------- | ------------ | ------------- |
-| POST   | `/login`                   | Authenticate and get a bearer token      | See below    | See below     |
-| GET    | `/auth/refresh_token`      | Gets a new token with extended expiry    | -            | See below     |
+| POST   | `/api/v1/auth/login`                   | Authenticate and get a bearer token      | See below    | See below     |
+| GET    | `/api/v1/auth/refresh_token`      | Gets a new token with extended expiry    | -            | See below     |
 
 ### Login
 Authenticate with username and password to receive a JWT bearer token.

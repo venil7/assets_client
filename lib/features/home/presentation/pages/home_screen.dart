@@ -1,9 +1,16 @@
+import 'package:assets_client/core/network/api_client.dart';
+import 'package:assets_client/core/services/dio_accessor.dart';
 import 'package:assets_client/core/services/token_manager_accessor.dart';
 import 'package:assets_client/features/config/presentation/bloc/config_bloc.dart';
 import 'package:assets_client/features/home/presentation/bloc/home_bloc.dart';
 import 'package:assets_client/features/home/presentation/widgets/portfolio_list.dart';
 import 'package:assets_client/features/home/presentation/widgets/range_switch.dart';
 import 'package:assets_client/features/home/presentation/widgets/summary_chart.dart';
+import 'package:assets_client/features/portfolio/data/datasources/portfolio_remote_data_source.dart';
+import 'package:assets_client/features/portfolio/data/repositories/portfolio_repository_impl.dart';
+import 'package:assets_client/features/portfolio/presentation/bloc/portfolio_bloc.dart'
+    show PortfolioBloc, LoadPortfolioEvent;
+import 'package:assets_client/features/portfolio/presentation/pages/portfolio_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -63,6 +70,22 @@ class HomeScreen extends StatelessWidget {
     Navigator.of(context).pushReplacementNamed('/api-url');
   }
 
+  void _navigateToPortfolio(BuildContext context, int portfolioId) {
+    final apiClient = ApiClient(dioInstance);
+    final dataSource = PortfolioRemoteDataSourceImpl(apiClient: apiClient);
+    final repo = PortfolioRepositoryImpl(remoteDataSource: dataSource);
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (_) => PortfolioBloc(repository: repo)
+            ..add(LoadPortfolioEvent(portfolioId: portfolioId)),
+          child: PortfolioScreen(portfolioId: portfolioId),
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -116,6 +139,9 @@ class HomeScreen extends StatelessWidget {
                             RangeSwitch(
                               ranges: state.validRanges,
                               currentRange: state.currentRange,
+                              onRangeChanged: (range) => context
+                                  .read<HomeBloc>()
+                                  .add(ChangeRangeEvent(range)),
                             ),
                             const SizedBox(height: 16),
                             SummaryChart(data: state.summary.chart),
@@ -135,7 +161,11 @@ class HomeScreen extends StatelessWidget {
                               ?.copyWith(fontWeight: FontWeight.bold),
                         ),
                       ),
-                      PortfolioList(portfolios: state.portfolios),
+                      PortfolioList(
+                        portfolios: state.portfolios,
+                        onPortfolioTap: (id) =>
+                            _navigateToPortfolio(context, id),
+                      ),
                     ],
                   ),
                 ),

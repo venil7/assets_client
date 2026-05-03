@@ -9,8 +9,6 @@ abstract class AssetMetaModel with _$AssetMetaModel {
   const factory AssetMetaModel({
     required String range,
     @JsonKey(name: 'validRanges') required List<String> validRanges,
-    @JsonKey(name: 'volatilityRange') required double volatilityRange,
-    @JsonKey(name: 'volatilityPct') required double volatilityPct,
     @JsonKey(name: 'fiftyTwoWeekLow') required double fiftyTwoWeekLow,
     @JsonKey(name: 'fiftyTwoWeekHigh') required double fiftyTwoWeekHigh,
   }) = _AssetMetaModel;

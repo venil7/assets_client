@@ -12,8 +12,6 @@ _AssetMetaModel _$AssetMetaModelFromJson(Map<String, dynamic> json) =>
       validRanges: (json['validRanges'] as List<dynamic>)
           .map((e) => e as String)
           .toList(),
-      volatilityRange: (json['volatilityRange'] as num).toDouble(),
-      volatilityPct: (json['volatilityPct'] as num).toDouble(),
       fiftyTwoWeekLow: (json['fiftyTwoWeekLow'] as num).toDouble(),
       fiftyTwoWeekHigh: (json['fiftyTwoWeekHigh'] as num).toDouble(),
     );
@@ -22,8 +20,6 @@ Map<String, dynamic> _$AssetMetaModelToJson(_AssetMetaModel instance) =>
     <String, dynamic>{
       'range': instance.range,
       'validRanges': instance.validRanges,
-      'volatilityRange': instance.volatilityRange,
-      'volatilityPct': instance.volatilityPct,
       'fiftyTwoWeekLow': instance.fiftyTwoWeekLow,
       'fiftyTwoWeekHigh': instance.fiftyTwoWeekHigh,
     };
