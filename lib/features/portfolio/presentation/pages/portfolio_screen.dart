@@ -14,9 +14,15 @@ class PortfolioScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final title = context.select<PortfolioBloc, String>((bloc) {
+      final s = bloc.state;
+      if (s is PortfolioLoaded) return s.portfolio.name;
+      return 'Portfolio Details';
+    });
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Portfolio Details'),
+        title: Text(title),
         elevation: 0,
         leading: IconButton(
           icon: const Icon(Icons.arrow_back),
@@ -132,36 +138,88 @@ class PortfolioScreen extends StatelessWidget {
     BuildContext context,
     PortfolioDetailEntity portfolio,
   ) {
-    final isPositive = portfolio.changes.returnPct >= 0;
-    return Row(
+    final periodPositive = portfolio.changes.returnPct >= 0;
+    final totalPositive = portfolio.totalReturnPct >= 0;
+    final hasFxImpact = portfolio.fxImpact != 0;
+    final hasRealizedPnl = portfolio.realizedPnl != 0;
+
+    return Column(
       children: [
-        Expanded(
-          child: _metricCard(
-            context,
-            'Current Value',
-            _formatCurrency(portfolio.changes.endPrice),
-            Icons.trending_up,
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: _metricCard(
+                context,
+                'Invested',
+                _formatCurrency(portfolio.invested),
+                Icons.account_balance,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _metricCard(
+                context,
+                'Current Value',
+                _formatCurrency(portfolio.changes.endPrice),
+                Icons.trending_up,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _metricCard(
-            context,
-            'Return',
-            '${(portfolio.changes.returnPct * 100).toStringAsFixed(2)}%',
-            Icons.percent,
-            color: isPositive ? Colors.green : Colors.red,
-          ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _metricCard(
+                context,
+                'Total Return',
+                '${_formatCurrency(portfolio.totalReturnValue)} (${(portfolio.totalReturnPct * 100).toStringAsFixed(2)}%)',
+                Icons.show_chart,
+                color: totalPositive ? Colors.green : Colors.red,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _metricCard(
+                context,
+                'Period Return',
+                '${_formatCurrency(portfolio.changes.returnValue)} (${(portfolio.changes.returnPct * 100).toStringAsFixed(2)}%)',
+                Icons.schedule,
+                color: periodPositive ? Colors.green : Colors.red,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _metricCard(
-            context,
-            'Invested',
-            _formatCurrency(portfolio.invested),
-            Icons.account_balance,
+        if (hasFxImpact || hasRealizedPnl) ...[
+          const SizedBox(height: 12),
+          Row(
+            children: [
+              if (hasFxImpact)
+                Expanded(
+                  child: _metricCard(
+                    context,
+                    'FX Impact',
+                    _formatCurrency(portfolio.fxImpact),
+                    Icons.currency_exchange,
+                    color: portfolio.fxImpact >= 0 ? Colors.green : Colors.red,
+                  ),
+                ),
+              if (hasFxImpact && hasRealizedPnl) const SizedBox(width: 12),
+              if (hasRealizedPnl)
+                Expanded(
+                  child: _metricCard(
+                    context,
+                    'Realized P&L',
+                    _formatCurrency(portfolio.realizedPnl),
+                    Icons.account_balance_wallet,
+                    color: portfolio.realizedPnl >= 0
+                        ? Colors.green
+                        : Colors.red,
+                  ),
+                ),
+            ],
           ),
-        ),
+        ],
       ],
     );
   }

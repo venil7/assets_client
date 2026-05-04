@@ -854,7 +854,7 @@ as int,
 /// @nodoc
 mixin _$PortfolioDetailEntity {
 
- int get id;@JsonKey(name: 'user_id') int get userId; String get name; String get description;@JsonKey(name: 'num_assets') int get numAssets; double get invested;@JsonKey(name: 'realizedPnl') double get realizedPnl; double get breakEven;@JsonKey(name: 'fxImpact') double get fxImpact; List<PortfolioChartEntity> get chart; PortfolioMetaEntity get meta; PortfolioChangesEntity get changes;
+ int get id;@JsonKey(name: 'user_id') int get userId; String get name; String get description;@JsonKey(name: 'num_assets') int get numAssets; double get invested;@JsonKey(name: 'realizedPnl') double get realizedPnl; double get breakEven;@JsonKey(name: 'fxImpact') double get fxImpact; List<PortfolioChartEntity> get chart; PortfolioMetaEntity get meta; PortfolioChangesEntity get changes; double get totalReturnValue; double get totalReturnPct;
 /// Create a copy of PortfolioDetailEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -865,16 +865,16 @@ $PortfolioDetailEntityCopyWith<PortfolioDetailEntity> get copyWith => _$Portfoli
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is PortfolioDetailEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.numAssets, numAssets) || other.numAssets == numAssets)&&(identical(other.invested, invested) || other.invested == invested)&&(identical(other.realizedPnl, realizedPnl) || other.realizedPnl == realizedPnl)&&(identical(other.breakEven, breakEven) || other.breakEven == breakEven)&&(identical(other.fxImpact, fxImpact) || other.fxImpact == fxImpact)&&const DeepCollectionEquality().equals(other.chart, chart)&&(identical(other.meta, meta) || other.meta == meta)&&(identical(other.changes, changes) || other.changes == changes));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is PortfolioDetailEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.numAssets, numAssets) || other.numAssets == numAssets)&&(identical(other.invested, invested) || other.invested == invested)&&(identical(other.realizedPnl, realizedPnl) || other.realizedPnl == realizedPnl)&&(identical(other.breakEven, breakEven) || other.breakEven == breakEven)&&(identical(other.fxImpact, fxImpact) || other.fxImpact == fxImpact)&&const DeepCollectionEquality().equals(other.chart, chart)&&(identical(other.meta, meta) || other.meta == meta)&&(identical(other.changes, changes) || other.changes == changes)&&(identical(other.totalReturnValue, totalReturnValue) || other.totalReturnValue == totalReturnValue)&&(identical(other.totalReturnPct, totalReturnPct) || other.totalReturnPct == totalReturnPct));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,userId,name,description,numAssets,invested,realizedPnl,breakEven,fxImpact,const DeepCollectionEquality().hash(chart),meta,changes);
+int get hashCode => Object.hash(runtimeType,id,userId,name,description,numAssets,invested,realizedPnl,breakEven,fxImpact,const DeepCollectionEquality().hash(chart),meta,changes,totalReturnValue,totalReturnPct);
 
 @override
 String toString() {
-  return 'PortfolioDetailEntity(id: $id, userId: $userId, name: $name, description: $description, numAssets: $numAssets, invested: $invested, realizedPnl: $realizedPnl, breakEven: $breakEven, fxImpact: $fxImpact, chart: $chart, meta: $meta, changes: $changes)';
+  return 'PortfolioDetailEntity(id: $id, userId: $userId, name: $name, description: $description, numAssets: $numAssets, invested: $invested, realizedPnl: $realizedPnl, breakEven: $breakEven, fxImpact: $fxImpact, chart: $chart, meta: $meta, changes: $changes, totalReturnValue: $totalReturnValue, totalReturnPct: $totalReturnPct)';
 }
 
 
@@ -885,7 +885,7 @@ abstract mixin class $PortfolioDetailEntityCopyWith<$Res>  {
   factory $PortfolioDetailEntityCopyWith(PortfolioDetailEntity value, $Res Function(PortfolioDetailEntity) _then) = _$PortfolioDetailEntityCopyWithImpl;
 @useResult
 $Res call({
- int id,@JsonKey(name: 'user_id') int userId, String name, String description,@JsonKey(name: 'num_assets') int numAssets, double invested,@JsonKey(name: 'realizedPnl') double realizedPnl, double breakEven,@JsonKey(name: 'fxImpact') double fxImpact, List<PortfolioChartEntity> chart, PortfolioMetaEntity meta, PortfolioChangesEntity changes
+ int id,@JsonKey(name: 'user_id') int userId, String name, String description,@JsonKey(name: 'num_assets') int numAssets, double invested,@JsonKey(name: 'realizedPnl') double realizedPnl, double breakEven,@JsonKey(name: 'fxImpact') double fxImpact, List<PortfolioChartEntity> chart, PortfolioMetaEntity meta, PortfolioChangesEntity changes, double totalReturnValue, double totalReturnPct
 });
 
 
@@ -902,7 +902,7 @@ class _$PortfolioDetailEntityCopyWithImpl<$Res>
 
 /// Create a copy of PortfolioDetailEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? userId = null,Object? name = null,Object? description = null,Object? numAssets = null,Object? invested = null,Object? realizedPnl = null,Object? breakEven = null,Object? fxImpact = null,Object? chart = null,Object? meta = null,Object? changes = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? userId = null,Object? name = null,Object? description = null,Object? numAssets = null,Object? invested = null,Object? realizedPnl = null,Object? breakEven = null,Object? fxImpact = null,Object? chart = null,Object? meta = null,Object? changes = null,Object? totalReturnValue = null,Object? totalReturnPct = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
@@ -916,7 +916,9 @@ as double,fxImpact: null == fxImpact ? _self.fxImpact : fxImpact // ignore: cast
 as double,chart: null == chart ? _self.chart : chart // ignore: cast_nullable_to_non_nullable
 as List<PortfolioChartEntity>,meta: null == meta ? _self.meta : meta // ignore: cast_nullable_to_non_nullable
 as PortfolioMetaEntity,changes: null == changes ? _self.changes : changes // ignore: cast_nullable_to_non_nullable
-as PortfolioChangesEntity,
+as PortfolioChangesEntity,totalReturnValue: null == totalReturnValue ? _self.totalReturnValue : totalReturnValue // ignore: cast_nullable_to_non_nullable
+as double,totalReturnPct: null == totalReturnPct ? _self.totalReturnPct : totalReturnPct // ignore: cast_nullable_to_non_nullable
+as double,
   ));
 }
 /// Create a copy of PortfolioDetailEntity
@@ -1019,10 +1021,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'user_id')  int userId,  String name,  String description, @JsonKey(name: 'num_assets')  int numAssets,  double invested, @JsonKey(name: 'realizedPnl')  double realizedPnl,  double breakEven, @JsonKey(name: 'fxImpact')  double fxImpact,  List<PortfolioChartEntity> chart,  PortfolioMetaEntity meta,  PortfolioChangesEntity changes)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'user_id')  int userId,  String name,  String description, @JsonKey(name: 'num_assets')  int numAssets,  double invested, @JsonKey(name: 'realizedPnl')  double realizedPnl,  double breakEven, @JsonKey(name: 'fxImpact')  double fxImpact,  List<PortfolioChartEntity> chart,  PortfolioMetaEntity meta,  PortfolioChangesEntity changes,  double totalReturnValue,  double totalReturnPct)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _PortfolioDetailEntity() when $default != null:
-return $default(_that.id,_that.userId,_that.name,_that.description,_that.numAssets,_that.invested,_that.realizedPnl,_that.breakEven,_that.fxImpact,_that.chart,_that.meta,_that.changes);case _:
+return $default(_that.id,_that.userId,_that.name,_that.description,_that.numAssets,_that.invested,_that.realizedPnl,_that.breakEven,_that.fxImpact,_that.chart,_that.meta,_that.changes,_that.totalReturnValue,_that.totalReturnPct);case _:
   return orElse();
 
 }
@@ -1040,10 +1042,10 @@ return $default(_that.id,_that.userId,_that.name,_that.description,_that.numAsse
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'user_id')  int userId,  String name,  String description, @JsonKey(name: 'num_assets')  int numAssets,  double invested, @JsonKey(name: 'realizedPnl')  double realizedPnl,  double breakEven, @JsonKey(name: 'fxImpact')  double fxImpact,  List<PortfolioChartEntity> chart,  PortfolioMetaEntity meta,  PortfolioChangesEntity changes)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id, @JsonKey(name: 'user_id')  int userId,  String name,  String description, @JsonKey(name: 'num_assets')  int numAssets,  double invested, @JsonKey(name: 'realizedPnl')  double realizedPnl,  double breakEven, @JsonKey(name: 'fxImpact')  double fxImpact,  List<PortfolioChartEntity> chart,  PortfolioMetaEntity meta,  PortfolioChangesEntity changes,  double totalReturnValue,  double totalReturnPct)  $default,) {final _that = this;
 switch (_that) {
 case _PortfolioDetailEntity():
-return $default(_that.id,_that.userId,_that.name,_that.description,_that.numAssets,_that.invested,_that.realizedPnl,_that.breakEven,_that.fxImpact,_that.chart,_that.meta,_that.changes);case _:
+return $default(_that.id,_that.userId,_that.name,_that.description,_that.numAssets,_that.invested,_that.realizedPnl,_that.breakEven,_that.fxImpact,_that.chart,_that.meta,_that.changes,_that.totalReturnValue,_that.totalReturnPct);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -1060,10 +1062,10 @@ return $default(_that.id,_that.userId,_that.name,_that.description,_that.numAsse
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(name: 'user_id')  int userId,  String name,  String description, @JsonKey(name: 'num_assets')  int numAssets,  double invested, @JsonKey(name: 'realizedPnl')  double realizedPnl,  double breakEven, @JsonKey(name: 'fxImpact')  double fxImpact,  List<PortfolioChartEntity> chart,  PortfolioMetaEntity meta,  PortfolioChangesEntity changes)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id, @JsonKey(name: 'user_id')  int userId,  String name,  String description, @JsonKey(name: 'num_assets')  int numAssets,  double invested, @JsonKey(name: 'realizedPnl')  double realizedPnl,  double breakEven, @JsonKey(name: 'fxImpact')  double fxImpact,  List<PortfolioChartEntity> chart,  PortfolioMetaEntity meta,  PortfolioChangesEntity changes,  double totalReturnValue,  double totalReturnPct)?  $default,) {final _that = this;
 switch (_that) {
 case _PortfolioDetailEntity() when $default != null:
-return $default(_that.id,_that.userId,_that.name,_that.description,_that.numAssets,_that.invested,_that.realizedPnl,_that.breakEven,_that.fxImpact,_that.chart,_that.meta,_that.changes);case _:
+return $default(_that.id,_that.userId,_that.name,_that.description,_that.numAssets,_that.invested,_that.realizedPnl,_that.breakEven,_that.fxImpact,_that.chart,_that.meta,_that.changes,_that.totalReturnValue,_that.totalReturnPct);case _:
   return null;
 
 }
@@ -1075,7 +1077,7 @@ return $default(_that.id,_that.userId,_that.name,_that.description,_that.numAsse
 
 
 class _PortfolioDetailEntity implements PortfolioDetailEntity {
-  const _PortfolioDetailEntity({required this.id, @JsonKey(name: 'user_id') required this.userId, required this.name, required this.description, @JsonKey(name: 'num_assets') required this.numAssets, required this.invested, @JsonKey(name: 'realizedPnl') required this.realizedPnl, required this.breakEven, @JsonKey(name: 'fxImpact') required this.fxImpact, required final  List<PortfolioChartEntity> chart, required this.meta, required this.changes}): _chart = chart;
+  const _PortfolioDetailEntity({required this.id, @JsonKey(name: 'user_id') required this.userId, required this.name, required this.description, @JsonKey(name: 'num_assets') required this.numAssets, required this.invested, @JsonKey(name: 'realizedPnl') required this.realizedPnl, required this.breakEven, @JsonKey(name: 'fxImpact') required this.fxImpact, required final  List<PortfolioChartEntity> chart, required this.meta, required this.changes, required this.totalReturnValue, required this.totalReturnPct}): _chart = chart;
   
 
 @override final  int id;
@@ -1096,6 +1098,8 @@ class _PortfolioDetailEntity implements PortfolioDetailEntity {
 
 @override final  PortfolioMetaEntity meta;
 @override final  PortfolioChangesEntity changes;
+@override final  double totalReturnValue;
+@override final  double totalReturnPct;
 
 /// Create a copy of PortfolioDetailEntity
 /// with the given fields replaced by the non-null parameter values.
@@ -1107,16 +1111,16 @@ _$PortfolioDetailEntityCopyWith<_PortfolioDetailEntity> get copyWith => __$Portf
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PortfolioDetailEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.numAssets, numAssets) || other.numAssets == numAssets)&&(identical(other.invested, invested) || other.invested == invested)&&(identical(other.realizedPnl, realizedPnl) || other.realizedPnl == realizedPnl)&&(identical(other.breakEven, breakEven) || other.breakEven == breakEven)&&(identical(other.fxImpact, fxImpact) || other.fxImpact == fxImpact)&&const DeepCollectionEquality().equals(other._chart, _chart)&&(identical(other.meta, meta) || other.meta == meta)&&(identical(other.changes, changes) || other.changes == changes));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _PortfolioDetailEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.name, name) || other.name == name)&&(identical(other.description, description) || other.description == description)&&(identical(other.numAssets, numAssets) || other.numAssets == numAssets)&&(identical(other.invested, invested) || other.invested == invested)&&(identical(other.realizedPnl, realizedPnl) || other.realizedPnl == realizedPnl)&&(identical(other.breakEven, breakEven) || other.breakEven == breakEven)&&(identical(other.fxImpact, fxImpact) || other.fxImpact == fxImpact)&&const DeepCollectionEquality().equals(other._chart, _chart)&&(identical(other.meta, meta) || other.meta == meta)&&(identical(other.changes, changes) || other.changes == changes)&&(identical(other.totalReturnValue, totalReturnValue) || other.totalReturnValue == totalReturnValue)&&(identical(other.totalReturnPct, totalReturnPct) || other.totalReturnPct == totalReturnPct));
 }
 
 
 @override
-int get hashCode => Object.hash(runtimeType,id,userId,name,description,numAssets,invested,realizedPnl,breakEven,fxImpact,const DeepCollectionEquality().hash(_chart),meta,changes);
+int get hashCode => Object.hash(runtimeType,id,userId,name,description,numAssets,invested,realizedPnl,breakEven,fxImpact,const DeepCollectionEquality().hash(_chart),meta,changes,totalReturnValue,totalReturnPct);
 
 @override
 String toString() {
-  return 'PortfolioDetailEntity(id: $id, userId: $userId, name: $name, description: $description, numAssets: $numAssets, invested: $invested, realizedPnl: $realizedPnl, breakEven: $breakEven, fxImpact: $fxImpact, chart: $chart, meta: $meta, changes: $changes)';
+  return 'PortfolioDetailEntity(id: $id, userId: $userId, name: $name, description: $description, numAssets: $numAssets, invested: $invested, realizedPnl: $realizedPnl, breakEven: $breakEven, fxImpact: $fxImpact, chart: $chart, meta: $meta, changes: $changes, totalReturnValue: $totalReturnValue, totalReturnPct: $totalReturnPct)';
 }
 
 
@@ -1127,7 +1131,7 @@ abstract mixin class _$PortfolioDetailEntityCopyWith<$Res> implements $Portfolio
   factory _$PortfolioDetailEntityCopyWith(_PortfolioDetailEntity value, $Res Function(_PortfolioDetailEntity) _then) = __$PortfolioDetailEntityCopyWithImpl;
 @override @useResult
 $Res call({
- int id,@JsonKey(name: 'user_id') int userId, String name, String description,@JsonKey(name: 'num_assets') int numAssets, double invested,@JsonKey(name: 'realizedPnl') double realizedPnl, double breakEven,@JsonKey(name: 'fxImpact') double fxImpact, List<PortfolioChartEntity> chart, PortfolioMetaEntity meta, PortfolioChangesEntity changes
+ int id,@JsonKey(name: 'user_id') int userId, String name, String description,@JsonKey(name: 'num_assets') int numAssets, double invested,@JsonKey(name: 'realizedPnl') double realizedPnl, double breakEven,@JsonKey(name: 'fxImpact') double fxImpact, List<PortfolioChartEntity> chart, PortfolioMetaEntity meta, PortfolioChangesEntity changes, double totalReturnValue, double totalReturnPct
 });
 
 
@@ -1144,7 +1148,7 @@ class __$PortfolioDetailEntityCopyWithImpl<$Res>
 
 /// Create a copy of PortfolioDetailEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? userId = null,Object? name = null,Object? description = null,Object? numAssets = null,Object? invested = null,Object? realizedPnl = null,Object? breakEven = null,Object? fxImpact = null,Object? chart = null,Object? meta = null,Object? changes = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? userId = null,Object? name = null,Object? description = null,Object? numAssets = null,Object? invested = null,Object? realizedPnl = null,Object? breakEven = null,Object? fxImpact = null,Object? chart = null,Object? meta = null,Object? changes = null,Object? totalReturnValue = null,Object? totalReturnPct = null,}) {
   return _then(_PortfolioDetailEntity(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,userId: null == userId ? _self.userId : userId // ignore: cast_nullable_to_non_nullable
@@ -1158,7 +1162,9 @@ as double,fxImpact: null == fxImpact ? _self.fxImpact : fxImpact // ignore: cast
 as double,chart: null == chart ? _self._chart : chart // ignore: cast_nullable_to_non_nullable
 as List<PortfolioChartEntity>,meta: null == meta ? _self.meta : meta // ignore: cast_nullable_to_non_nullable
 as PortfolioMetaEntity,changes: null == changes ? _self.changes : changes // ignore: cast_nullable_to_non_nullable
-as PortfolioChangesEntity,
+as PortfolioChangesEntity,totalReturnValue: null == totalReturnValue ? _self.totalReturnValue : totalReturnValue // ignore: cast_nullable_to_non_nullable
+as double,totalReturnPct: null == totalReturnPct ? _self.totalReturnPct : totalReturnPct // ignore: cast_nullable_to_non_nullable
+as double,
   ));
 }
 

@@ -53,5 +53,7 @@ abstract class PortfolioDetailEntity with _$PortfolioDetailEntity {
     required List<PortfolioChartEntity> chart,
     required PortfolioMetaEntity meta,
     required PortfolioChangesEntity changes,
+    required double totalReturnValue,
+    required double totalReturnPct,
   }) = _PortfolioDetailEntity;
 }

@@ -175,6 +175,8 @@ class PortfolioRepositoryImpl implements PortfolioRepository {
         startTs: model.changes.startTs,
         endTs: model.changes.endTs,
       ),
+      totalReturnValue: model.totals.returnValue,
+      totalReturnPct: model.totals.returnPct,
     );
   }
 }
