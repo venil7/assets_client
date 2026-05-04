@@ -81,13 +81,6 @@ class MyApp extends StatelessWidget {
               });
               return const SizedBox.shrink();
             }
-            if (state is AuthSuccess) {
-              WidgetsBinding.instance.addPostFrameCallback((_) async {
-                await tokenManager.setToken(state.token, state.refreshBefore);
-                Navigator.of(context).pushReplacementNamed('/home');
-              });
-              return const SizedBox.shrink();
-            }
             if (state is ApiUrlMissing) {
               return const ApiUrlScreen();
             }
