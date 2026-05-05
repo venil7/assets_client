@@ -1,7 +1,5 @@
 import 'package:assets_client/core/network/api_client.dart';
 import 'package:assets_client/core/services/dio_accessor.dart';
-import 'package:assets_client/core/services/token_manager_accessor.dart';
-import 'package:assets_client/features/config/presentation/bloc/config_bloc.dart';
 import 'package:assets_client/features/home/domain/entities/summary_entity.dart';
 import 'package:assets_client/features/home/presentation/bloc/home_bloc.dart';
 import 'package:assets_client/features/home/presentation/widgets/portfolio_list.dart';
@@ -17,59 +15,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
-
-  void _showSettingsDialog(BuildContext context) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Settings'),
-        content: Column(
-          mainAxisSize: MainAxisSize.min,
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text('What would you like to clear?'),
-            const SizedBox(height: 16),
-            ListTile(
-              leading: const Icon(Icons.logout, color: Colors.orange),
-              title: const Text('Logout'),
-              subtitle: const Text('Clear credentials only'),
-              onTap: () {
-                Navigator.pop(context);
-                _logout(context);
-              },
-            ),
-            ListTile(
-              leading: const Icon(Icons.delete_forever, color: Colors.red),
-              title: const Text('Reset everything'),
-              subtitle: const Text('Clear API URL and credentials'),
-              onTap: () {
-                Navigator.pop(context);
-                _clearAll(context);
-              },
-            ),
-          ],
-        ),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Cancel'),
-          ),
-        ],
-      ),
-    );
-  }
-
-  void _logout(BuildContext context) {
-    context.read<ConfigBloc>().add(const ClearCredentialsEvent());
-    tokenManager.clearToken();
-    Navigator.of(context).pushReplacementNamed('/login');
-  }
-
-  void _clearAll(BuildContext context) {
-    context.read<ConfigBloc>().add(const ClearConfigEvent());
-    tokenManager.clearToken();
-    Navigator.of(context).pushReplacementNamed('/api-url');
-  }
 
   void _navigateToPortfolio(BuildContext context, int portfolioId) {
     final apiClient = ApiClient(dioInstance);
@@ -97,7 +42,7 @@ class HomeScreen extends StatelessWidget {
         actions: [
           IconButton(
             icon: const Icon(Icons.settings),
-            onPressed: () => _showSettingsDialog(context),
+            onPressed: () => Navigator.of(context).pushNamed('/settings'),
           ),
         ],
       ),

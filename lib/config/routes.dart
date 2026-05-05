@@ -3,6 +3,7 @@ import 'package:assets_client/core/services/dio_accessor.dart';
 import 'package:assets_client/features/config/presentation/pages/api_url_screen.dart';
 import 'package:assets_client/features/config/presentation/pages/init_screen.dart';
 import 'package:assets_client/features/config/presentation/pages/login_screen.dart';
+import 'package:assets_client/features/config/presentation/pages/settings_screen.dart';
 import 'package:assets_client/features/home/data/repositories/home_repository_impl.dart';
 import 'package:assets_client/features/home/presentation/bloc/home_bloc.dart';
 import 'package:assets_client/features/home/presentation/pages/home_screen.dart';
@@ -39,6 +40,10 @@ class RouteGenerator {
               child: const HomeScreen(),
             );
           },
+        );
+      case '/settings':
+        return MaterialPageRoute(
+          builder: (_) => const SettingsScreen(),
         );
       case '/portfolio':
         final portfolioId = settings.arguments as int;

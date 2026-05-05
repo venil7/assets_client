@@ -28,6 +28,12 @@ class PortfolioScreen extends StatelessWidget {
           icon: const Icon(Icons.arrow_back),
           onPressed: () => Navigator.of(context).pop(),
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () => Navigator.of(context).pushNamed('/settings'),
+          ),
+        ],
       ),
       body: BlocBuilder<PortfolioBloc, PortfolioState>(
         builder: (context, state) {
