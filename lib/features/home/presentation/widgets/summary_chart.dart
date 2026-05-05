@@ -1,12 +1,19 @@
 import 'package:assets_client/features/home/domain/entities/summary_entity.dart';
+import 'package:assets_client/shared/utils/format_utils.dart';
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 class SummaryChart extends StatelessWidget {
   final List<SummaryChartEntity> data;
   final bool? isPositive;
+  final String range;
 
-  const SummaryChart({super.key, required this.data, this.isPositive});
+  const SummaryChart({
+    super.key,
+    required this.data,
+    this.isPositive,
+    this.range = '1m',
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +33,7 @@ class SummaryChart extends StatelessWidget {
                 reservedSize: 50,
                 getTitlesWidget: (value, meta) {
                   return Text(
-                    _formatPrice(value),
+                    formatCurrency(value),
                     style: TextStyle(fontSize: 10, color: Colors.grey[500]),
                   );
                 },
@@ -36,10 +43,14 @@ class SummaryChart extends StatelessWidget {
               sideTitles: SideTitles(
                 showTitles: true,
                 interval: _getInterval(),
+                reservedSize: 28,
                 getTitlesWidget: (value, meta) {
-                  return Text(
-                    _formatDate(value),
-                    style: const TextStyle(fontSize: 10),
+                  return Padding(
+                    padding: const EdgeInsets.only(top: 4),
+                    child: Text(
+                      _formatDate(value),
+                      style: TextStyle(fontSize: 10, color: Colors.grey[600]),
+                    ),
                   );
                 },
               ),
@@ -115,18 +126,54 @@ class SummaryChart extends StatelessWidget {
 
   double _getInterval() {
     if (data.length <= 10) return 1;
-    if (data.length <= 50) return 5;
-    if (data.length <= 100) return 10;
-    return data.length / 10;
+    if (data.length <= 50) return _intervalForRangeLarge();
+    if (data.length <= 100) return _intervalForRangeMedium();
+    return _intervalForRangeDense();
   }
 
-  String _formatPrice(double value) {
-    return value.toStringAsFixed(2);
+  double _intervalForRangeLarge() {
+    switch (range) {
+      case '1d': return 2;
+      case '1w': return 1;
+      case '1m': return 5;
+      case '3m': return 10;
+      case '1y': return 20;
+      case '5y': return 60;
+      case 'all': return data.length / 8;
+      default: return 5;
+    }
+  }
+
+  double _intervalForRangeMedium() {
+    switch (range) {
+      case '1d': return 4;
+      case '1w': return 2;
+      case '1m': return 10;
+      case '3m': return 15;
+      case '1y': return 30;
+      case '5y': return 80;
+      case 'all': return data.length / 8;
+      default: return 10;
+    }
+  }
+
+  double _intervalForRangeDense() {
+    switch (range) {
+      case '1d': return 8;
+      case '1w': return 4;
+      case '1m': return 20;
+      case '3m': return 30;
+      case '1y': return 60;
+      case '5y': return 120;
+      case 'all': return data.length / 8;
+      default: return 20;
+    }
   }
 
   String _formatDate(double value) {
     final index = value.toInt();
     if (index < 0 || index >= data.length) return '';
-    return '${data[index].timestamp}';
+    final timestamp = data[index].timestamp;
+    return formatChartDate(timestamp, range);
   }
 }

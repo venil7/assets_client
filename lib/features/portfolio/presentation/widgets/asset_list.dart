@@ -1,4 +1,5 @@
 import 'package:assets_client/features/portfolio/domain/entities/asset_entity.dart';
+import 'package:assets_client/shared/utils/format_utils.dart';
 import 'package:flutter/material.dart';
 
 class AssetList extends StatelessWidget {
@@ -111,12 +112,5 @@ class AssetList extends StatelessWidget {
     );
   }
 
-  String _formatCurrency(double value) {
-    if (value >= 1000000) {
-      return '${(value / 1000000).toStringAsFixed(2)}M';
-    } else if (value >= 1000) {
-      return '${(value / 1000).toStringAsFixed(2)}K';
-    }
-    return value.toStringAsFixed(2);
-  }
+  String _formatCurrency(double value) => formatCurrency(value);
 }

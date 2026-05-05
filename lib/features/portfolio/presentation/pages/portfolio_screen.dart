@@ -4,6 +4,7 @@ import 'package:assets_client/features/home/presentation/widgets/summary_chart.d
 import 'package:assets_client/features/portfolio/domain/entities/portfolio_detail_entity.dart';
 import 'package:assets_client/features/portfolio/presentation/bloc/portfolio_bloc.dart';
 import 'package:assets_client/features/portfolio/presentation/widgets/asset_list.dart';
+import 'package:assets_client/shared/utils/format_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -85,7 +86,7 @@ class PortfolioScreen extends StatelessWidget {
                                 .add(ChangeRangeEvent(range)),
                           ),
                           const SizedBox(height: 16),
-                          _buildChart(state.portfolio),
+                          _buildChart(state),
                         ],
                       ),
                     ),
@@ -264,8 +265,8 @@ class PortfolioScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildChart(PortfolioDetailEntity portfolio) {
-    final chartData = portfolio.chart
+  Widget _buildChart(PortfolioLoaded state) {
+    final chartData = state.portfolio.chart
         .map(
           (point) => SummaryChartEntity(
             timestamp: point.timestamp,
@@ -276,16 +277,10 @@ class PortfolioScreen extends StatelessWidget {
         .toList();
     return SummaryChart(
       data: chartData,
-      isPositive: portfolio.changes.returnPct >= 0,
+      isPositive: state.portfolio.changes.returnPct >= 0,
+      range: state.currentRange,
     );
   }
 
-  String _formatCurrency(double value) {
-    if (value >= 1000000) {
-      return '${(value / 1000000).toStringAsFixed(2)}M';
-    } else if (value >= 1000) {
-      return '${(value / 1000).toStringAsFixed(2)}K';
-    }
-    return value.toStringAsFixed(2);
-  }
+  String _formatCurrency(double value) => formatCurrency(value);
 }

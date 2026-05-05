@@ -10,6 +10,7 @@ import 'package:assets_client/features/portfolio/data/repositories/portfolio_rep
 import 'package:assets_client/features/portfolio/presentation/bloc/portfolio_bloc.dart'
     show PortfolioBloc, LoadPortfolioEvent;
 import 'package:assets_client/features/portfolio/presentation/pages/portfolio_screen.dart';
+import 'package:assets_client/shared/utils/format_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -90,6 +91,7 @@ class HomeScreen extends StatelessWidget {
                               data: state.summary.chart,
                               isPositive:
                                   state.summary.changes.returnPct >= 0,
+                              range: state.currentRange,
                             ),
                           ],
                         ),
@@ -241,12 +243,5 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  String _formatCurrency(double value) {
-    if (value >= 1000000) {
-      return '${(value / 1000000).toStringAsFixed(2)}M';
-    } else if (value >= 1000) {
-      return '${(value / 1000).toStringAsFixed(2)}K';
-    }
-    return value.toStringAsFixed(2);
-  }
+  String _formatCurrency(double value) => formatCurrency(value);
 }
