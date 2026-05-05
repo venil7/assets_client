@@ -66,6 +66,27 @@ class SummaryChart extends StatelessWidget {
             show: true,
             border: Border.all(color: Colors.grey[300]!),
           ),
+          lineTouchData: LineTouchData(
+            touchTooltipData: LineTouchTooltipData(
+              getTooltipItems: (touchedSpots) {
+                return touchedSpots.map((spot) {
+                  final index = spot.x.toInt();
+                  final ts = index >= 0 && index < data.length
+                      ? data[index].timestamp
+                      : null;
+                  final dateStr = ts != null ? formatChartDate(ts, range) : '';
+                  return LineTooltipItem(
+                    '${formatCurrency(spot.y)}\n$dateStr',
+                    const TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      fontSize: 12,
+                    ),
+                  );
+                }).toList();
+              },
+            ),
+          ),
           lineBarsData: [
             LineChartBarData(
               isCurved: true,
@@ -117,11 +138,21 @@ class SummaryChart extends StatelessWidget {
   }
 
   double _minPrice() {
-    return data.map((e) => e.price).reduce((a, b) => a < b ? a : b) * 0.99;
+    final prices = data.map((e) => e.price);
+    final min = prices.reduce((a, b) => a < b ? a : b);
+    final max = prices.reduce((a, b) => a > b ? a : b);
+    final range = max - min;
+    final padding = range == 0 ? min * 0.01 : range * 0.1;
+    return min - padding;
   }
 
   double _maxPrice() {
-    return data.map((e) => e.price).reduce((a, b) => a > b ? a : b) * 1.01;
+    final prices = data.map((e) => e.price);
+    final min = prices.reduce((a, b) => a < b ? a : b);
+    final max = prices.reduce((a, b) => a > b ? a : b);
+    final range = max - min;
+    final padding = range == 0 ? max * 0.01 : range * 0.1;
+    return max + padding;
   }
 
   double _getInterval() {
