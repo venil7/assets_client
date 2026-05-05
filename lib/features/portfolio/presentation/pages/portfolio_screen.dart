@@ -268,7 +268,10 @@ class PortfolioScreen extends StatelessWidget {
           ),
         )
         .toList();
-    return SummaryChart(data: chartData);
+    return SummaryChart(
+      data: chartData,
+      isPositive: portfolio.changes.returnPct >= 0,
+    );
   }
 
   String _formatCurrency(double value) {

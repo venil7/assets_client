@@ -2,6 +2,7 @@ import 'package:assets_client/core/network/api_client.dart';
 import 'package:assets_client/core/services/dio_accessor.dart';
 import 'package:assets_client/core/services/token_manager_accessor.dart';
 import 'package:assets_client/features/config/presentation/bloc/config_bloc.dart';
+import 'package:assets_client/features/home/domain/entities/summary_entity.dart';
 import 'package:assets_client/features/home/presentation/bloc/home_bloc.dart';
 import 'package:assets_client/features/home/presentation/widgets/portfolio_list.dart';
 import 'package:assets_client/features/home/presentation/widgets/range_switch.dart';
@@ -140,7 +141,11 @@ class HomeScreen extends StatelessWidget {
                                   .add(ChangeRangeEvent(range)),
                             ),
                             const SizedBox(height: 16),
-                            SummaryChart(data: state.summary.chart),
+                            SummaryChart(
+                              data: state.summary.chart,
+                              isPositive:
+                                  state.summary.changes.returnPct >= 0,
+                            ),
                           ],
                         ),
                       ),
@@ -202,36 +207,56 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMetricsRow(BuildContext context, dynamic summary) {
-    final isPositive = summary.changes.returnPct >= 0;
-    return Row(
+  Widget _buildMetricsRow(BuildContext context, SummaryEntity summary) {
+    final periodPositive = summary.changes.returnPct >= 0;
+    final totalPositive = summary.totals.returnPct >= 0;
+
+    return Column(
       children: [
-        Expanded(
-          child: _metricCard(
-            context,
-            'Current Value',
-            _formatCurrency(summary.changes.endPrice),
-            Icons.trending_up,
-          ),
+        Row(
+          children: [
+            Expanded(
+              child: _metricCard(
+                context,
+                'Invested',
+                _formatCurrency(summary.invested),
+                Icons.account_balance,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _metricCard(
+                context,
+                'Current Value',
+                _formatCurrency(summary.changes.endPrice),
+                Icons.trending_up,
+              ),
+            ),
+          ],
         ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _metricCard(
-            context,
-            'Return',
-            '${(summary.changes.returnPct * 100).toStringAsFixed(2)}%',
-            Icons.percent,
-            color: isPositive ? Colors.green : Colors.red,
-          ),
-        ),
-        const SizedBox(width: 12),
-        Expanded(
-          child: _metricCard(
-            context,
-            'Invested',
-            _formatCurrency(summary.invested),
-            Icons.account_balance,
-          ),
+        const SizedBox(height: 12),
+        Row(
+          children: [
+            Expanded(
+              child: _metricCard(
+                context,
+                'Total Return',
+                '${_formatCurrency(summary.totals.returnValue)} (${(summary.totals.returnPct * 100).toStringAsFixed(2)}%)',
+                Icons.show_chart,
+                color: totalPositive ? Colors.green : Colors.red,
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: _metricCard(
+                context,
+                'Period Return',
+                '${_formatCurrency(summary.changes.returnValue)} (${(summary.changes.returnPct * 100).toStringAsFixed(2)}%)',
+                Icons.schedule,
+                color: periodPositive ? Colors.green : Colors.red,
+              ),
+            ),
+          ],
         ),
       ],
     );

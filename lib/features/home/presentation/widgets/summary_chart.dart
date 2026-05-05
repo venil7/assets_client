@@ -4,8 +4,9 @@ import 'package:flutter/material.dart';
 
 class SummaryChart extends StatelessWidget {
   final List<SummaryChartEntity> data;
+  final bool? isPositive;
 
-  const SummaryChart({super.key, required this.data});
+  const SummaryChart({super.key, required this.data, this.isPositive});
 
   @override
   Widget build(BuildContext context) {
@@ -57,6 +58,7 @@ class SummaryChart extends StatelessWidget {
           lineBarsData: [
             LineChartBarData(
               isCurved: true,
+              color: _lineColor(context),
               spots: List.generate(
                 data.length,
                 (i) => FlSpot(i.toDouble(), data[i].price),
@@ -65,10 +67,7 @@ class SummaryChart extends StatelessWidget {
               belowBarData: BarAreaData(
                 show: true,
                 gradient: LinearGradient(
-                  colors: [
-                    Theme.of(context).primaryColor.withValues(alpha: 0.3),
-                    Theme.of(context).primaryColor.withValues(alpha: 0.05),
-                  ],
+                  colors: _gradientColors(context),
                   begin: Alignment.topCenter,
                   end: Alignment.bottomCenter,
                 ),
@@ -80,6 +79,30 @@ class SummaryChart extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  List<Color> _gradientColors(BuildContext context) {
+    if (isPositive == null) {
+      return [
+        Theme.of(context).primaryColor.withValues(alpha: 0.3),
+        Theme.of(context).primaryColor.withValues(alpha: 0.05),
+      ];
+    }
+    if (isPositive!) {
+      return [
+        Colors.green.withValues(alpha: 0.3),
+        Colors.green.withValues(alpha: 0.05),
+      ];
+    }
+    return [
+      Colors.red.withValues(alpha: 0.3),
+      Colors.red.withValues(alpha: 0.05),
+    ];
+  }
+
+  Color _lineColor(BuildContext context) {
+    if (isPositive == null) return Theme.of(context).primaryColor;
+    return isPositive! ? Colors.green : Colors.red;
   }
 
   double _minPrice() {
