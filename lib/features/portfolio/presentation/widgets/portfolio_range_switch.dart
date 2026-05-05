@@ -14,22 +14,27 @@ class PortfolioRangeSwitch extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Wrap(
-      spacing: 8,
-      children: ranges.map((range) {
-        final isSelected = range == currentRange;
-        return ChoiceChip(
-          label: Text(range),
-          selected: isSelected,
-          onSelected: (selected) {
-            if (selected) {
-              context.read<PortfolioBloc>().add(ChangeRangeEvent(range));
-            }
-          },
-          selectedColor: Theme.of(context).primaryColor,
-          labelStyle: TextStyle(color: isSelected ? Colors.white : null),
-        );
-      }).toList(),
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: ranges.map((range) {
+          final isSelected = range == currentRange;
+          return Padding(
+            padding: const EdgeInsets.only(right: 8),
+            child: ChoiceChip(
+              label: Text(range),
+              selected: isSelected,
+              onSelected: (selected) {
+                if (selected) {
+                  context.read<PortfolioBloc>().add(ChangeRangeEvent(range));
+                }
+              },
+              selectedColor: Theme.of(context).primaryColor,
+              labelStyle: TextStyle(color: isSelected ? Colors.white : null),
+            ),
+          );
+        }).toList(),
+      ),
     );
   }
 }
