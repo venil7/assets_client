@@ -1,12 +1,19 @@
 import 'package:intl/intl.dart';
 
-String formatCurrency(double value) {
+String formatCurrency(double value, {bool showSign = false}) {
+  final sign = showSign && value >= 0 ? '+' : '';
   if (value >= 1000000) {
-    return '${(value / 1000000).toStringAsFixed(2)}M';
+    return '$sign${(value / 1000000).toStringAsFixed(2)}M';
   } else if (value >= 1000) {
-    return '${(value / 1000).toStringAsFixed(2)}K';
+    return '$sign${(value / 1000).toStringAsFixed(2)}K';
   }
-  return value.toStringAsFixed(2);
+  return '$sign${value.toStringAsFixed(2)}';
+}
+
+String formatPct(double value, {int decimals = 2, bool showSign = true}) {
+  final sign = showSign && value >= 0 ? '+' : '';
+  final formatted = (value * 100).toStringAsFixed(decimals);
+  return '$sign$formatted%';
 }
 
 String formatChartDate(int timestamp, String range) {

@@ -188,7 +188,7 @@ class HomeScreen extends StatelessWidget {
               child: _metricCard(
                 context,
                 'Total Return',
-                '${_formatCurrency(summary.totals.returnValue)} (${(summary.totals.returnPct * 100).toStringAsFixed(2)}%)',
+                '${_formatCurrency(summary.totals.returnValue)} (${formatPct(summary.totals.returnPct)})',
                 Icons.show_chart,
                 color: totalPositive ? Colors.green : Colors.red,
               ),
@@ -198,7 +198,7 @@ class HomeScreen extends StatelessWidget {
               child: _metricCard(
                 context,
                 'Period Return',
-                '${_formatCurrency(summary.changes.returnValue)} (${(summary.changes.returnPct * 100).toStringAsFixed(2)}%)',
+                '${_formatCurrency(summary.changes.returnValue)} (${formatPct(summary.changes.returnPct)})',
                 Icons.schedule,
                 color: periodPositive ? Colors.green : Colors.red,
               ),

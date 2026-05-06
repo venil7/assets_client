@@ -180,7 +180,7 @@ class PortfolioScreen extends StatelessWidget {
               child: _metricCard(
                 context,
                 'Total Return',
-                '${_formatCurrency(portfolio.totalReturnValue)} (${(portfolio.totalReturnPct * 100).toStringAsFixed(2)}%)',
+                '${_formatCurrency(portfolio.totalReturnValue)} (${formatPct(portfolio.totalReturnPct)})',
                 Icons.show_chart,
                 color: totalPositive ? Colors.green : Colors.red,
               ),
@@ -190,7 +190,7 @@ class PortfolioScreen extends StatelessWidget {
               child: _metricCard(
                 context,
                 'Period Return',
-                '${_formatCurrency(portfolio.changes.returnValue)} (${(portfolio.changes.returnPct * 100).toStringAsFixed(2)}%)',
+                '${_formatCurrency(portfolio.changes.returnValue)} (${formatPct(portfolio.changes.returnPct)})',
                 Icons.schedule,
                 color: periodPositive ? Colors.green : Colors.red,
               ),
