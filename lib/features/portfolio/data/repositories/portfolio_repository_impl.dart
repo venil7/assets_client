@@ -128,6 +128,9 @@ class PortfolioRepositoryImpl implements PortfolioRepository {
       baseCcy: model.baseCcy,
       weight: model.weight,
       returnPct: model.base.changes.returnPct,
+      returnValue: model.base.changes.returnValue,
+      totalReturnPct: model.base.totals.returnPct,
+      totalReturnValue: model.base.totals.returnValue,
     );
   }
 

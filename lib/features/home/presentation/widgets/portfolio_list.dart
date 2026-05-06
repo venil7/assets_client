@@ -18,14 +18,17 @@ class PortfolioList extends StatelessWidget {
       return const Center(child: Text('No portfolios found'));
     }
 
+    final sorted = List<PortfolioEntity>.of(portfolios)
+      ..sort((a, b) => b.changes.returnPct.compareTo(a.changes.returnPct));
+
     return ListView.separated(
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       padding: const EdgeInsets.all(16),
-      itemCount: portfolios.length,
+      itemCount: sorted.length,
       separatorBuilder: (context, index) => const SizedBox(height: 12),
       itemBuilder: (context, index) {
-        final portfolio = portfolios[index];
+        final portfolio = sorted[index];
         final periodPos = portfolio.changes.returnPct >= 0;
         final totalPos = portfolio.totals.returnPct >= 0;
         final periodColor = periodPos ? Colors.green : Colors.red;

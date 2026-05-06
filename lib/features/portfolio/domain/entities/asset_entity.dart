@@ -18,5 +18,8 @@ abstract class AssetEntity with _$AssetEntity {
     @JsonKey(name: 'base_ccy') required String baseCcy,
     double? weight,
     @JsonKey(name: 'returnPct') double? returnPct,
+    double? returnValue,
+    double? totalReturnPct,
+    double? totalReturnValue,
   }) = _AssetEntity;
 }
