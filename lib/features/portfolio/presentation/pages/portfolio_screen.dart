@@ -1,10 +1,9 @@
 import 'package:assets_client/features/home/domain/entities/summary_entity.dart';
-import 'package:assets_client/features/home/presentation/widgets/range_switch.dart';
-import 'package:assets_client/features/home/presentation/widgets/summary_chart.dart';
 import 'package:assets_client/features/portfolio/domain/entities/portfolio_detail_entity.dart';
 import 'package:assets_client/features/portfolio/presentation/bloc/portfolio_bloc.dart';
 import 'package:assets_client/features/portfolio/presentation/widgets/asset_list.dart';
 import 'package:assets_client/shared/utils/format_utils.dart';
+import 'package:assets_client/shared/widgets/chart_with_range.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -78,15 +77,21 @@ class PortfolioScreen extends StatelessWidget {
                           const SizedBox(height: 16),
                           _buildMetricsRow(context, state.portfolio),
                           const SizedBox(height: 16),
-                          RangeSwitch(
-                            ranges: state.validRanges,
+                          ChartWithRange(
+                            data: state.portfolio.chart
+                                .map((point) => SummaryChartEntity(
+                                      timestamp: point.timestamp,
+                                      price: point.price,
+                                      volume: point.volume,
+                                    ))
+                                .toList(),
+                            isPositive: state.portfolio.changes.returnPct >= 0,
                             currentRange: state.currentRange,
+                            validRanges: state.validRanges,
                             onRangeChanged: (range) => context
                                 .read<PortfolioBloc>()
                                 .add(ChangeRangeEvent(range)),
                           ),
-                          const SizedBox(height: 16),
-                          _buildChart(state),
                         ],
                       ),
                     ),
@@ -262,23 +267,6 @@ class PortfolioScreen extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Widget _buildChart(PortfolioLoaded state) {
-    final chartData = state.portfolio.chart
-        .map(
-          (point) => SummaryChartEntity(
-            timestamp: point.timestamp,
-            price: point.price,
-            volume: point.volume,
-          ),
-        )
-        .toList();
-    return SummaryChart(
-      data: chartData,
-      isPositive: state.portfolio.changes.returnPct >= 0,
-      range: state.currentRange,
     );
   }
 

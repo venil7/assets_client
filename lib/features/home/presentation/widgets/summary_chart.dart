@@ -62,10 +62,7 @@ class SummaryChart extends StatelessWidget {
               sideTitles: SideTitles(showTitles: false),
             ),
           ),
-          borderData: FlBorderData(
-            show: true,
-            border: Border.all(color: Colors.grey[300]!),
-          ),
+          borderData: FlBorderData(show: false),
           lineTouchData: LineTouchData(
             touchTooltipData: LineTouchTooltipData(
               getTooltipItems: (touchedSpots) {

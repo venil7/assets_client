@@ -3,14 +3,13 @@ import 'package:assets_client/core/services/dio_accessor.dart';
 import 'package:assets_client/features/home/domain/entities/summary_entity.dart';
 import 'package:assets_client/features/home/presentation/bloc/home_bloc.dart';
 import 'package:assets_client/features/home/presentation/widgets/portfolio_list.dart';
-import 'package:assets_client/features/home/presentation/widgets/range_switch.dart';
-import 'package:assets_client/features/home/presentation/widgets/summary_chart.dart';
 import 'package:assets_client/features/portfolio/data/datasources/portfolio_remote_data_source.dart';
 import 'package:assets_client/features/portfolio/data/repositories/portfolio_repository_impl.dart';
 import 'package:assets_client/features/portfolio/presentation/bloc/portfolio_bloc.dart'
     show PortfolioBloc, LoadPortfolioEvent;
 import 'package:assets_client/features/portfolio/presentation/pages/portfolio_screen.dart';
 import 'package:assets_client/shared/utils/format_utils.dart';
+import 'package:assets_client/shared/widgets/chart_with_range.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -71,27 +70,22 @@ class HomeScreen extends StatelessWidget {
                         child: Column(
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Text(
-                              'Portfolio Summary',
-                              style: Theme.of(context).textTheme.headlineSmall
-                                  ?.copyWith(fontWeight: FontWeight.bold),
-                            ),
+                            // Text(
+                            //   'Portfolio Summary',
+                            //   style: Theme.of(context).textTheme.headlineSmall
+                            //       ?.copyWith(fontWeight: FontWeight.bold),
+                            // ),
                             const SizedBox(height: 8),
                             _buildMetricsRow(context, state.summary),
                             const SizedBox(height: 16),
-                            RangeSwitch(
-                              ranges: state.validRanges,
+                            ChartWithRange(
+                              data: state.summary.chart,
+                              isPositive: state.summary.changes.returnPct >= 0,
                               currentRange: state.currentRange,
+                              validRanges: state.validRanges,
                               onRangeChanged: (range) => context
                                   .read<HomeBloc>()
                                   .add(ChangeRangeEvent(range)),
-                            ),
-                            const SizedBox(height: 16),
-                            SummaryChart(
-                              data: state.summary.chart,
-                              isPositive:
-                                  state.summary.changes.returnPct >= 0,
-                              range: state.currentRange,
                             ),
                           ],
                         ),
@@ -103,11 +97,11 @@ class HomeScreen extends StatelessWidget {
                           top: 16,
                           right: 16,
                         ),
-                        child: Text(
-                          'Portfolios',
-                          style: Theme.of(context).textTheme.titleLarge
-                              ?.copyWith(fontWeight: FontWeight.bold),
-                        ),
+                        // child: Text(
+                        //   'Portfolios',
+                        //   style: Theme.of(context).textTheme.titleLarge
+                        //       ?.copyWith(fontWeight: FontWeight.bold),
+                        // ),
                       ),
                       PortfolioList(
                         portfolios: state.portfolios,
