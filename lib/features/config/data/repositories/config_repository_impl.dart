@@ -12,12 +12,10 @@ class ConfigRepositoryImpl implements ConfigRepository {
 
   @override
   Future<void> saveCredentials(
-    String url,
     String username,
     String token,
     int refreshBefore,
   ) async {
-    await localDataSource.saveApiUrl(url);
     await localDataSource.saveUsername(username);
     await localDataSource.saveJwtToken(token, refreshBefore);
   }

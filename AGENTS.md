@@ -26,7 +26,7 @@ The app should follow **Clean Architecture** with **BLoC** for state management:
 - **Data Layer**: API clients, repositories, data sources (local & remote)
 - **BLoC Layer**: Business Logic Components managing state and events
 
-### Recommended Dependencies (to be added)
+### Recommended Dependencies
 
 **State Management:**
 - `flutter_bloc: ^8.1.0+` - BLoC pattern implementation
@@ -101,7 +101,9 @@ lib/
 
 ---
 
-## Development Workflow
+## server URLs and authentication
+The application is an API client, hence it can connect to a compatible API that is often selfhosted, or may be available on the internet (refer to API.md) for the atual API endpoints. Therefore it is assumed that an app will store an API base url (eg http://localhost:4020/api/v1 ) base url before it lets user login and communicate with it. The user authentocates with the chosen API via appropriate login endpoint where they supply username and passowrd, which returns a JWT token, along with the information of when it needs to be refreshed. The app stores a JWT token against username, but never the actual password.  JWT among other things encodes when it expires. if API url, username and valid jwt are present usеr is considered to be logged in. All subsequent requests are made with JWT attached as bearer token.
+
 
 ### Setup Commands
 
@@ -321,6 +323,7 @@ Dio interceptor handles:
 ## Common Development Tasks
 
 ### Adding a New Feature
+0. consider reusing some existing funxtionality, if relevant
 1. Create folder structure under `lib/features/{feature}/`
 2. Start with domain layer (entities, repository interfaces)
 3. Implement data layer (models, datasources, repository)
@@ -362,8 +365,7 @@ Output: `build/macos/Build/Products/Release/assets_client.app`
 
 ### Android Build
 ```bash
-flutter build apk --release      # APK
-flutter build appbundle --release # App Bundle for Play Store
+flutter build apk --target-platform android-arm64 --split-per-abi
 ```
 
 Requires keystore configuration for signing.
@@ -375,7 +377,7 @@ Requires keystore configuration for signing.
 0. **always use caveman skill** make sure to use Caveman skill
 1. **Always generate code**: After modifying models or adding new features, run `build_runner` to generate serialization/deserialization code
 2. **BLoC for state**: Every feature should have a BLoC managing its state
-3. **Clean Architecture**: Separate concerns across data, domain, and presentation layers
+3. **Clean Architecture**: Separate concerns across data, domain, and presentation layers, reuse existing functionality where appropriate, avoid code duplication
 4. **Error handling**: Transform API errors into appropriate BLoC failure states
 5. **Immutability**: Use `@freezed` for all data models
 6. **Testing**: Write tests for business logic and critical UI flows

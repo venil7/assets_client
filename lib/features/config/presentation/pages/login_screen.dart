@@ -1,4 +1,3 @@
-import 'package:assets_client/core/services/token_manager_accessor.dart';
 import 'package:assets_client/features/config/presentation/bloc/config_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -81,7 +80,6 @@ class _LoginScreenState extends State<LoginScreen> {
       body: BlocListener<ConfigBloc, ConfigState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
-            tokenManager.setToken(state.token, state.refreshBefore);
             Navigator.of(context).pushReplacementNamed('/home');
           } else if (state is AuthFailure) {
             ScaffoldMessenger.of(context).showSnackBar(

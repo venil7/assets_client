@@ -1,16 +1,15 @@
-import 'package:assets_client/features/config/presentation/bloc/config_bloc.dart';
+import 'package:assets_client/core/services/token_manager_accessor.dart';
 import 'package:assets_client/features/config/presentation/widgets/settings_account_tab.dart';
 import 'package:assets_client/features/config/presentation/widgets/settings_preferences_tab.dart';
 import 'package:assets_client/features/config/presentation/widgets/settings_session_tab.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 
 class SettingsScreen extends StatelessWidget {
   const SettingsScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final loggedIn = context.read<ConfigBloc>().state is ConfigFound;
+    final loggedIn = tokenManager.isLoggedIn;
 
     return DefaultTabController(
       length: loggedIn ? 3 : 1,

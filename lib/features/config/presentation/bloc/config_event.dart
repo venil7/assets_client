@@ -41,3 +41,7 @@ class ClearConfigEvent extends ConfigEvent {
 class ClearCredentialsEvent extends ConfigEvent {
   const ClearCredentialsEvent();
 }
+
+class RefreshTokenEvent extends ConfigEvent {
+  const RefreshTokenEvent();
+}

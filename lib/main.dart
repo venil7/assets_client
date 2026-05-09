@@ -10,6 +10,7 @@ import 'package:assets_client/core/services/token_manager.dart';
 import 'package:assets_client/core/services/token_manager_accessor.dart';
 import 'package:assets_client/features/auth/data/datasources/auth_remote_data_source.dart';
 import 'package:assets_client/features/auth/data/repositories/auth_repository_impl.dart';
+import 'package:assets_client/features/auth/domain/repositories/auth_repository.dart';
 import 'package:assets_client/features/config/data/datasources/config_local_data_source.dart';
 import 'package:assets_client/features/config/data/repositories/config_repository_impl.dart';
 import 'package:assets_client/features/config/presentation/bloc/config_bloc.dart';
@@ -43,10 +44,9 @@ class MyApp extends StatelessWidget {
 
     return BlocProvider(
       create: (_) {
-        final dio = _createDio();
+        final dio = _createBaseDio();
         initDio(dio);
 
-        // Load saved API URL and set as baseUrl
         configLocalDataSource.getApiUrl().then((savedUrl) {
           if (savedUrl != null) {
             setBaseUrl(savedUrl);
@@ -57,6 +57,9 @@ class MyApp extends StatelessWidget {
         final authRepository = AuthRepositoryImpl(
           remoteDataSource: AuthRemoteDataSourceImpl(apiClient: apiClient),
         );
+
+        _addAuthInterceptor(dio, authRepository);
+
         return ConfigBloc(
           repository: configRepository,
           authRepository: authRepository,
@@ -75,7 +78,7 @@ class MyApp extends StatelessWidget {
                 body: Center(child: CircularProgressIndicator()),
               );
             }
-            if (state is ConfigFound) {
+            if (state is ConfigFound || state is AuthSuccess) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.of(context).pushReplacementNamed('/home');
               });
@@ -91,7 +94,6 @@ class MyApp extends StatelessWidget {
               );
             }
             if (state is AuthFailure) {
-              // Show login screen again with error. User can retry
               return Scaffold(
                 body: Center(
                   child: Column(
@@ -129,7 +131,6 @@ class MyApp extends StatelessWidget {
                 ),
               );
             }
-            // Fallback: show API URL screen
             return const ApiUrlScreen();
           },
         ),
@@ -137,11 +138,9 @@ class MyApp extends StatelessWidget {
     );
   }
 
-  Dio _createDio() {
+  Dio _createBaseDio() {
     final dio = Dio();
-    // Set default JSON content-type header
     dio.options.headers['Content-Type'] = 'application/json';
-    // Accept self-signed certs (dev mode)
     dio.httpClientAdapter = IOHttpClientAdapter()
       ..onHttpClientCreate = (client) {
         client.badCertificateCallback =
@@ -149,12 +148,19 @@ class MyApp extends StatelessWidget {
         return client;
       };
     dio.interceptors.add(NetworkErrorInterceptor());
+    return dio;
+  }
+
+  void _addAuthInterceptor(Dio dio, AuthRepository authRepository) {
     dio.interceptors.add(
       AuthInterceptor(
         getToken: () => tokenManager.getToken() ?? '',
-        refreshToken: () async => tokenManager.getToken() ?? '',
+        refreshToken: () async {
+          final entity = await authRepository.refreshToken();
+          await tokenManager.setToken(entity.token, entity.refreshBefore);
+          return entity.token;
+        },
       ),
     );
-    return dio;
   }
 }

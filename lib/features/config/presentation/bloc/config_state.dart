@@ -87,3 +87,31 @@ class AuthFailure extends ConfigState {
   @override
   List<Object?> get props => [message];
 }
+
+class TokenRefreshing extends ConfigState {
+  const TokenRefreshing();
+}
+
+class TokenRefreshed extends ConfigState {
+  final String token;
+  final int refreshBefore;
+  final int expiresAt;
+
+  const TokenRefreshed({
+    required this.token,
+    required this.refreshBefore,
+    required this.expiresAt,
+  });
+
+  @override
+  List<Object?> get props => [token, refreshBefore, expiresAt];
+}
+
+class TokenRefreshFailure extends ConfigState {
+  final String message;
+
+  const TokenRefreshFailure({required this.message});
+
+  @override
+  List<Object?> get props => [message];
+}

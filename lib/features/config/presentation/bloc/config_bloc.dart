@@ -1,3 +1,4 @@
+import 'package:assets_client/core/services/token_manager_accessor.dart';
 import 'package:assets_client/features/auth/domain/repositories/auth_repository.dart';
 import 'package:assets_client/features/config/domain/repositories/config_repository.dart';
 import 'package:dio/dio.dart';
@@ -18,15 +19,14 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
     on<LoginWithCredentialsEvent>(_onLoginWithCredentials);
     on<ClearConfigEvent>(_onClearConfig);
     on<ClearCredentialsEvent>(_onClearCredentials);
+    on<RefreshTokenEvent>(_onRefreshToken);
   }
 
   String _errorMessage(dynamic e) {
     if (e is DioException) {
-      // Prefer custom error from interceptor
       if (e.error != null) {
         return e.error.toString();
       }
-      // Fallback: human-readable message from Dio type
       switch (e.type) {
         case DioExceptionType.connectionTimeout:
         case DioExceptionType.receiveTimeout:
@@ -87,7 +87,6 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
   ) async {
     try {
       await repository.saveApiUrl(event.apiUrl);
-      // URL saved. No token yet, so move to credentials screen
       emit(CredentialsMissing(apiUrl: event.apiUrl, savedUsername: null));
     } catch (e) {
       emit(ConfigError(message: _errorMessage(e)));
@@ -105,11 +104,11 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
         event.password,
       );
       await repository.saveCredentials(
-        event.apiUrl,
         event.username,
         authEntity.token,
         authEntity.refreshBefore,
       );
+      await tokenManager.setToken(authEntity.token, authEntity.refreshBefore);
       emit(
         AuthSuccess(
           apiUrl: event.apiUrl,
@@ -117,6 +116,9 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
           token: authEntity.token,
           refreshBefore: authEntity.refreshBefore,
         ),
+      );
+      emit(
+        ConfigFound(apiUrl: event.apiUrl, username: event.username),
       );
     } catch (e) {
       emit(AuthFailure(message: _errorMessage(e)));
@@ -129,6 +131,7 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
   ) async {
     try {
       await repository.clearConfig();
+      await tokenManager.clearToken();
       emit(const ApiUrlMissing());
     } catch (e) {
       emit(ConfigError(message: _errorMessage(e)));
@@ -141,6 +144,7 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
   ) async {
     try {
       await repository.clearCredentials();
+      await tokenManager.clearToken();
       final config = await repository.getConfig();
       if (config != null) {
         emit(
@@ -154,6 +158,39 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
       }
     } catch (e) {
       emit(ConfigError(message: e.toString()));
+    }
+  }
+
+  Future<void> _onRefreshToken(
+    RefreshTokenEvent event,
+    Emitter<ConfigState> emit,
+  ) async {
+    try {
+      final config = await repository.getConfig();
+      if (config == null || config.jwtToken == null || config.jwtToken!.isEmpty) {
+        emit(TokenRefreshFailure(message: 'No active session'));
+        return;
+      }
+      emit(const TokenRefreshing());
+      final auth = await authRepository.refreshToken();
+      await repository.saveCredentials(
+        config.username ?? '',
+        auth.token,
+        auth.refreshBefore,
+      );
+      await tokenManager.setToken(auth.token, auth.refreshBefore);
+      emit(
+        TokenRefreshed(
+          token: auth.token,
+          refreshBefore: auth.refreshBefore,
+          expiresAt: DateTime.now().millisecondsSinceEpoch + auth.refreshBefore,
+        ),
+      );
+      emit(
+        ConfigFound(apiUrl: config.apiBaseUrl, username: config.username),
+      );
+    } catch (e) {
+      emit(TokenRefreshFailure(message: _errorMessage(e)));
     }
   }
 }
