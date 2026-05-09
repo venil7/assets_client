@@ -49,7 +49,9 @@ class RouteGenerator {
           builder: (_) {
             final apiClient = ApiClient(dioInstance);
             final profileRepo = ProfileRepositoryImpl(
-              remoteDataSource: ProfileRemoteDataSourceImpl(apiClient: apiClient),
+              remoteDataSource: ProfileRemoteDataSourceImpl(
+                apiClient: apiClient,
+              ),
             );
             return BlocProvider(
               create: (_) => SettingsBloc(repository: profileRepo),
@@ -62,14 +64,14 @@ class RouteGenerator {
         return MaterialPageRoute(
           builder: (_) {
             final apiClient = ApiClient(dioInstance);
-            final dataSource =
-                PortfolioRemoteDataSourceImpl(apiClient: apiClient);
-            final repo = PortfolioRepositoryImpl(
-              remoteDataSource: dataSource,
+            final dataSource = PortfolioRemoteDataSourceImpl(
+              apiClient: apiClient,
             );
+            final repo = PortfolioRepositoryImpl(remoteDataSource: dataSource);
             return BlocProvider(
-              create: (_) => PortfolioBloc(repository: repo)
-                ..add(LoadPortfolioEvent(portfolioId: portfolioId)),
+              create: (_) =>
+                  PortfolioBloc(repository: repo)
+                    ..add(LoadPortfolioEvent(portfolioId: portfolioId)),
               child: PortfolioScreen(portfolioId: portfolioId),
             );
           },

@@ -4,10 +4,7 @@ class AuthInterceptor extends Interceptor {
   final String Function()? getToken;
   final Future<String> Function()? refreshToken;
 
-  AuthInterceptor({
-    this.getToken,
-    this.refreshToken,
-  });
+  AuthInterceptor({this.getToken, this.refreshToken});
 
   @override
   void onRequest(RequestOptions options, RequestInterceptorHandler handler) {

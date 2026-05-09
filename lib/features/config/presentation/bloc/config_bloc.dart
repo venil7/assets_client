@@ -117,9 +117,7 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
           refreshBefore: authEntity.refreshBefore,
         ),
       );
-      emit(
-        ConfigFound(apiUrl: event.apiUrl, username: event.username),
-      );
+      emit(ConfigFound(apiUrl: event.apiUrl, username: event.username));
     } catch (e) {
       emit(AuthFailure(message: _errorMessage(e)));
     }
@@ -167,7 +165,9 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
   ) async {
     try {
       final config = await repository.getConfig();
-      if (config == null || config.jwtToken == null || config.jwtToken!.isEmpty) {
+      if (config == null ||
+          config.jwtToken == null ||
+          config.jwtToken!.isEmpty) {
         emit(TokenRefreshFailure(message: 'No active session'));
         return;
       }
@@ -186,9 +186,7 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
           expiresAt: DateTime.now().millisecondsSinceEpoch + auth.refreshBefore,
         ),
       );
-      emit(
-        ConfigFound(apiUrl: config.apiBaseUrl, username: config.username),
-      );
+      emit(ConfigFound(apiUrl: config.apiBaseUrl, username: config.username));
     } catch (e) {
       emit(TokenRefreshFailure(message: _errorMessage(e)));
     }

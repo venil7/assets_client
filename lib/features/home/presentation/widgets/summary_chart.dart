@@ -161,40 +161,64 @@ class SummaryChart extends StatelessWidget {
 
   double _intervalForRangeLarge() {
     switch (range) {
-      case '1d': return 2;
-      case '1w': return 1;
-      case '1m': return 5;
-      case '3m': return 10;
-      case '1y': return 20;
-      case '5y': return 60;
-      case 'all': return data.length / 8;
-      default: return 5;
+      case '1d':
+        return 2;
+      case '1w':
+        return 1;
+      case '1m':
+        return 5;
+      case '3m':
+        return 10;
+      case '1y':
+        return 20;
+      case '5y':
+        return 60;
+      case 'all':
+        return data.length / 8;
+      default:
+        return 5;
     }
   }
 
   double _intervalForRangeMedium() {
     switch (range) {
-      case '1d': return 4;
-      case '1w': return 2;
-      case '1m': return 10;
-      case '3m': return 15;
-      case '1y': return 30;
-      case '5y': return 80;
-      case 'all': return data.length / 8;
-      default: return 10;
+      case '1d':
+        return 4;
+      case '1w':
+        return 2;
+      case '1m':
+        return 10;
+      case '3m':
+        return 15;
+      case '1y':
+        return 30;
+      case '5y':
+        return 80;
+      case 'all':
+        return data.length / 8;
+      default:
+        return 10;
     }
   }
 
   double _intervalForRangeDense() {
     switch (range) {
-      case '1d': return 8;
-      case '1w': return 4;
-      case '1m': return 20;
-      case '3m': return 30;
-      case '1y': return 60;
-      case '5y': return 120;
-      case 'all': return data.length / 8;
-      default: return 20;
+      case '1d':
+        return 8;
+      case '1w':
+        return 4;
+      case '1m':
+        return 20;
+      case '3m':
+        return 30;
+      case '1y':
+        return 60;
+      case '5y':
+        return 120;
+      case 'all':
+        return data.length / 8;
+      default:
+        return 20;
     }
   }
 

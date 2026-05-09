@@ -1,3 +1,12 @@
+import 'package:assets_client/core/network/api_client.dart';
+import 'package:assets_client/core/services/dio_accessor.dart';
+import 'package:assets_client/features/asset/data/datasources/asset_remote_data_source.dart';
+import 'package:assets_client/features/asset/data/datasources/transaction_remote_data_source.dart';
+import 'package:assets_client/features/asset/data/repositories/asset_detail_repository_impl.dart';
+import 'package:assets_client/features/asset/data/repositories/transaction_repository_impl.dart';
+import 'package:assets_client/features/asset/presentation/bloc/asset_detail_bloc.dart'
+    hide ChangeRangeEvent;
+import 'package:assets_client/features/asset/presentation/pages/asset_detail_screen.dart';
 import 'package:assets_client/features/home/domain/entities/summary_entity.dart';
 import 'package:assets_client/features/portfolio/domain/entities/portfolio_detail_entity.dart';
 import 'package:assets_client/features/portfolio/presentation/bloc/portfolio_bloc.dart';
@@ -11,6 +20,34 @@ class PortfolioScreen extends StatelessWidget {
   final int portfolioId;
 
   const PortfolioScreen({super.key, required this.portfolioId});
+
+  void _navigateToAsset(BuildContext context, int assetId) {
+    final apiClient = ApiClient(dioInstance);
+    final assetDataSource = AssetRemoteDataSourceImpl(apiClient: apiClient);
+    final txDataSource = TransactionRemoteDataSourceImpl(apiClient: apiClient);
+    final assetDetailRepo = AssetDetailRepositoryImpl(
+      remoteDataSource: assetDataSource,
+    );
+    final txRepo = TransactionRepositoryImpl(remoteDataSource: txDataSource);
+
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => BlocProvider(
+          create: (_) =>
+              AssetDetailBloc(
+                assetDetailRepository: assetDetailRepo,
+                transactionRepository: txRepo,
+              )..add(
+                LoadAssetDetailEvent(
+                  portfolioId: portfolioId,
+                  assetId: assetId,
+                ),
+              ),
+          child: AssetDetailScreen(portfolioId: portfolioId, assetId: assetId),
+        ),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -79,11 +116,13 @@ class PortfolioScreen extends StatelessWidget {
                           const SizedBox(height: 16),
                           ChartWithRange(
                             data: state.portfolio.chart
-                                .map((point) => SummaryChartEntity(
-                                      timestamp: point.timestamp,
-                                      price: point.price,
-                                      volume: point.volume,
-                                    ))
+                                .map(
+                                  (point) => SummaryChartEntity(
+                                    timestamp: point.timestamp,
+                                    price: point.price,
+                                    volume: point.volume,
+                                  ),
+                                )
                                 .toList(),
                             isPositive: state.portfolio.changes.returnPct >= 0,
                             currentRange: state.currentRange,
@@ -110,7 +149,10 @@ class PortfolioScreen extends StatelessWidget {
                         ),
                       ),
                     ),
-                    AssetList(assets: state.assets),
+                    AssetList(
+                      assets: state.assets,
+                      onAssetTap: (pid, aid) => _navigateToAsset(context, aid),
+                    ),
                   ],
                 ),
               ),
@@ -150,89 +192,74 @@ class PortfolioScreen extends StatelessWidget {
     BuildContext context,
     PortfolioDetailEntity portfolio,
   ) {
-    final periodPositive = portfolio.changes.returnPct >= 0;
-    final totalPositive = portfolio.totalReturnPct >= 0;
-    final hasFxImpact = portfolio.fxImpact != 0;
-    final hasRealizedPnl = portfolio.realizedPnl != 0;
+    final periodPos = portfolio.changes.returnPct >= 0;
+    final totalPos = portfolio.totalReturnPct >= 0;
 
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: _metricCard(
-                context,
-                'Invested',
-                _formatCurrency(portfolio.invested),
-                Icons.account_balance,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _metricCard(
-                context,
-                'Current Value',
-                _formatCurrency(portfolio.changes.endPrice),
-                Icons.trending_up,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: _metricCard(
-                context,
-                'Total Return',
-                '${_formatCurrency(portfolio.totalReturnValue)} (${formatPct(portfolio.totalReturnPct)})',
-                Icons.show_chart,
-                color: totalPositive ? Colors.green : Colors.red,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _metricCard(
-                context,
-                'Period Return',
-                '${_formatCurrency(portfolio.changes.returnValue)} (${formatPct(portfolio.changes.returnPct)})',
-                Icons.schedule,
-                color: periodPositive ? Colors.green : Colors.red,
-              ),
-            ),
-          ],
-        ),
-        if (hasFxImpact || hasRealizedPnl) ...[
-          const SizedBox(height: 12),
-          Row(
-            children: [
-              if (hasFxImpact)
-                Expanded(
-                  child: _metricCard(
-                    context,
-                    'FX Impact',
-                    _formatCurrency(portfolio.fxImpact),
-                    Icons.currency_exchange,
-                    color: portfolio.fxImpact >= 0 ? Colors.green : Colors.red,
-                  ),
-                ),
-              if (hasFxImpact && hasRealizedPnl) const SizedBox(width: 12),
-              if (hasRealizedPnl)
-                Expanded(
-                  child: _metricCard(
-                    context,
-                    'Realized P&L',
-                    _formatCurrency(portfolio.realizedPnl),
-                    Icons.account_balance_wallet,
-                    color: portfolio.realizedPnl >= 0
-                        ? Colors.green
-                        : Colors.red,
-                  ),
-                ),
-            ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          _metricCard(
+            context,
+            'Current Value',
+            formatCurrency(portfolio.changes.endPrice),
+            Icons.trending_up,
+          ),
+          const SizedBox(width: 10),
+          _metricCard(
+            context,
+            'Period Return',
+            '${formatCurrency(portfolio.changes.returnValue)} (${formatPct(portfolio.changes.returnPct)})',
+            Icons.schedule,
+            color: periodPos ? Colors.green : Colors.red,
+          ),
+          const SizedBox(width: 10),
+          _metricCard(
+            context,
+            'Total Return',
+            '${formatCurrency(portfolio.totalReturnValue)} (${formatPct(portfolio.totalReturnPct)})',
+            Icons.show_chart,
+            color: totalPos ? Colors.green : Colors.red,
+          ),
+          const SizedBox(width: 10),
+          _metricCard(
+            context,
+            'Invested',
+            formatCurrency(portfolio.invested),
+            Icons.account_balance,
+          ),
+          const SizedBox(width: 10),
+          _metricCard(
+            context,
+            'Break Even',
+            formatCurrency(portfolio.breakEven),
+            Icons.ev_station,
+          ),
+          const SizedBox(width: 10),
+          _metricCard(
+            context,
+            'Realized P&L',
+            formatCurrency(portfolio.realizedPnl, showSign: true),
+            Icons.account_balance_wallet,
+            color: portfolio.realizedPnl >= 0 ? Colors.green : Colors.red,
+          ),
+          const SizedBox(width: 10),
+          _metricCard(
+            context,
+            'FX Impact',
+            formatCurrency(portfolio.fxImpact, showSign: true),
+            Icons.currency_exchange,
+            color: portfolio.fxImpact >= 0 ? Colors.green : Colors.red,
+          ),
+          const SizedBox(width: 10),
+          _metricCard(
+            context,
+            'Holdings',
+            '${portfolio.numAssets}',
+            Icons.folder,
           ),
         ],
-      ],
+      ),
     );
   }
 
@@ -243,32 +270,35 @@ class PortfolioScreen extends StatelessWidget {
     IconData icon, {
     Color? color,
   }) {
-    return Card(
-      elevation: 1,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, size: 20, color: color ?? Colors.blue),
-            const SizedBox(height: 8),
-            Text(
-              label,
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: color,
+    return SizedBox(
+      width: 140,
+      child: Card(
+        elevation: 1,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icon, size: 18, color: color ?? Colors.blue),
+              const SizedBox(height: 6),
+              Text(
+                label,
+                style: const TextStyle(fontSize: 11, color: Colors.grey),
               ),
-            ),
-          ],
+              const SizedBox(height: 2),
+              Text(
+                value,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-
-  String _formatCurrency(double value) => formatCurrency(value);
 }

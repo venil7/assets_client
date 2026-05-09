@@ -71,9 +71,7 @@ class _SettingsAccountTabState extends State<SettingsAccountTab> {
                       border: const OutlineInputBorder(),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscureOld
-                              ? Icons.visibility_off
-                              : Icons.visibility,
+                          _obscureOld ? Icons.visibility_off : Icons.visibility,
                         ),
                         onPressed: () =>
                             setState(() => _obscureOld = !_obscureOld),
@@ -92,9 +90,7 @@ class _SettingsAccountTabState extends State<SettingsAccountTab> {
                       border: const OutlineInputBorder(),
                       suffixIcon: IconButton(
                         icon: Icon(
-                          _obscureNew
-                              ? Icons.visibility_off
-                              : Icons.visibility,
+                          _obscureNew ? Icons.visibility_off : Icons.visibility,
                         ),
                         onPressed: () =>
                             setState(() => _obscureNew = !_obscureNew),
@@ -159,10 +155,7 @@ class _SettingsAccountTabState extends State<SettingsAccountTab> {
             ],
             if (state.error != null) ...[
               const SizedBox(height: 12),
-              Text(
-                state.error!,
-                style: const TextStyle(color: Colors.red),
-              ),
+              Text(state.error!, style: const TextStyle(color: Colors.red)),
             ],
           ],
         );
@@ -173,12 +166,12 @@ class _SettingsAccountTabState extends State<SettingsAccountTab> {
   void _changePassword(BuildContext context) {
     if (!_formKey.currentState!.validate()) return;
     context.read<SettingsBloc>().add(
-          ChangePasswordEvent(
-            oldPassword: _oldPasswordController.text,
-            newPassword: _newPasswordController.text,
-            repeat: _repeatPasswordController.text,
-          ),
-        );
+      ChangePasswordEvent(
+        oldPassword: _oldPasswordController.text,
+        newPassword: _newPasswordController.text,
+        repeat: _repeatPasswordController.text,
+      ),
+    );
   }
 }
 
@@ -202,9 +195,7 @@ class _ProfileCard extends StatelessWidget {
         padding: const EdgeInsets.all(16),
         child: Row(
           children: [
-            const CircleAvatar(
-              child: Icon(Icons.person),
-            ),
+            const CircleAvatar(child: Icon(Icons.person)),
             const SizedBox(width: 16),
             Expanded(
               child: Column(
@@ -220,10 +211,7 @@ class _ProfileCard extends StatelessWidget {
                   const SizedBox(height: 4),
                   Text(
                     profile!.admin ? 'Administrator' : 'User',
-                    style: TextStyle(
-                      fontSize: 14,
-                      color: Colors.grey[600],
-                    ),
+                    style: TextStyle(fontSize: 14, color: Colors.grey[600]),
                   ),
                 ],
               ),

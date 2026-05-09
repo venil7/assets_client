@@ -3,8 +3,18 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 const List<String> _supportedCurrencies = [
-  'USD', 'GBP', 'EUR', 'CAD', 'AUD', 'CHF',
-  'SEK', 'NOK', 'DKK', 'NZD', 'JPY', 'INR',
+  'USD',
+  'GBP',
+  'EUR',
+  'CAD',
+  'AUD',
+  'CHF',
+  'SEK',
+  'NOK',
+  'DKK',
+  'NZD',
+  'JPY',
+  'INR',
 ];
 
 class SettingsPreferencesTab extends StatefulWidget {
@@ -35,8 +45,7 @@ class _SettingsPreferencesTabState extends State<SettingsPreferencesTab> {
 
         if (prefs != null && _selectedCurrency == null) {
           _selectedCurrency = prefs.baseCcy;
-          _altChart =
-              (prefs.additional?['altChart'] as bool?) ?? false;
+          _altChart = (prefs.additional?['altChart'] as bool?) ?? false;
         }
 
         return ListView(
@@ -57,12 +66,7 @@ class _SettingsPreferencesTabState extends State<SettingsPreferencesTab> {
                 border: OutlineInputBorder(),
               ),
               items: _supportedCurrencies
-                  .map(
-                    (ccy) => DropdownMenuItem(
-                      value: ccy,
-                      child: Text(ccy),
-                    ),
-                  )
+                  .map((ccy) => DropdownMenuItem(value: ccy, child: Text(ccy)))
                   .toList(),
               onChanged: (val) {
                 setState(() => _selectedCurrency = val);
@@ -109,10 +113,7 @@ class _SettingsPreferencesTabState extends State<SettingsPreferencesTab> {
             ],
             if (state.error != null) ...[
               const SizedBox(height: 12),
-              Text(
-                state.error!,
-                style: const TextStyle(color: Colors.red),
-              ),
+              Text(state.error!, style: const TextStyle(color: Colors.red)),
             ],
           ],
         );
@@ -123,10 +124,10 @@ class _SettingsPreferencesTabState extends State<SettingsPreferencesTab> {
   void _save(BuildContext context) {
     if (_selectedCurrency == null) return;
     context.read<SettingsBloc>().add(
-          UpdatePreferencesEvent(
-            baseCcy: _selectedCurrency!,
-            additional: {'altChart': _altChart},
-          ),
-        );
+      UpdatePreferencesEvent(
+        baseCcy: _selectedCurrency!,
+        additional: {'altChart': _altChart},
+      ),
+    );
   }
 }

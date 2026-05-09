@@ -60,9 +60,8 @@ class _SettingsSessionTabState extends State<SettingsSessionTab> {
             enabled: !_refreshing,
             onTap: _refreshing
                 ? null
-                : () => context
-                    .read<ConfigBloc>()
-                    .add(const RefreshTokenEvent()),
+                : () =>
+                      context.read<ConfigBloc>().add(const RefreshTokenEvent()),
           ),
           const Divider(indent: 16, endIndent: 16),
           ListTile(
@@ -97,10 +96,10 @@ class _SettingsSessionTabState extends State<SettingsSessionTab> {
     }
 
     context.read<ConfigBloc>().add(const ClearCredentialsEvent());
-    Navigator.of(context).pushReplacementNamed('/login', arguments: {
-      'prefilledUrl': url,
-      'prefilledUsername': username,
-    });
+    Navigator.of(context).pushReplacementNamed(
+      '/login',
+      arguments: {'prefilledUrl': url, 'prefilledUsername': username},
+    );
   }
 
   void _clearAll(BuildContext context) {

@@ -31,9 +31,9 @@ class _ApiUrlScreenState extends State<ApiUrlScreen> {
     var url = _urlController.text.trim();
 
     if (url.isEmpty) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Enter API URL')),
-      );
+      ScaffoldMessenger.of(
+        context,
+      ).showSnackBar(const SnackBar(content: Text('Enter API URL')));
       return;
     }
 
@@ -51,10 +51,9 @@ class _ApiUrlScreenState extends State<ApiUrlScreen> {
     setBaseUrl(url);
     context.read<ConfigBloc>().add(SaveApiUrlEvent(url));
 
-    Navigator.of(context).pushReplacementNamed(
-      '/login',
-      arguments: {'prefilledUrl': url},
-    );
+    Navigator.of(
+      context,
+    ).pushReplacementNamed('/login', arguments: {'prefilledUrl': url});
   }
 
   @override

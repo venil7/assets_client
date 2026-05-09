@@ -149,57 +149,74 @@ class HomeScreen extends StatelessWidget {
   }
 
   Widget _buildMetricsRow(BuildContext context, SummaryEntity summary) {
-    final periodPositive = summary.changes.returnPct >= 0;
-    final totalPositive = summary.totals.returnPct >= 0;
+    final periodPos = summary.changes.returnPct >= 0;
+    final totalPos = summary.totals.returnPct >= 0;
 
-    return Column(
-      children: [
-        Row(
-          children: [
-            Expanded(
-              child: _metricCard(
-                context,
-                'Invested',
-                _formatCurrency(summary.invested),
-                Icons.account_balance,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _metricCard(
-                context,
-                'Current Value',
-                _formatCurrency(summary.changes.endPrice),
-                Icons.trending_up,
-              ),
-            ),
-          ],
-        ),
-        const SizedBox(height: 12),
-        Row(
-          children: [
-            Expanded(
-              child: _metricCard(
-                context,
-                'Total Return',
-                '${_formatCurrency(summary.totals.returnValue)} (${formatPct(summary.totals.returnPct)})',
-                Icons.show_chart,
-                color: totalPositive ? Colors.green : Colors.red,
-              ),
-            ),
-            const SizedBox(width: 12),
-            Expanded(
-              child: _metricCard(
-                context,
-                'Period Return',
-                '${_formatCurrency(summary.changes.returnValue)} (${formatPct(summary.changes.returnPct)})',
-                Icons.schedule,
-                color: periodPositive ? Colors.green : Colors.red,
-              ),
-            ),
-          ],
-        ),
-      ],
+    return SingleChildScrollView(
+      scrollDirection: Axis.horizontal,
+      child: Row(
+        children: [
+          _metricCard(
+            context,
+            'Current Value',
+            formatCurrency(summary.changes.endPrice),
+            Icons.trending_up,
+          ),
+          const SizedBox(width: 10),
+          _metricCard(
+            context,
+            'Period Return',
+            '${formatCurrency(summary.changes.returnValue)} (${formatPct(summary.changes.returnPct)})',
+            Icons.schedule,
+            color: periodPos ? Colors.green : Colors.red,
+          ),
+          const SizedBox(width: 10),
+          _metricCard(
+            context,
+            'Total Return',
+            '${formatCurrency(summary.totals.returnValue)} (${formatPct(summary.totals.returnPct)})',
+            Icons.show_chart,
+            color: totalPos ? Colors.green : Colors.red,
+          ),
+          const SizedBox(width: 10),
+          _metricCard(
+            context,
+            'Invested',
+            formatCurrency(summary.invested),
+            Icons.account_balance,
+          ),
+          const SizedBox(width: 10),
+          _metricCard(
+            context,
+            'Break Even',
+            formatCurrency(summary.breakEven),
+            Icons.ev_station,
+          ),
+          const SizedBox(width: 10),
+          _metricCard(
+            context,
+            'Realized P&L',
+            formatCurrency(summary.realizedPnl, showSign: true),
+            Icons.account_balance_wallet,
+            color: summary.realizedPnl >= 0 ? Colors.green : Colors.red,
+          ),
+          const SizedBox(width: 10),
+          _metricCard(
+            context,
+            'FX Impact',
+            formatCurrency(summary.fxImpact, showSign: true),
+            Icons.currency_exchange,
+            color: summary.fxImpact >= 0 ? Colors.green : Colors.red,
+          ),
+          const SizedBox(width: 10),
+          _metricCard(
+            context,
+            'Volatility',
+            formatPct(summary.meta.volatilityPct, showSign: false),
+            Icons.show_chart,
+          ),
+        ],
+      ),
     );
   }
 
@@ -210,32 +227,35 @@ class HomeScreen extends StatelessWidget {
     IconData icon, {
     Color? color,
   }) {
-    return Card(
-      elevation: 1,
-      child: Padding(
-        padding: const EdgeInsets.all(12),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Icon(icon, size: 20, color: color ?? Colors.blue),
-            const SizedBox(height: 8),
-            Text(
-              label,
-              style: const TextStyle(fontSize: 12, color: Colors.grey),
-            ),
-            Text(
-              value,
-              style: TextStyle(
-                fontSize: 16,
-                fontWeight: FontWeight.bold,
-                color: color,
+    return SizedBox(
+      width: 140,
+      child: Card(
+        elevation: 1,
+        child: Padding(
+          padding: const EdgeInsets.all(12),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Icon(icon, size: 18, color: color ?? Colors.blue),
+              const SizedBox(height: 6),
+              Text(
+                label,
+                style: const TextStyle(fontSize: 11, color: Colors.grey),
               ),
-            ),
-          ],
+              const SizedBox(height: 2),
+              Text(
+                value,
+                style: TextStyle(
+                  fontSize: 14,
+                  fontWeight: FontWeight.bold,
+                  color: color,
+                ),
+                overflow: TextOverflow.ellipsis,
+              ),
+            ],
+          ),
         ),
       ),
     );
   }
-
-  String _formatCurrency(double value) => formatCurrency(value);
 }

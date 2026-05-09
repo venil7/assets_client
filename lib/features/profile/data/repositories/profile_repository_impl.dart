@@ -22,8 +22,18 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<ProfileEntity> updateProfile(String username, bool admin, int loginAttempts, bool locked) async {
-    final model = await remoteDataSource.updateProfile(username, admin, loginAttempts, locked);
+  Future<ProfileEntity> updateProfile(
+    String username,
+    bool admin,
+    int loginAttempts,
+    bool locked,
+  ) async {
+    final model = await remoteDataSource.updateProfile(
+      username,
+      admin,
+      loginAttempts,
+      locked,
+    );
     return ProfileEntity(
       id: model.id,
       username: model.username,
@@ -36,8 +46,16 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<ProfileEntity> changePassword(String oldPassword, String newPassword, String repeat) async {
-    final model = await remoteDataSource.changePassword(oldPassword, newPassword, repeat);
+  Future<ProfileEntity> changePassword(
+    String oldPassword,
+    String newPassword,
+    String repeat,
+  ) async {
+    final model = await remoteDataSource.changePassword(
+      oldPassword,
+      newPassword,
+      repeat,
+    );
     return ProfileEntity(
       id: model.id,
       username: model.username,
@@ -63,7 +81,10 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<UserPreferencesEntity> updatePreferences(String baseCcy, Map<String, dynamic>? additional) async {
+  Future<UserPreferencesEntity> updatePreferences(
+    String baseCcy,
+    Map<String, dynamic>? additional,
+  ) async {
     final model = await remoteDataSource.updatePreferences(baseCcy, additional);
     return UserPreferencesEntity(
       id: model.id,
@@ -88,15 +109,17 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<List<UserEntity>> getAllUsers() async {
     final models = await remoteDataSource.getAllUsers();
     return models
-        .map((m) => UserEntity(
-              id: m.id,
-              username: m.username,
-              admin: m.admin,
-              loginAttempts: m.loginAttempts,
-              locked: m.locked,
-              created: m.created,
-              modified: m.modified,
-            ))
+        .map(
+          (m) => UserEntity(
+            id: m.id,
+            username: m.username,
+            admin: m.admin,
+            loginAttempts: m.loginAttempts,
+            locked: m.locked,
+            created: m.created,
+            modified: m.modified,
+          ),
+        )
         .toList();
   }
 
@@ -115,8 +138,18 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<UserEntity> createUser(String username, bool admin, int loginAttempts, bool locked) async {
-    final model = await remoteDataSource.createUser(username, admin, loginAttempts, locked);
+  Future<UserEntity> createUser(
+    String username,
+    bool admin,
+    int loginAttempts,
+    bool locked,
+  ) async {
+    final model = await remoteDataSource.createUser(
+      username,
+      admin,
+      loginAttempts,
+      locked,
+    );
     return UserEntity(
       id: model.id,
       username: model.username,
@@ -129,8 +162,20 @@ class ProfileRepositoryImpl implements ProfileRepository {
   }
 
   @override
-  Future<UserEntity> updateUser(int userId, String username, bool admin, int loginAttempts, bool locked) async {
-    final model = await remoteDataSource.updateUser(userId, username, admin, loginAttempts, locked);
+  Future<UserEntity> updateUser(
+    int userId,
+    String username,
+    bool admin,
+    int loginAttempts,
+    bool locked,
+  ) async {
+    final model = await remoteDataSource.updateUser(
+      userId,
+      username,
+      admin,
+      loginAttempts,
+      locked,
+    );
     return UserEntity(
       id: model.id,
       username: model.username,

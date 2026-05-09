@@ -11,29 +11,35 @@ class AssetRepositoryImpl implements AssetRepository {
   Future<List<AssetEntity>> getAssets(int portfolioId, String? range) async {
     final models = await remoteDataSource.getAssets(portfolioId, range);
     return models
-        .map((m) => AssetEntity(
-              id: m.id,
-              portfolioId: m.portfolioId,
-              ticker: m.ticker,
-              name: m.name,
-              userId: m.userId,
-              holdings: m.holdings,
-              invested: m.invested,
-              avgPrice: m.avgPrice,
-              breakEven: m.breakEven,
-              realizedPnl: m.realizedPnl,
-              numTxs: m.numTxs,
-              lastActivity: m.lastActivity,
-              lastActivityTs: m.lastActivityTs,
-              baseCcy: m.baseCcy,
-              created: m.created,
-              modified: m.modified,
-            ))
+        .map(
+          (m) => AssetEntity(
+            id: m.id,
+            portfolioId: m.portfolioId,
+            ticker: m.ticker,
+            name: m.name,
+            userId: m.userId,
+            holdings: m.holdings,
+            invested: m.invested,
+            avgPrice: m.avgPrice,
+            breakEven: m.breakEven,
+            realizedPnl: m.realizedPnl,
+            numTxs: m.numTxs,
+            lastActivity: m.lastActivity,
+            lastActivityTs: m.lastActivityTs,
+            baseCcy: m.baseCcy,
+            created: m.created,
+            modified: m.modified,
+          ),
+        )
         .toList();
   }
 
   @override
-  Future<AssetEntity> getAsset(int portfolioId, int assetId, String? range) async {
+  Future<AssetEntity> getAsset(
+    int portfolioId,
+    int assetId,
+    String? range,
+  ) async {
     final model = await remoteDataSource.getAsset(portfolioId, assetId, range);
     return AssetEntity(
       id: model.id,
@@ -56,7 +62,11 @@ class AssetRepositoryImpl implements AssetRepository {
   }
 
   @override
-  Future<AssetEntity> createAsset(int portfolioId, String ticker, String name) async {
+  Future<AssetEntity> createAsset(
+    int portfolioId,
+    String ticker,
+    String name,
+  ) async {
     final model = await remoteDataSource.createAsset(portfolioId, ticker, name);
     return AssetEntity(
       id: model.id,
@@ -79,8 +89,18 @@ class AssetRepositoryImpl implements AssetRepository {
   }
 
   @override
-  Future<AssetEntity> updateAsset(int portfolioId, int assetId, String ticker, String name) async {
-    final model = await remoteDataSource.updateAsset(portfolioId, assetId, ticker, name);
+  Future<AssetEntity> updateAsset(
+    int portfolioId,
+    int assetId,
+    String ticker,
+    String name,
+  ) async {
+    final model = await remoteDataSource.updateAsset(
+      portfolioId,
+      assetId,
+      ticker,
+      name,
+    );
     return AssetEntity(
       id: model.id,
       portfolioId: model.portfolioId,

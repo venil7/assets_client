@@ -4,7 +4,9 @@ class JwtDecoder {
   static Map<String, dynamic> decodePayload(String token) {
     final parts = token.split('.');
     if (parts.length != 3) {
-      throw FormatException('Invalid JWT: expected 3 parts, got ${parts.length}');
+      throw FormatException(
+        'Invalid JWT: expected 3 parts, got ${parts.length}',
+      );
     }
     return _decodeBase64UrlJson(parts[1]);
   }

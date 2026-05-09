@@ -2,7 +2,11 @@ import 'package:assets_client/features/asset/domain/entities/asset_entity.dart';
 
 abstract class TransactionRepository {
   Future<List<TransactionEntity>> getTransactions(int portfolioId, int assetId);
-  Future<TransactionEntity> getTransaction(int portfolioId, int assetId, int txId);
+  Future<TransactionEntity> getTransaction(
+    int portfolioId,
+    int assetId,
+    int txId,
+  );
   Future<TransactionEntity> createTransaction(
     int portfolioId,
     int assetId,

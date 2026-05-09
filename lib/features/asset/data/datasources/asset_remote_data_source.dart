@@ -5,7 +5,12 @@ abstract class AssetRemoteDataSource {
   Future<List<AssetModel>> getAssets(int portfolioId, String? range);
   Future<AssetModel> getAsset(int portfolioId, int assetId, String? range);
   Future<AssetModel> createAsset(int portfolioId, String ticker, String name);
-  Future<AssetModel> updateAsset(int portfolioId, int assetId, String ticker, String name);
+  Future<AssetModel> updateAsset(
+    int portfolioId,
+    int assetId,
+    String ticker,
+    String name,
+  );
   Future<void> deleteAsset(int portfolioId, int assetId);
   Future<void> moveAsset(int portfolioId, int assetId, int newPortfolioId);
 }
@@ -30,7 +35,12 @@ class AssetRemoteDataSourceImpl implements AssetRemoteDataSource {
   }
 
   @override
-  Future<AssetModel> updateAsset(int portfolioId, int assetId, String ticker, String name) {
+  Future<AssetModel> updateAsset(
+    int portfolioId,
+    int assetId,
+    String ticker,
+    String name,
+  ) {
     final request = UpdateAssetRequestModel(ticker: ticker, name: name);
     return apiClient.updateAsset(portfolioId, assetId, request);
   }
@@ -41,7 +51,11 @@ class AssetRemoteDataSourceImpl implements AssetRemoteDataSource {
   }
 
   @override
-  Future<void> moveAsset(int portfolioId, int assetId, int newPortfolioId) async {
+  Future<void> moveAsset(
+    int portfolioId,
+    int assetId,
+    int newPortfolioId,
+  ) async {
     await apiClient.moveAsset(portfolioId, assetId, newPortfolioId);
   }
 }

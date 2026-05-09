@@ -5,9 +5,7 @@ class AppTheme {
     return ThemeData(
       useMaterial3: true,
       colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-      appBarTheme: const AppBarTheme(
-        elevation: 0,
-      ),
+      appBarTheme: const AppBarTheme(elevation: 0),
     );
   }
 
@@ -18,9 +16,7 @@ class AppTheme {
         seedColor: Colors.blue,
         brightness: Brightness.dark,
       ),
-      appBarTheme: const AppBarTheme(
-        elevation: 0,
-      ),
+      appBarTheme: const AppBarTheme(elevation: 0),
     );
   }
 }

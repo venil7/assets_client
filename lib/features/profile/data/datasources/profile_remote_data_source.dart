@@ -8,16 +8,39 @@ import 'package:assets_client/features/profile/data/models/user_model.dart';
 
 abstract class ProfileRemoteDataSource {
   Future<ProfileModel> getProfile();
-  Future<ProfileModel> updateProfile(String username, bool admin, int loginAttempts, bool locked);
-  Future<ProfileModel> changePassword(String oldPassword, String newPassword, String repeat);
+  Future<ProfileModel> updateProfile(
+    String username,
+    bool admin,
+    int loginAttempts,
+    bool locked,
+  );
+  Future<ProfileModel> changePassword(
+    String oldPassword,
+    String newPassword,
+    String repeat,
+  );
   Future<void> deleteProfile();
   Future<UserPreferencesModel> getPreferences();
-  Future<UserPreferencesModel> updatePreferences(String baseCcy, Map<String, dynamic>? additional);
+  Future<UserPreferencesModel> updatePreferences(
+    String baseCcy,
+    Map<String, dynamic>? additional,
+  );
   Future<SummaryModel> getSummary(String? range);
   Future<List<UserModel>> getAllUsers();
   Future<UserModel> getUserById(int userId);
-  Future<UserModel> createUser(String username, bool admin, int loginAttempts, bool locked);
-  Future<UserModel> updateUser(int userId, String username, bool admin, int loginAttempts, bool locked);
+  Future<UserModel> createUser(
+    String username,
+    bool admin,
+    int loginAttempts,
+    bool locked,
+  );
+  Future<UserModel> updateUser(
+    int userId,
+    String username,
+    bool admin,
+    int loginAttempts,
+    bool locked,
+  );
   Future<void> deleteUser(int userId);
 }
 
@@ -30,7 +53,12 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   Future<ProfileModel> getProfile() => apiClient.getProfile();
 
   @override
-  Future<ProfileModel> updateProfile(String username, bool admin, int loginAttempts, bool locked) {
+  Future<ProfileModel> updateProfile(
+    String username,
+    bool admin,
+    int loginAttempts,
+    bool locked,
+  ) {
     final request = UpdateProfileRequestModel(
       username: username,
       admin: admin,
@@ -41,7 +69,11 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   }
 
   @override
-  Future<ProfileModel> changePassword(String oldPassword, String newPassword, String repeat) {
+  Future<ProfileModel> changePassword(
+    String oldPassword,
+    String newPassword,
+    String repeat,
+  ) {
     final request = ChangePasswordRequestModel(
       oldPassword: oldPassword,
       newPassword: newPassword,
@@ -59,7 +91,10 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   Future<UserPreferencesModel> getPreferences() => apiClient.getPreferences();
 
   @override
-  Future<UserPreferencesModel> updatePreferences(String baseCcy, Map<String, dynamic>? additional) {
+  Future<UserPreferencesModel> updatePreferences(
+    String baseCcy,
+    Map<String, dynamic>? additional,
+  ) {
     final request = UserPreferencesModel(
       id: 0,
       baseCcy: baseCcy,
@@ -78,7 +113,12 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   Future<UserModel> getUserById(int userId) => apiClient.getUserById(userId);
 
   @override
-  Future<UserModel> createUser(String username, bool admin, int loginAttempts, bool locked) {
+  Future<UserModel> createUser(
+    String username,
+    bool admin,
+    int loginAttempts,
+    bool locked,
+  ) {
     final request = CreateUserRequestModel(
       username: username,
       admin: admin,
@@ -89,7 +129,13 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   }
 
   @override
-  Future<UserModel> updateUser(int userId, String username, bool admin, int loginAttempts, bool locked) {
+  Future<UserModel> updateUser(
+    int userId,
+    String username,
+    bool admin,
+    int loginAttempts,
+    bool locked,
+  ) {
     final request = UpdateUserRequestModel(
       username: username,
       admin: admin,

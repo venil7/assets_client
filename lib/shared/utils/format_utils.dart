@@ -35,3 +35,9 @@ String formatChartDate(int timestamp, String range) {
       return DateFormat('dd/MM/yy').format(date);
   }
 }
+
+String formatTxDate(String dateStr) {
+  final date = DateTime.tryParse(dateStr);
+  if (date == null) return dateStr;
+  return DateFormat('d MMM yyyy').format(date);
+}

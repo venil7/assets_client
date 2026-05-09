@@ -34,10 +34,7 @@ class UpdatePreferencesEvent extends SettingsEvent {
   final String baseCcy;
   final Map<String, dynamic>? additional;
 
-  const UpdatePreferencesEvent({
-    required this.baseCcy,
-    this.additional,
-  });
+  const UpdatePreferencesEvent({required this.baseCcy, this.additional});
 
   @override
   List<Object?> get props => [baseCcy, additional];

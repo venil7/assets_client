@@ -10,18 +10,12 @@ class AuthRepositoryImpl implements AuthRepository {
   @override
   Future<AuthEntity> login(String username, String password) async {
     final model = await remoteDataSource.login(username, password);
-    return AuthEntity(
-      token: model.token,
-      refreshBefore: model.refreshBefore,
-    );
+    return AuthEntity(token: model.token, refreshBefore: model.refreshBefore);
   }
 
   @override
   Future<AuthEntity> refreshToken() async {
     final model = await remoteDataSource.refreshToken();
-    return AuthEntity(
-      token: model.token,
-      refreshBefore: model.refreshBefore,
-    );
+    return AuthEntity(token: model.token, refreshBefore: model.refreshBefore);
   }
 }

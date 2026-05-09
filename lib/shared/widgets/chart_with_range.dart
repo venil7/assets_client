@@ -24,11 +24,7 @@ class ChartWithRange extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SummaryChart(
-          data: data,
-          isPositive: isPositive,
-          range: currentRange,
-        ),
+        SummaryChart(data: data, isPositive: isPositive, range: currentRange),
         const SizedBox(height: 12),
         Center(
           child: RangeSwitch(

@@ -53,18 +53,14 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     LoadProfileEvent event,
     Emitter<SettingsState> emit,
   ) async {
-    emit(state.copyWith(isProfileLoading: true, error: null, successMessage: null));
+    emit(
+      state.copyWith(isProfileLoading: true, error: null, successMessage: null),
+    );
     try {
       final profile = await repository.getProfile();
-      emit(state.copyWith(
-        isProfileLoading: false,
-        profile: profile,
-      ));
+      emit(state.copyWith(isProfileLoading: false, profile: profile));
     } catch (e) {
-      emit(state.copyWith(
-        isProfileLoading: false,
-        error: _errorMessage(e),
-      ));
+      emit(state.copyWith(isProfileLoading: false, error: _errorMessage(e)));
     }
   }
 
@@ -72,22 +68,27 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     ChangePasswordEvent event,
     Emitter<SettingsState> emit,
   ) async {
-    emit(state.copyWith(isPasswordChanging: true, error: null, successMessage: null));
+    emit(
+      state.copyWith(
+        isPasswordChanging: true,
+        error: null,
+        successMessage: null,
+      ),
+    );
     try {
       await repository.changePassword(
         event.oldPassword,
         event.newPassword,
         event.repeat,
       );
-      emit(state.copyWith(
-        isPasswordChanging: false,
-        successMessage: 'Password changed successfully',
-      ));
+      emit(
+        state.copyWith(
+          isPasswordChanging: false,
+          successMessage: 'Password changed successfully',
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        isPasswordChanging: false,
-        error: _errorMessage(e),
-      ));
+      emit(state.copyWith(isPasswordChanging: false, error: _errorMessage(e)));
     }
   }
 
@@ -95,18 +96,20 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     LoadPreferencesEvent event,
     Emitter<SettingsState> emit,
   ) async {
-    emit(state.copyWith(isPreferencesLoading: true, error: null, successMessage: null));
+    emit(
+      state.copyWith(
+        isPreferencesLoading: true,
+        error: null,
+        successMessage: null,
+      ),
+    );
     try {
       final prefs = await repository.getPreferences();
-      emit(state.copyWith(
-        isPreferencesLoading: false,
-        preferences: prefs,
-      ));
+      emit(state.copyWith(isPreferencesLoading: false, preferences: prefs));
     } catch (e) {
-      emit(state.copyWith(
-        isPreferencesLoading: false,
-        error: _errorMessage(e),
-      ));
+      emit(
+        state.copyWith(isPreferencesLoading: false, error: _errorMessage(e)),
+      );
     }
   }
 
@@ -114,29 +117,33 @@ class SettingsBloc extends Bloc<SettingsEvent, SettingsState> {
     UpdatePreferencesEvent event,
     Emitter<SettingsState> emit,
   ) async {
-    emit(state.copyWith(isPreferencesLoading: true, error: null, successMessage: null));
+    emit(
+      state.copyWith(
+        isPreferencesLoading: true,
+        error: null,
+        successMessage: null,
+      ),
+    );
     try {
       final prefs = await repository.updatePreferences(
         event.baseCcy,
         event.additional,
       );
-      emit(state.copyWith(
-        isPreferencesLoading: false,
-        preferences: prefs,
-        successMessage: 'Preferences saved',
-      ));
+      emit(
+        state.copyWith(
+          isPreferencesLoading: false,
+          preferences: prefs,
+          successMessage: 'Preferences saved',
+        ),
+      );
     } catch (e) {
-      emit(state.copyWith(
-        isPreferencesLoading: false,
-        error: _errorMessage(e),
-      ));
+      emit(
+        state.copyWith(isPreferencesLoading: false, error: _errorMessage(e)),
+      );
     }
   }
 
-  void _onReset(
-    ResetSettingsState event,
-    Emitter<SettingsState> emit,
-  ) {
+  void _onReset(ResetSettingsState event, Emitter<SettingsState> emit) {
     emit(state.copyWith(error: null, successMessage: null));
   }
 }

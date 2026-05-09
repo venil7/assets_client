@@ -2,8 +2,15 @@ import 'package:assets_client/core/network/api_client.dart';
 import 'package:assets_client/features/asset/data/models/transaction_model.dart';
 
 abstract class TransactionRemoteDataSource {
-  Future<List<TransactionListItemModel>> getTransactions(int portfolioId, int assetId);
-  Future<TransactionModel> getTransaction(int portfolioId, int assetId, int txId);
+  Future<List<TransactionListItemModel>> getTransactions(
+    int portfolioId,
+    int assetId,
+  );
+  Future<TransactionModel> getTransaction(
+    int portfolioId,
+    int assetId,
+    int txId,
+  );
   Future<TransactionModel> createTransaction(
     int portfolioId,
     int assetId,
@@ -39,12 +46,17 @@ class TransactionRemoteDataSourceImpl implements TransactionRemoteDataSource {
   TransactionRemoteDataSourceImpl({required this.apiClient});
 
   @override
-  Future<List<TransactionListItemModel>> getTransactions(int portfolioId, int assetId) =>
-      apiClient.getTransactions(portfolioId, assetId);
+  Future<List<TransactionListItemModel>> getTransactions(
+    int portfolioId,
+    int assetId,
+  ) => apiClient.getTransactions(portfolioId, assetId);
 
   @override
-  Future<TransactionModel> getTransaction(int portfolioId, int assetId, int txId) =>
-      apiClient.getTransaction(portfolioId, assetId, txId);
+  Future<TransactionModel> getTransaction(
+    int portfolioId,
+    int assetId,
+    int txId,
+  ) => apiClient.getTransaction(portfolioId, assetId, txId);
 
   @override
   Future<TransactionModel> createTransaction(
