@@ -57,6 +57,47 @@ class CreateTransactionEvent extends AssetDetailEvent {
       [portfolioId, assetId, type, quantity, price, date, comments];
 }
 
+class UpdateTransactionEvent extends AssetDetailEvent {
+  final int portfolioId;
+  final int assetId;
+  final int txId;
+  final String type;
+  final double quantity;
+  final double price;
+  final String date;
+  final String? comments;
+
+  const UpdateTransactionEvent({
+    required this.portfolioId,
+    required this.assetId,
+    required this.txId,
+    required this.type,
+    required this.quantity,
+    required this.price,
+    required this.date,
+    this.comments,
+  });
+
+  @override
+  List<Object?> get props =>
+      [portfolioId, assetId, txId, type, quantity, price, date, comments];
+}
+
+class DeleteTransactionEvent extends AssetDetailEvent {
+  final int portfolioId;
+  final int assetId;
+  final int txId;
+
+  const DeleteTransactionEvent({
+    required this.portfolioId,
+    required this.assetId,
+    required this.txId,
+  });
+
+  @override
+  List<Object?> get props => [portfolioId, assetId, txId];
+}
+
 abstract class AssetDetailState extends Equatable {
   const AssetDetailState();
 
@@ -108,6 +149,8 @@ class AssetDetailBloc extends Bloc<AssetDetailEvent, AssetDetailState> {
     on<LoadAssetDetailEvent>(_onLoadAssetDetail);
     on<ChangeRangeEvent>(_onChangeRange);
     on<CreateTransactionEvent>(_onCreateTransaction);
+    on<UpdateTransactionEvent>(_onUpdateTransaction);
+    on<DeleteTransactionEvent>(_onDeleteTransaction);
   }
 
   Future<void> _onLoadAssetDetail(
@@ -184,6 +227,55 @@ class AssetDetailBloc extends Bloc<AssetDetailEvent, AssetDetailState> {
       );
     } catch (e) {
       emit(AssetDetailError('Failed to create transaction: $e'));
+    }
+  }
+
+  Future<void> _onUpdateTransaction(
+    UpdateTransactionEvent event,
+    Emitter<AssetDetailState> emit,
+  ) async {
+    try {
+      await transactionRepository.updateTransaction(
+        event.portfolioId,
+        event.assetId,
+        event.txId,
+        event.type,
+        event.quantity,
+        event.price,
+        event.date,
+        event.comments,
+      );
+      add(
+        LoadAssetDetailEvent(
+          portfolioId: event.portfolioId,
+          assetId: event.assetId,
+          range: _currentRange,
+        ),
+      );
+    } catch (e) {
+      emit(AssetDetailError('Failed to update transaction: $e'));
+    }
+  }
+
+  Future<void> _onDeleteTransaction(
+    DeleteTransactionEvent event,
+    Emitter<AssetDetailState> emit,
+  ) async {
+    try {
+      await transactionRepository.deleteTransaction(
+        event.portfolioId,
+        event.assetId,
+        event.txId,
+      );
+      add(
+        LoadAssetDetailEvent(
+          portfolioId: event.portfolioId,
+          assetId: event.assetId,
+          range: _currentRange,
+        ),
+      );
+    } catch (e) {
+      emit(AssetDetailError('Failed to delete transaction: $e'));
     }
   }
 }

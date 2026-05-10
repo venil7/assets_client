@@ -139,7 +139,11 @@ return Scaffold(
                         ),
                       ),
                     ),
-                    TransactionList(transactions: state.transactions),
+                    TransactionList(
+                      portfolioId: portfolioId,
+                      assetId: assetId,
+                      transactions: state.transactions,
+                    ),
                   ],
                 ),
               ),

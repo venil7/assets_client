@@ -1,5 +1,6 @@
 import 'package:assets_client/core/network/api_client.dart';
 import 'package:assets_client/core/services/dio_accessor.dart';
+import 'package:assets_client/features/asset/domain/entities/asset_entity.dart';
 import 'package:assets_client/features/asset/presentation/bloc/asset_detail_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -10,6 +11,7 @@ class AddTransactionDialog extends StatefulWidget {
   final int assetId;
   final String ticker;
   final AssetDetailBloc bloc;
+  final TransactionEntity? transaction;
 
   const AddTransactionDialog({
     super.key,
@@ -17,10 +19,16 @@ class AddTransactionDialog extends StatefulWidget {
     required this.assetId,
     required this.ticker,
     required this.bloc,
+    this.transaction,
   });
 
   static void show(
-      BuildContext context, int portfolioId, int assetId, String ticker) {
+    BuildContext context,
+    int portfolioId,
+    int assetId,
+    String ticker, {
+    TransactionEntity? transaction,
+  }) {
     final bloc = context.read<AssetDetailBloc>();
     showDialog(
       context: context,
@@ -29,6 +37,7 @@ class AddTransactionDialog extends StatefulWidget {
         assetId: assetId,
         ticker: ticker,
         bloc: bloc,
+        transaction: transaction,
       ),
     );
   }
@@ -48,6 +57,7 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
   final _formKey = GlobalKey<FormState>();
   DateTime _selectedDate = DateTime.now();
   bool _isLookupLoading = false;
+  bool get _isEditing => widget.transaction != null;
 
   @override
   void initState() {
@@ -55,8 +65,22 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
     _qtyCtrl.addListener(_onQtyChanged);
     _priceCtrl.addListener(_onPriceChanged);
     _totalCtrl.addListener(_onTotalChanged);
-    _dateCtrl.text = DateFormat('yyyy-MM-dd').format(_selectedDate);
-    _lookupPrice(_selectedDate);
+
+    final tx = widget.transaction;
+    if (tx != null) {
+      _typeNotifier.value = tx.type.toLowerCase() == 'buy' ? 'buy' : 'sell';
+      _qtyCtrl.text = tx.quantity.toString();
+      _priceCtrl.text = tx.price.toString();
+      _totalCtrl.text = (tx.quantity * tx.price).toStringAsFixed(2);
+      _selectedDate = DateTime.tryParse(tx.date) ?? DateTime.now();
+      _dateCtrl.text = DateFormat('yyyy-MM-dd').format(_selectedDate);
+      if (tx.comments != null && tx.comments!.isNotEmpty) {
+        _notesCtrl.text = tx.comments!;
+      }
+    } else {
+      _dateCtrl.text = DateFormat('yyyy-MM-dd').format(_selectedDate);
+      _lookupPrice(_selectedDate);
+    }
   }
 
   @override
@@ -110,7 +134,9 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
     if (picked == null) return;
     setState(() => _selectedDate = picked);
     _dateCtrl.text = DateFormat('yyyy-MM-dd').format(picked);
-    await _lookupPrice(picked);
+    if (!_isEditing) {
+      await _lookupPrice(picked);
+    }
   }
 
   Future<void> _lookupPrice(DateTime date) async {
@@ -133,18 +159,35 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
     final qty = double.parse(_qtyCtrl.text);
     final price = double.parse(_priceCtrl.text);
     final date = _dateCtrl.text;
+    final comments = _notesCtrl.text.isEmpty ? null : _notesCtrl.text;
 
-    widget.bloc.add(
-      CreateTransactionEvent(
-        portfolioId: widget.portfolioId,
-        assetId: widget.assetId,
-        type: _typeNotifier.value,
-        quantity: qty,
-        price: price,
-        date: date,
-        comments: _notesCtrl.text.isEmpty ? null : _notesCtrl.text,
-      ),
-    );
+    final tx = widget.transaction;
+    if (tx != null) {
+      widget.bloc.add(
+        UpdateTransactionEvent(
+          portfolioId: widget.portfolioId,
+          assetId: widget.assetId,
+          txId: tx.id,
+          type: _typeNotifier.value,
+          quantity: qty,
+          price: price,
+          date: date,
+          comments: comments,
+        ),
+      );
+    } else {
+      widget.bloc.add(
+        CreateTransactionEvent(
+          portfolioId: widget.portfolioId,
+          assetId: widget.assetId,
+          type: _typeNotifier.value,
+          quantity: qty,
+          price: price,
+          date: date,
+          comments: comments,
+        ),
+      );
+    }
 
     Navigator.of(context).pop();
   }
@@ -152,7 +195,9 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      title: Text('Add Transaction — ${widget.ticker}'),
+      title: Text(
+        _isEditing ? 'Edit Transaction — ${widget.ticker}' : 'Add Transaction — ${widget.ticker}',
+      ),
       content: Form(
         key: _formKey,
         child: Column(
@@ -242,7 +287,7 @@ class _AddTransactionDialogState extends State<AddTransactionDialog> {
         ),
         FilledButton(
           onPressed: _submit,
-          child: const Text('Submit'),
+          child: Text(_isEditing ? 'Save' : 'Submit'),
         ),
       ],
     );
