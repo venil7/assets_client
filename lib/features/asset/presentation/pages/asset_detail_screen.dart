@@ -1,5 +1,6 @@
 import 'package:assets_client/features/asset/domain/entities/asset_detail_entity.dart';
 import 'package:assets_client/features/asset/presentation/bloc/asset_detail_bloc.dart';
+import 'package:assets_client/features/asset/presentation/widgets/add_transaction_dialog.dart';
 import 'package:assets_client/features/asset/presentation/widgets/transaction_list.dart';
 import 'package:assets_client/shared/utils/format_utils.dart';
 import 'package:assets_client/shared/widgets/chart_with_range.dart';
@@ -24,7 +25,7 @@ class AssetDetailScreen extends StatelessWidget {
       return 'Asset Details';
     });
 
-    return Scaffold(
+return Scaffold(
       appBar: AppBar(
         title: Text(title),
         elevation: 0,
@@ -39,6 +40,21 @@ class AssetDetailScreen extends StatelessWidget {
           ),
         ],
       ),
+      floatingActionButton: context.select<AssetDetailBloc, Widget?>((bloc) {
+        final s = bloc.state;
+        if (s is AssetDetailLoaded) {
+          return FloatingActionButton(
+            onPressed: () => AddTransactionDialog.show(
+              context,
+              portfolioId,
+              assetId,
+              s.detail.ticker,
+            ),
+            child: const Icon(Icons.add),
+          );
+        }
+        return null;
+      }),
       body: SafeArea(
         child: BlocBuilder<AssetDetailBloc, AssetDetailState>(
         builder: (context, state) {

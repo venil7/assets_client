@@ -33,6 +33,30 @@ class ChangeRangeEvent extends AssetDetailEvent {
   const ChangeRangeEvent(this.range);
 }
 
+class CreateTransactionEvent extends AssetDetailEvent {
+  final int portfolioId;
+  final int assetId;
+  final String type;
+  final double quantity;
+  final double price;
+  final String date;
+  final String? comments;
+
+  const CreateTransactionEvent({
+    required this.portfolioId,
+    required this.assetId,
+    required this.type,
+    required this.quantity,
+    required this.price,
+    required this.date,
+    this.comments,
+  });
+
+  @override
+  List<Object?> get props =>
+      [portfolioId, assetId, type, quantity, price, date, comments];
+}
+
 abstract class AssetDetailState extends Equatable {
   const AssetDetailState();
 
@@ -83,6 +107,7 @@ class AssetDetailBloc extends Bloc<AssetDetailEvent, AssetDetailState> {
   }) : super(AssetDetailInitial()) {
     on<LoadAssetDetailEvent>(_onLoadAssetDetail);
     on<ChangeRangeEvent>(_onChangeRange);
+    on<CreateTransactionEvent>(_onCreateTransaction);
   }
 
   Future<void> _onLoadAssetDetail(
@@ -134,5 +159,31 @@ class AssetDetailBloc extends Bloc<AssetDetailEvent, AssetDetailState> {
         range: event.range,
       ),
     );
+  }
+
+  Future<void> _onCreateTransaction(
+    CreateTransactionEvent event,
+    Emitter<AssetDetailState> emit,
+  ) async {
+    try {
+      await transactionRepository.createTransaction(
+        event.portfolioId,
+        event.assetId,
+        event.type,
+        event.quantity,
+        event.price,
+        event.date,
+        event.comments,
+      );
+      add(
+        LoadAssetDetailEvent(
+          portfolioId: event.portfolioId,
+          assetId: event.assetId,
+          range: _currentRange,
+        ),
+      );
+    } catch (e) {
+      emit(AssetDetailError('Failed to create transaction: $e'));
+    }
   }
 }
