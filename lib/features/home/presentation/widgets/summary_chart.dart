@@ -43,10 +43,10 @@ class SummaryChart extends StatelessWidget {
               sideTitles: SideTitles(
                 showTitles: true,
                 interval: _getInterval(),
-                reservedSize: 28,
+                reservedSize: 40,
                 getTitlesWidget: (value, meta) {
                   return Padding(
-                    padding: const EdgeInsets.only(top: 4),
+                    padding: const EdgeInsets.only(top: 8),
                     child: Text(
                       _formatDate(value),
                       style: TextStyle(fontSize: 10, color: Colors.grey[600]),
@@ -112,21 +112,11 @@ class SummaryChart extends StatelessWidget {
 
   List<Color> _gradientColors(BuildContext context) {
     if (isPositive == null) {
-      return [
-        Theme.of(context).primaryColor.withValues(alpha: 0.3),
-        Theme.of(context).primaryColor.withValues(alpha: 0.05),
-      ];
+      final c = Theme.of(context).primaryColor;
+      return [c, c.withValues(alpha: 0.0)];
     }
-    if (isPositive!) {
-      return [
-        Colors.green.withValues(alpha: 0.3),
-        Colors.green.withValues(alpha: 0.05),
-      ];
-    }
-    return [
-      Colors.red.withValues(alpha: 0.3),
-      Colors.red.withValues(alpha: 0.05),
-    ];
+    final c = isPositive! ? Colors.green : Colors.red;
+    return [c, c.withValues(alpha: 0.0)];
   }
 
   Color _lineColor(BuildContext context) {
@@ -162,51 +152,29 @@ class SummaryChart extends StatelessWidget {
   double _intervalForRangeLarge() {
     switch (range) {
       case '1d':
-        return 2;
+        return 4;
       case '1w':
-        return 1;
+        return 3;
       case '1m':
-        return 5;
       case '3m':
-        return 10;
-      case '1y':
         return 20;
+      case '1y':
+        return 40;
       case '5y':
-        return 60;
+        return 120;
       case 'all':
-        return data.length / 8;
+        return data.length / 6;
       default:
-        return 5;
+        return 10;
     }
   }
 
   double _intervalForRangeMedium() {
     switch (range) {
       case '1d':
-        return 4;
-      case '1w':
-        return 2;
-      case '1m':
-        return 10;
-      case '3m':
-        return 15;
-      case '1y':
-        return 30;
-      case '5y':
-        return 80;
-      case 'all':
-        return data.length / 8;
-      default:
-        return 10;
-    }
-  }
-
-  double _intervalForRangeDense() {
-    switch (range) {
-      case '1d':
         return 8;
       case '1w':
-        return 4;
+        return 6;
       case '1m':
         return 20;
       case '3m':
@@ -214,11 +182,32 @@ class SummaryChart extends StatelessWidget {
       case '1y':
         return 60;
       case '5y':
-        return 120;
+        return 160;
       case 'all':
-        return data.length / 8;
+        return data.length / 6;
       default:
         return 20;
+    }
+  }
+
+  double _intervalForRangeDense() {
+    switch (range) {
+      case '1d':
+        return 24;
+      case '1w':
+        return 8;
+      case '1m':
+        return 40;
+      case '3m':
+        return 60;
+      case '1y':
+        return 120;
+      case '5y':
+        return 240;
+      case 'all':
+        return data.length / 6;
+      default:
+        return 40;
     }
   }
 

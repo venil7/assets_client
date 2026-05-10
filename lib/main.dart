@@ -141,12 +141,14 @@ class MyApp extends StatelessWidget {
   Dio _createBaseDio() {
     final dio = Dio();
     dio.options.headers['Content-Type'] = 'application/json';
-    dio.httpClientAdapter = IOHttpClientAdapter()
-      ..onHttpClientCreate = (client) {
+    dio.httpClientAdapter = IOHttpClientAdapter(
+      createHttpClient: () {
+        final client = HttpClient();
         client.badCertificateCallback =
             ((X509Certificate cert, String host, int port) => true);
         return client;
-      };
+      },
+    );
     dio.interceptors.add(NetworkErrorInterceptor());
     return dio;
   }

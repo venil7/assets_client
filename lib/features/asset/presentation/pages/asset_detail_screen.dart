@@ -39,7 +39,8 @@ class AssetDetailScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocBuilder<AssetDetailBloc, AssetDetailState>(
+      body: SafeArea(
+        child: BlocBuilder<AssetDetailBloc, AssetDetailState>(
         builder: (context, state) {
           if (state is AssetDetailLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -157,6 +158,7 @@ class AssetDetailScreen extends StatelessWidget {
 
           return const Center(child: Text('Loading asset...'));
         },
+      ),
       ),
     );
   }

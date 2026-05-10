@@ -25,19 +25,19 @@ String formatChartDate(int timestamp, String range) {
       return DateFormat('EEE').format(date);
     case '1m':
     case '3m':
-      return DateFormat('dd/MM/yyyy').format(date);
+      return DateFormat('dd-MMM').format(date);
     case '1y':
     case '5y':
-      return DateFormat('MMM yyyy').format(date);
+      return DateFormat('MMM-yy').format(date);
     case 'all':
       return DateFormat('yyyy').format(date);
     default:
-      return DateFormat('dd/MM/yy').format(date);
+      return DateFormat('dd-MMM').format(date);
   }
 }
 
 String formatTxDate(String dateStr) {
   final date = DateTime.tryParse(dateStr);
   if (date == null) return dateStr;
-  return DateFormat('d MMM yyyy').format(date);
+  return DateFormat('d MMM yy').format(date);
 }

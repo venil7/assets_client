@@ -76,8 +76,18 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Login'), elevation: 0),
-      body: BlocListener<ConfigBloc, ConfigState>(
+      appBar: AppBar(
+        title: const Text('Login'),
+        elevation: 0,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.settings),
+            onPressed: () => Navigator.of(context).pushNamed('/settings'),
+          ),
+        ],
+      ),
+      body: SafeArea(
+        child: BlocListener<ConfigBloc, ConfigState>(
         listener: (context, state) {
           if (state is AuthSuccess) {
             Navigator.of(context).pushReplacementNamed('/home');
@@ -167,6 +177,7 @@ class _LoginScreenState extends State<LoginScreen> {
             ),
           ),
         ),
+      ),
       ),
     );
   }

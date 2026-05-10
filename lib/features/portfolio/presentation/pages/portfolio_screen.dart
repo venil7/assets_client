@@ -72,7 +72,8 @@ class PortfolioScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocBuilder<PortfolioBloc, PortfolioState>(
+      body: SafeArea(
+        child: BlocBuilder<PortfolioBloc, PortfolioState>(
         builder: (context, state) {
           if (state is PortfolioLoading) {
             return const Center(child: CircularProgressIndicator());
@@ -184,6 +185,7 @@ class PortfolioScreen extends StatelessWidget {
 
           return const Center(child: Text('Loading portfolio...'));
         },
+      ),
       ),
     );
   }

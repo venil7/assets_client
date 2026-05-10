@@ -2,6 +2,8 @@ import 'package:assets_client/core/network/api_client.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter_test/flutter_test.dart';
 
+// ignore_for_file: avoid_print
+
 // Test configuration
 class ApiTestConfig {
   final String baseUrl;

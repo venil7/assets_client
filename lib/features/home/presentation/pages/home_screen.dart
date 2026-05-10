@@ -46,7 +46,8 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: BlocListener<HomeBloc, HomeState>(
+      body: SafeArea(
+        child: BlocListener<HomeBloc, HomeState>(
         listener: (context, state) {},
         child: BlocBuilder<HomeBloc, HomeState>(
           builder: (context, state) {
@@ -144,6 +145,7 @@ class HomeScreen extends StatelessWidget {
             );
           },
         ),
+      ),
       ),
     );
   }
