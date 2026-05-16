@@ -1,87 +1,75 @@
 # Assets Client
 
-Flutter app for portfolio & asset management.
+Flutter client for the Assets portfolio management API.
+Backend: https://github.com/venil7/assets
 
-## Setup
+## What is this
+
+Assets Client is a macOS and Android app for tracking investment portfolios and individual assets. It connects to a self-hosted Assets API server, which handles all data storage and market data retrieval.
+
+Because the backend is intended to be self-hosted, the client supports multiple server URLs and saved connections. You can add several API servers and switch between them without re-entering credentials.
+
+## Features
+
+- Server management: add, remove, and switch between multiple API endpoints
+- JWT authentication with automatic token refresh
+- Dashboard with summary metrics across all portfolios (total invested, realized P&L, break-even, FX impact, portfolio count)
+- Interactive line chart with configurable range (1d, 5d, 1mo, 3mo, 6mo, 1y, 2y, 5y, 10y, ytd, max)
+- Portfolio drill-down with per-portfolio metrics and chart
+- Asset-level detail view with holdings, average price, break-even, P&L
+- Transaction history per asset with buy/sell type badges
+- Add, edit, and delete transactions
+- Bulk transaction upload (CSV-style JSON array)
+- Ticker search and price quote lookup
+- Material 3 design with light and dark theme
+- Multi-currency support (12 currencies)
+- Settings: change password, update preferences (base currency, alt chart), view session info, switch user, logout
+
+## Screenshots
+
+[Screenshots to be added]
+
+## Tech Stack
+
+- Flutter / Dart
+- BLoC for state management
+- Clean Architecture (domain, data, presentation layers)
+- Dio + Retrofit for HTTP and API client code generation
+- Hive for local credential storage
+- fl_chart for data visualization
+- freezed + json_serializable for immutable models
+
+## Quick Start
+
+### Prerequisites
+
+- Flutter SDK (see .fvmrc for pinned version)
+- A running instance of the Assets API server
+
+### Setup
 
 ```bash
-# Install dependencies
 flutter pub get
-
-# Generate code (models, API client)
 dart run build_runner build --delete-conflicting-outputs
-
-# Watch mode (for development)
-dart run build_runner watch --delete-conflicting-outputs
 ```
 
-## Run
+### Run
 
 ```bash
-# macOS
 flutter run -d macos
-
-# Android
 flutter run -d android
 ```
 
-## Build
+### Build
 
 ```bash
-# macOS release
 flutter build macos --release
-
-# Android APK
 flutter build apk --release
-flutter build apk --target-platform android-arm,android-arm64,android-x64 --split-per-abi
-
-# Android App Bundle
-flutter build appbundle --release
 ```
 
-## Test
+### Test
 
-### Unit & Widget Tests
 ```bash
-# Run all tests
 flutter test
-
-# Run specific test file
-flutter test test/api_client_test.dart
-
-# Run with verbose output
-flutter test -v
-
-# Run with coverage report
 flutter test --coverage
 ```
-
-### API Client Integration Tests
-Integration tests connect to running API server at `http://localhost:4020` (default).
-
-**Prerequisites:**
-- API server running on `http://localhost:4020`
-- Credentials: `admin` / `admin` (or configure in test)
-
-**Run:**
-```bash
-flutter test test/api_client_test.dart -v
-```
-
-**Configure for different server:**
-Edit `test/api_client_test.dart` and modify:
-```dart
-config = ApiTestConfig(
-  baseUrl: 'http://your-server:port',
-  username: 'your-username',
-  password: 'your-password',
-);
-```
-
-**What's tested:**
-- ✓ Login & authentication
-- ✓ JWT token handling
-- ✓ Profile endpoints
-- ✓ Error handling (401, timeouts)
-- ✓ Sequential requests
-- ✓ Request/response logging
