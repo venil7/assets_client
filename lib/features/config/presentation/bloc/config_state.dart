@@ -15,48 +15,42 @@ class ConfigLoading extends ConfigState {
   const ConfigLoading();
 }
 
-class ConfigNotFound extends ConfigState {
-  const ConfigNotFound();
+class UrlsMissing extends ConfigState {
+  const UrlsMissing();
 }
 
-class ApiUrlMissing extends ConfigState {
-  const ApiUrlMissing();
-}
+class UrlSelected extends ConfigState {
+  final String url;
+  final List<String> savedUsernames;
 
-class CredentialsMissing extends ConfigState {
-  final String apiUrl;
-  final String? savedUsername;
-
-  const CredentialsMissing({required this.apiUrl, this.savedUsername});
+  const UrlSelected({required this.url, this.savedUsernames = const []});
 
   @override
-  List<Object?> get props => [apiUrl, savedUsername];
+  List<Object?> get props => [url, savedUsernames];
 }
 
-class ConfigFound extends ConfigState {
+class ConfigReady extends ConfigState {
   final String apiUrl;
-  final String? username;
+  final String username;
+  final String token;
+  final int refreshBefore;
 
-  const ConfigFound({required this.apiUrl, this.username});
+  const ConfigReady({
+    required this.apiUrl,
+    required this.username,
+    required this.token,
+    required this.refreshBefore,
+  });
 
   @override
-  List<Object?> get props => [apiUrl, username];
+  List<Object?> get props => [apiUrl, username, token, refreshBefore];
 }
 
 class ConfigError extends ConfigState {
   final String message;
   const ConfigError({required this.message});
-
   @override
   List<Object?> get props => [message];
-}
-
-class ApiUrlSaved extends ConfigState {
-  final String apiUrl;
-  const ApiUrlSaved({required this.apiUrl});
-
-  @override
-  List<Object?> get props => [apiUrl];
 }
 
 class AuthLoading extends ConfigState {
@@ -83,7 +77,6 @@ class AuthSuccess extends ConfigState {
 class AuthFailure extends ConfigState {
   final String message;
   const AuthFailure({required this.message});
-
   @override
   List<Object?> get props => [message];
 }
@@ -109,9 +102,7 @@ class TokenRefreshed extends ConfigState {
 
 class TokenRefreshFailure extends ConfigState {
   final String message;
-
   const TokenRefreshFailure({required this.message});
-
   @override
   List<Object?> get props => [message];
 }

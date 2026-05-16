@@ -1,5 +1,5 @@
 import 'package:assets_client/features/config/data/datasources/config_local_data_source.dart';
-import 'package:assets_client/features/config/domain/entities/app_config_entity.dart';
+import 'package:assets_client/features/config/data/models/saved_connection_model.dart';
 import 'package:assets_client/features/config/domain/repositories/config_repository.dart';
 
 class ConfigRepositoryImpl implements ConfigRepository {
@@ -8,43 +8,47 @@ class ConfigRepositoryImpl implements ConfigRepository {
   ConfigRepositoryImpl({required this.localDataSource});
 
   @override
-  Future<void> saveApiUrl(String url) => localDataSource.saveApiUrl(url);
+  Future<List<SavedConnectionModel>> getAllConnections() =>
+      localDataSource.getAllConnections();
 
   @override
-  Future<void> saveCredentials(
-    String username,
-    String token,
-    int refreshBefore,
-  ) async {
-    await localDataSource.saveUsername(username);
-    await localDataSource.saveJwtToken(token, refreshBefore);
+  Future<void> saveConnection(SavedConnectionModel connection) =>
+      localDataSource.saveConnection(connection);
+
+  @override
+  Future<void> saveUrl(String url) => localDataSource.saveUrl(url);
+
+  @override
+  Future<void> removeConnection(String id) =>
+      localDataSource.removeConnection(id);
+
+  @override
+  Future<void> setActiveConnectionId(String? id) =>
+      localDataSource.setActiveConnectionId(id);
+
+  @override
+  Future<String?> getActiveConnectionId() =>
+      localDataSource.getActiveConnectionId();
+
+  @override
+  Future<List<String>> getAllUrls() => localDataSource.getAllUrls();
+
+  @override
+  Future<SavedConnectionModel?> getActiveConnection() async {
+    final id = await localDataSource.getActiveConnectionId();
+    if (id == null) return null;
+    final all = await localDataSource.getAllConnections();
+    try {
+      return all.firstWhere((c) => c.id == id);
+    } catch (_) {
+      return null;
+    }
   }
 
   @override
-  Future<AppConfigEntity?> getConfig() async {
-    final url = await localDataSource.getApiUrl();
-    if (url == null) return null;
-    final username = await localDataSource.getUsername();
-    final token = await localDataSource.getJwtToken();
-    final refreshBefore = await localDataSource.getTokenRefreshBefore();
-    return AppConfigEntity(
-      apiBaseUrl: url,
-      username: username,
-      jwtToken: token,
-      tokenRefreshBefore: refreshBefore,
-    );
-  }
+  Future<void> removeAllForUrl(String url) =>
+      localDataSource.removeAllForUrl(url);
 
   @override
-  Future<void> clearConfig() => localDataSource.clear();
-
-  @override
-  Future<void> clearApiUrl() async {
-    await localDataSource.clearApiUrl();
-  }
-
-  @override
-  Future<void> clearCredentials() async {
-    await localDataSource.clearCredentials();
-  }
+  Future<void> clearAll() => localDataSource.clearAll();
 }

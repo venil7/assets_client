@@ -26,11 +26,9 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const ApiUrlScreen());
       case '/login':
         final args = settings.arguments as Map<String, dynamic>?;
+        final url = args?['url'] as String? ?? '';
         return MaterialPageRoute(
-          builder: (_) => LoginScreen(
-            prefilledUrl: args?['prefilledUrl'],
-            prefilledUsername: args?['prefilledUsername'],
-          ),
+          builder: (_) => LoginScreen(url: url),
         );
       case '/home':
         return MaterialPageRoute(

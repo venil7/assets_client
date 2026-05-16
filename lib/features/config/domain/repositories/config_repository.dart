@@ -1,14 +1,14 @@
-import 'package:assets_client/features/config/domain/entities/app_config_entity.dart';
+import 'package:assets_client/features/config/data/models/saved_connection_model.dart';
 
 abstract class ConfigRepository {
-  Future<void> saveApiUrl(String url);
-  Future<void> saveCredentials(
-    String username,
-    String token,
-    int refreshBefore,
-  );
-  Future<AppConfigEntity?> getConfig();
-  Future<void> clearConfig();
-  Future<void> clearApiUrl();
-  Future<void> clearCredentials();
+  Future<List<SavedConnectionModel>> getAllConnections();
+  Future<void> saveConnection(SavedConnectionModel connection);
+  Future<void> removeConnection(String id);
+  Future<void> setActiveConnectionId(String? id);
+  Future<String?> getActiveConnectionId();
+  Future<List<String>> getAllUrls();
+  Future<void> saveUrl(String url);
+  Future<SavedConnectionModel?> getActiveConnection();
+  Future<void> removeAllForUrl(String url);
+  Future<void> clearAll();
 }

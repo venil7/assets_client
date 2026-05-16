@@ -61,20 +61,28 @@ class _SettingsSessionTabState extends State<SettingsSessionTab> {
             onTap: _refreshing
                 ? null
                 : () =>
-                      context.read<ConfigBloc>().add(const RefreshTokenEvent()),
+                    context.read<ConfigBloc>().add(const RefreshTokenEvent()),
+          ),
+          const Divider(indent: 16, endIndent: 16),
+          ListTile(
+            leading: const Icon(Icons.swap_horiz, color: Colors.blue),
+            title: const Text('Switch user'),
+            subtitle: const Text('Pick another saved account or sign in',
+                style: TextStyle(fontSize: 12)),
+            onTap: () => _switchUser(context),
           ),
           const Divider(indent: 16, endIndent: 16),
           ListTile(
             leading: const Icon(Icons.logout, color: Colors.orange),
             title: const Text('Logout'),
-            subtitle: const Text('Clear credentials only'),
+            subtitle: const Text('Remove this account, keep others'),
             onTap: () => _logout(context),
           ),
           const Divider(indent: 16, endIndent: 16),
           ListTile(
             leading: const Icon(Icons.delete_forever, color: Colors.red),
             title: const Text('Reset everything'),
-            subtitle: const Text('Clear API URL and credentials'),
+            subtitle: const Text('Clear all servers and accounts'),
             onTap: () => _clearAll(context),
           ),
         ],
@@ -82,28 +90,30 @@ class _SettingsSessionTabState extends State<SettingsSessionTab> {
     );
   }
 
-  void _logout(BuildContext context) {
-    final state = context.read<ConfigBloc>().state;
-    String? url;
-    String? username;
-
-    if (state is ConfigFound) {
-      url = state.apiUrl;
-      username = state.username;
-    } else if (state is CredentialsMissing) {
-      url = state.apiUrl;
-      username = state.savedUsername;
-    }
-
-    context.read<ConfigBloc>().add(const ClearCredentialsEvent());
+  void _switchUser(BuildContext context) {
+    final url = tokenManager.activeApiUrl ?? '';
+    context.read<ConfigBloc>().add(const SwitchUserEvent());
     Navigator.of(context).pushReplacementNamed(
       '/login',
-      arguments: {'prefilledUrl': url, 'prefilledUsername': username},
+      arguments: {'url': url},
     );
   }
 
+  void _logout(BuildContext context) {
+    context.read<ConfigBloc>().add(const LogoutEvent());
+    final state = context.read<ConfigBloc>().state;
+    if (state is UrlSelected) {
+      Navigator.of(context).pushReplacementNamed(
+        '/login',
+        arguments: {'url': state.url},
+      );
+    } else if (state is UrlsMissing) {
+      Navigator.of(context).pushReplacementNamed('/api-url');
+    }
+  }
+
   void _clearAll(BuildContext context) {
-    context.read<ConfigBloc>().add(const ClearConfigEvent());
+    context.read<ConfigBloc>().add(const ClearAllEvent());
     Navigator.of(context).pushReplacementNamed('/api-url');
   }
 }
@@ -113,12 +123,14 @@ class _TokenExpiryTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final expiresAt = tokenManager.tokenExpiresAt;
     final expired = tokenManager.isTokenExpired();
+    final user = tokenManager.activeUsername;
+    final url = tokenManager.activeApiUrl;
 
     String subtitle;
     IconData icon;
     Color color;
 
-    if (expiresAt == null) {
+    if (expiresAt == null || expiresAt == 0) {
       subtitle = 'No token loaded';
       icon = Icons.warning_amber;
       color = Colors.grey;
@@ -142,10 +154,30 @@ class _TokenExpiryTile extends StatelessWidget {
       color = tokenManager.shouldRefreshToken() ? Colors.orange : Colors.green;
     }
 
-    return ListTile(
-      leading: Icon(icon, color: color),
-      title: const Text('JWT Token'),
-      subtitle: Text(subtitle, style: const TextStyle(fontSize: 12)),
+    final info = StringBuffer();
+    if (user != null && user.isNotEmpty) info.write(user);
+    if (url != null && url.isNotEmpty) {
+      if (info.isNotEmpty) info.write(' @ ');
+      info.write(url);
+    }
+
+    return Column(
+      children: [
+        if (info.isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
+            child: Text(
+              info.toString(),
+              style: const TextStyle(fontSize: 12, color: Colors.grey),
+              overflow: TextOverflow.ellipsis,
+            ),
+          ),
+        ListTile(
+          leading: Icon(icon, color: color),
+          title: const Text('JWT Token'),
+          subtitle: Text(subtitle, style: const TextStyle(fontSize: 12)),
+        ),
+      ],
     );
   }
 }

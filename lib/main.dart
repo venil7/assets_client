@@ -24,34 +24,25 @@ import 'package:hive_flutter/hive_flutter.dart';
 
 void main() async {
   await Hive.initFlutter();
-  final configLocalDataSource = ConfigLocalDataSourceImpl();
-  final tm = TokenManager(configDataSource: configLocalDataSource);
-  initTokenManager(tm);
-  await tm.loadToken();
-  runApp(MyApp(configLocalDataSource: configLocalDataSource));
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {
-  final ConfigLocalDataSource configLocalDataSource;
-
-  const MyApp({super.key, required this.configLocalDataSource});
+  const MyApp({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final configLocalDataSource = ConfigLocalDataSourceImpl();
     final configRepository = ConfigRepositoryImpl(
       localDataSource: configLocalDataSource,
     );
+    final tm = TokenManager(configRepository: configRepository);
+    initTokenManager(tm);
 
     return BlocProvider(
       create: (_) {
         final dio = _createBaseDio();
         initDio(dio);
-
-        configLocalDataSource.getApiUrl().then((savedUrl) {
-          if (savedUrl != null) {
-            setBaseUrl(savedUrl);
-          }
-        });
 
         final apiClient = ApiClient(dio);
         final authRepository = AuthRepositoryImpl(
@@ -78,20 +69,17 @@ class MyApp extends StatelessWidget {
                 body: Center(child: CircularProgressIndicator()),
               );
             }
-            if (state is ConfigFound || state is AuthSuccess) {
+            if (state is ConfigReady || state is AuthSuccess) {
               WidgetsBinding.instance.addPostFrameCallback((_) {
                 Navigator.of(context).pushReplacementNamed('/home');
               });
               return const SizedBox.shrink();
             }
-            if (state is ApiUrlMissing) {
+            if (state is UrlsMissing) {
               return const ApiUrlScreen();
             }
-            if (state is CredentialsMissing) {
-              return LoginScreen(
-                prefilledUrl: state.apiUrl,
-                prefilledUsername: state.savedUsername,
-              );
+            if (state is UrlSelected) {
+              return LoginScreen(key: ValueKey(state.url), url: state.url);
             }
             if (state is AuthFailure) {
               return Scaffold(
@@ -102,9 +90,11 @@ class MyApp extends StatelessWidget {
                       Text('Login failed: ${state.message}'),
                       const SizedBox(height: 16),
                       ElevatedButton(
-                        onPressed: () => context.read<ConfigBloc>().add(
-                          const ClearCredentialsEvent(),
-                        ),
+                        onPressed: () {
+                          context.read<ConfigBloc>().add(
+                            const SwitchUserEvent(),
+                          );
+                        },
                         child: const Text('Retry'),
                       ),
                     ],
@@ -121,9 +111,10 @@ class MyApp extends StatelessWidget {
                       Text('Error: ${state.message}'),
                       const SizedBox(height: 16),
                       ElevatedButton(
-                        onPressed: () => context.read<ConfigBloc>().add(
-                          const CheckConfigEvent(),
-                        ),
+                        onPressed: () =>
+                            context.read<ConfigBloc>().add(
+                              const CheckConfigEvent(),
+                            ),
                         child: const Text('Retry'),
                       ),
                     ],
@@ -159,7 +150,11 @@ class MyApp extends StatelessWidget {
         getToken: () => tokenManager.getToken() ?? '',
         refreshToken: () async {
           final entity = await authRepository.refreshToken();
-          await tokenManager.setToken(entity.token, entity.refreshBefore);
+          await tokenManager.updateActiveToken(
+            entity.token,
+            entity.refreshBefore,
+          );
+          updateDioToken(entity.token);
           return entity.token;
         },
       ),
