@@ -113,6 +113,41 @@ class PortfolioRepositoryImpl implements PortfolioRepository {
     return models.map(_mapAssetModelToEntity).toList();
   }
 
+  @override
+  Future<AssetEntity> createAsset(
+    int portfolioId,
+    String ticker,
+    String name,
+  ) async {
+    final model = await remoteDataSource.createAsset(
+      portfolioId,
+      ticker,
+      name,
+    );
+    return _mapAssetModelToEntity(model);
+  }
+
+  @override
+  Future<AssetEntity> updateAsset(
+    int portfolioId,
+    int assetId,
+    String ticker,
+    String name,
+  ) async {
+    final model = await remoteDataSource.updateAsset(
+      portfolioId,
+      assetId,
+      ticker,
+      name,
+    );
+    return _mapAssetModelToEntity(model);
+  }
+
+  @override
+  Future<void> deleteAsset(int portfolioId, int assetId) async {
+    await remoteDataSource.deleteAsset(portfolioId, assetId);
+  }
+
   AssetEntity _mapAssetModelToEntity(AssetModel model) {
     return AssetEntity(
       id: model.id,

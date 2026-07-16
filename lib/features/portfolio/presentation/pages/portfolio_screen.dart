@@ -8,8 +8,10 @@ import 'package:assets_client/features/asset/presentation/bloc/asset_detail_bloc
     hide ChangeRangeEvent;
 import 'package:assets_client/features/asset/presentation/pages/asset_detail_screen.dart';
 import 'package:assets_client/features/home/domain/entities/summary_entity.dart';
+import 'package:assets_client/features/portfolio/domain/entities/asset_entity.dart';
 import 'package:assets_client/features/portfolio/domain/entities/portfolio_detail_entity.dart';
 import 'package:assets_client/features/portfolio/presentation/bloc/portfolio_bloc.dart';
+import 'package:assets_client/features/portfolio/presentation/widgets/asset_dialog.dart';
 import 'package:assets_client/features/portfolio/presentation/widgets/asset_list.dart';
 import 'package:assets_client/shared/utils/format_utils.dart';
 import 'package:assets_client/shared/widgets/chart_with_range.dart';
@@ -49,6 +51,80 @@ class PortfolioScreen extends StatelessWidget {
     );
   }
 
+  Future<void> _showCreateAssetDialog(BuildContext context) async {
+    final result = await showDialog<Map<String, String>>(
+      context: context,
+      builder: (_) => AssetDialog(portfolioId: portfolioId),
+    );
+
+    if (result != null) {
+      context.read<PortfolioBloc>().add(
+        CreateAssetEvent(
+          portfolioId: portfolioId,
+          ticker: result['ticker']!,
+          name: result['name']!,
+        ),
+      );
+    }
+  }
+
+  Future<void> _showEditAssetDialog(
+    BuildContext context,
+    AssetEntity asset,
+  ) async {
+    final result = await showDialog<Map<String, String>>(
+      context: context,
+      builder: (_) => AssetDialog(
+        portfolioId: portfolioId,
+        asset: asset,
+      ),
+    );
+
+    if (result != null) {
+      context.read<PortfolioBloc>().add(
+        UpdateAssetEvent(
+          portfolioId: portfolioId,
+          assetId: asset.id,
+          ticker: result['ticker']!,
+          name: result['name']!,
+        ),
+      );
+    }
+  }
+
+  Future<void> _confirmDeleteAsset(
+    BuildContext context,
+    int assetId,
+    String assetName,
+  ) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Delete Asset'),
+        content: Text(
+          'Are you sure you want to delete "$assetName"? This will also delete all transactions for this asset. This action cannot be undone.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      context.read<PortfolioBloc>().add(
+        DeleteAssetEvent(portfolioId: portfolioId, assetId: assetId),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final title = context.select<PortfolioBloc, String>((bloc) {
@@ -72,120 +148,170 @@ class PortfolioScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: SafeArea(
-        child: BlocBuilder<PortfolioBloc, PortfolioState>(
+      floatingActionButton: BlocBuilder<PortfolioBloc, PortfolioState>(
         builder: (context, state) {
-          if (state is PortfolioLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
-
           if (state is PortfolioLoaded) {
-            return RefreshIndicator(
-              onRefresh: () async {
-                context.read<PortfolioBloc>().add(
-                  LoadPortfolioEvent(
-                    portfolioId: portfolioId,
-                    range: state.currentRange,
-                  ),
-                );
-                await Future.delayed(const Duration(milliseconds: 500));
-              },
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    // Summary Section
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Text(
-                            state.portfolio.name,
-                            style: Theme.of(context).textTheme.headlineSmall
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                          if (state.portfolio.description.isNotEmpty)
-                            Text(
-                              state.portfolio.description,
-                              style: TextStyle(
-                                color: Colors.grey[600],
-                                fontSize: 14,
-                              ),
-                            ),
-                          const SizedBox(height: 16),
-                          _buildMetricsRow(context, state.portfolio),
-                          const SizedBox(height: 16),
-                          ChartWithRange(
-                            data: state.portfolio.chart
-                                .map(
-                                  (point) => SummaryChartEntity(
-                                    timestamp: point.timestamp,
-                                    price: point.price,
-                                    volume: point.volume,
-                                  ),
-                                )
-                                .toList(),
-                            isPositive: state.portfolio.changes.returnPct >= 0,
-                            currentRange: state.currentRange,
-                            validRanges: state.validRanges,
-                            onRangeChanged: (range) => context
-                                .read<PortfolioBloc>()
-                                .add(ChangeRangeEvent(range)),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Divider(height: 1),
-                    // Assets Section
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 16,
-                        top: 16,
-                        right: 16,
-                      ),
-                      child: Text(
-                        'Assets',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    AssetList(
-                      assets: state.assets,
-                      onAssetTap: (pid, aid) => _navigateToAsset(context, aid),
-                    ),
-                  ],
-                ),
-              ),
+            return FloatingActionButton.extended(
+              onPressed: () => _showCreateAssetDialog(context),
+              icon: const Icon(Icons.add),
+              label: const Text('Asset'),
             );
           }
-
-          if (state is PortfolioError) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error_outline, size: 64, color: Colors.red),
-                  const SizedBox(height: 16),
-                  Text(state.message, textAlign: TextAlign.center),
-                  const SizedBox(height: 16),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      context.read<PortfolioBloc>().add(
-                        LoadPortfolioEvent(portfolioId: portfolioId),
-                      );
-                    },
-                    icon: const Icon(Icons.refresh),
-                    label: const Text('Retry'),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          return const Center(child: Text('Loading portfolio...'));
+          return const SizedBox.shrink();
         },
       ),
+      body: SafeArea(
+        child: BlocListener<PortfolioBloc, PortfolioState>(
+          listener: (context, state) {
+            if (state is PortfolioError &&
+                state.message.contains('Failed to') &&
+                !state.message.contains('load data')) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.message)),
+              );
+              context.read<PortfolioBloc>().add(
+                LoadPortfolioEvent(portfolioId: portfolioId),
+              );
+            }
+          },
+          child: BlocBuilder<PortfolioBloc, PortfolioState>(
+            builder: (context, state) {
+              if (state is PortfolioLoading) {
+                return const Center(child: CircularProgressIndicator());
+              }
+
+              if (state is PortfolioLoaded) {
+                return RefreshIndicator(
+                  onRefresh: () async {
+                    context.read<PortfolioBloc>().add(
+                      LoadPortfolioEvent(
+                        portfolioId: portfolioId,
+                        range: state.currentRange,
+                      ),
+                    );
+                    await Future.delayed(
+                      const Duration(milliseconds: 500),
+                    );
+                  },
+                  child: SingleChildScrollView(
+                    child: Column(
+                      children: [
+                        Padding(
+                          padding: const EdgeInsets.all(16),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                state.portfolio.name,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .headlineSmall
+                                    ?.copyWith(
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                              ),
+                              if (state.portfolio.description.isNotEmpty)
+                                Text(
+                                  state.portfolio.description,
+                                  style: TextStyle(
+                                    color: Colors.grey[600],
+                                    fontSize: 14,
+                                  ),
+                                ),
+                              const SizedBox(height: 16),
+                              _buildMetricsRow(context, state.portfolio),
+                              const SizedBox(height: 16),
+                              ChartWithRange(
+                                data: state.portfolio.chart
+                                    .map(
+                                      (point) => SummaryChartEntity(
+                                        timestamp: point.timestamp,
+                                        price: point.price,
+                                        volume: point.volume,
+                                      ),
+                                    )
+                                    .toList(),
+                                isPositive:
+                                    state.portfolio.changes.returnPct >= 0,
+                                currentRange: state.currentRange,
+                                validRanges: state.validRanges,
+                                onRangeChanged: (range) => context
+                                    .read<PortfolioBloc>()
+                                    .add(ChangeRangeEvent(range)),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const Divider(height: 1),
+                        Padding(
+                          padding: const EdgeInsets.only(
+                            left: 16,
+                            top: 16,
+                            right: 16,
+                          ),
+                          child: Text(
+                            'Assets',
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge
+                                ?.copyWith(fontWeight: FontWeight.bold),
+                          ),
+                        ),
+                        AssetList(
+                          assets: state.assets,
+                          onAssetTap: (id) => _navigateToAsset(context, id),
+                          onAssetEdit: (id) {
+                            final asset =
+                                state.assets.firstWhere((a) => a.id == id);
+                            _showEditAssetDialog(context, asset);
+                          },
+                          onAssetDelete: (id) {
+                            final asset =
+                                state.assets.firstWhere((a) => a.id == id);
+                            _confirmDeleteAsset(
+                              context,
+                              id,
+                              asset.ticker,
+                            );
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                );
+              }
+
+              if (state is PortfolioError) {
+                return Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      const Icon(
+                        Icons.error_outline,
+                        size: 64,
+                        color: Colors.red,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(state.message, textAlign: TextAlign.center),
+                      const SizedBox(height: 16),
+                      ElevatedButton.icon(
+                        onPressed: () {
+                          context.read<PortfolioBloc>().add(
+                            LoadPortfolioEvent(portfolioId: portfolioId),
+                          );
+                        },
+                        icon: const Icon(Icons.refresh),
+                        label: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                );
+              }
+
+              return const Center(child: Text('Loading portfolio...'));
+            },
+          ),
+        ),
       ),
     );
   }

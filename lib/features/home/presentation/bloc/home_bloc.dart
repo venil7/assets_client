@@ -24,6 +24,34 @@ class ChangeRangeEvent extends HomeEvent {
   const ChangeRangeEvent(this.range);
 }
 
+class CreatePortfolioEvent extends HomeEvent {
+  final String name;
+  final String description;
+  const CreatePortfolioEvent({required this.name, required this.description});
+  @override
+  List<Object?> get props => [name, description];
+}
+
+class UpdatePortfolioEvent extends HomeEvent {
+  final int id;
+  final String name;
+  final String description;
+  const UpdatePortfolioEvent({
+    required this.id,
+    required this.name,
+    required this.description,
+  });
+  @override
+  List<Object?> get props => [id, name, description];
+}
+
+class DeletePortfolioEvent extends HomeEvent {
+  final int id;
+  const DeletePortfolioEvent(this.id);
+  @override
+  List<Object?> get props => [id];
+}
+
 // == States ==
 abstract class HomeState extends Equatable {
   const HomeState();
@@ -64,10 +92,14 @@ class HomeError extends HomeState {
 // == Bloc ==
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
   final HomeRepository repository;
+  String? _currentRange;
 
   HomeBloc({required this.repository}) : super(HomeInitial()) {
     on<LoadHomeEvent>(_onLoadHome);
     on<ChangeRangeEvent>(_onChangeRange);
+    on<CreatePortfolioEvent>(_onCreatePortfolio);
+    on<UpdatePortfolioEvent>(_onUpdatePortfolio);
+    on<DeletePortfolioEvent>(_onDeletePortfolio);
   }
 
   Future<void> _onLoadHome(LoadHomeEvent event, Emitter<HomeState> emit) async {
@@ -75,6 +107,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     try {
       final summary = await repository.getSummary(range: event.range);
       final portfolios = await repository.getPortfolios(range: event.range);
+      _currentRange = summary.meta.range;
       emit(
         HomeLoaded(
           summary: summary,
@@ -93,5 +126,47 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     Emitter<HomeState> emit,
   ) async {
     add(LoadHomeEvent(range: event.range));
+  }
+
+  Future<void> _onCreatePortfolio(
+    CreatePortfolioEvent event,
+    Emitter<HomeState> emit,
+  ) async {
+    if (state is! HomeLoaded) return;
+    try {
+      await repository.createPortfolio(event.name, event.description);
+    } catch (e) {
+      emit(HomeError('Failed to create portfolio: $e'));
+      return;
+    }
+    add(LoadHomeEvent(range: _currentRange));
+  }
+
+  Future<void> _onUpdatePortfolio(
+    UpdatePortfolioEvent event,
+    Emitter<HomeState> emit,
+  ) async {
+    if (state is! HomeLoaded) return;
+    try {
+      await repository.updatePortfolio(event.id, event.name, event.description);
+    } catch (e) {
+      emit(HomeError('Failed to update portfolio: $e'));
+      return;
+    }
+    add(LoadHomeEvent(range: _currentRange));
+  }
+
+  Future<void> _onDeletePortfolio(
+    DeletePortfolioEvent event,
+    Emitter<HomeState> emit,
+  ) async {
+    if (state is! HomeLoaded) return;
+    try {
+      await repository.deletePortfolio(event.id);
+    } catch (e) {
+      emit(HomeError('Failed to delete portfolio: $e'));
+      return;
+    }
+    add(LoadHomeEvent(range: _currentRange));
   }
 }

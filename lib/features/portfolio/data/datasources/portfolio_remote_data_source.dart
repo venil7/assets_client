@@ -1,5 +1,6 @@
 import 'package:assets_client/core/network/api_client.dart';
-import 'package:assets_client/features/asset/data/models/asset_model.dart';
+import 'package:assets_client/features/asset/data/models/asset_model.dart'
+    show AssetModel, CreateAssetRequestModel, UpdateAssetRequestModel;
 import 'package:assets_client/features/portfolio/data/models/portfolio_model.dart';
 
 abstract class PortfolioRemoteDataSource {
@@ -16,6 +17,18 @@ abstract class PortfolioRemoteDataSource {
     int portfolioId,
     String? range,
   );
+  Future<AssetModel> createAsset(
+    int portfolioId,
+    String ticker,
+    String name,
+  );
+  Future<AssetModel> updateAsset(
+    int portfolioId,
+    int assetId,
+    String ticker,
+    String name,
+  );
+  Future<void> deleteAsset(int portfolioId, int assetId);
 }
 
 class PortfolioRemoteDataSourceImpl implements PortfolioRemoteDataSource {
@@ -63,4 +76,30 @@ class PortfolioRemoteDataSourceImpl implements PortfolioRemoteDataSource {
     int portfolioId,
     String? range,
   ) => apiClient.getAssets(portfolioId, range);
+
+  @override
+  Future<AssetModel> createAsset(
+    int portfolioId,
+    String ticker,
+    String name,
+  ) {
+    final request = CreateAssetRequestModel(ticker: ticker, name: name);
+    return apiClient.createAsset(portfolioId, request);
+  }
+
+  @override
+  Future<AssetModel> updateAsset(
+    int portfolioId,
+    int assetId,
+    String ticker,
+    String name,
+  ) {
+    final request = UpdateAssetRequestModel(ticker: ticker, name: name);
+    return apiClient.updateAsset(portfolioId, assetId, request);
+  }
+
+  @override
+  Future<void> deleteAsset(int portfolioId, int assetId) async {
+    await apiClient.deleteAsset(portfolioId, assetId);
+  }
 }

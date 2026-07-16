@@ -3,6 +3,7 @@ import 'package:assets_client/core/services/dio_accessor.dart';
 import 'package:assets_client/core/services/token_manager_accessor.dart';
 import 'package:assets_client/features/home/domain/entities/summary_entity.dart';
 import 'package:assets_client/features/home/presentation/bloc/home_bloc.dart';
+import 'package:assets_client/features/home/presentation/widgets/portfolio_dialog.dart';
 import 'package:assets_client/features/home/presentation/widgets/portfolio_list.dart';
 import 'package:assets_client/features/portfolio/data/datasources/portfolio_remote_data_source.dart';
 import 'package:assets_client/features/portfolio/data/repositories/portfolio_repository_impl.dart';
@@ -34,6 +35,73 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
+  Future<void> _showCreatePortfolioDialog(BuildContext context) async {
+    final result = await showDialog<Map<String, String>>(
+      context: context,
+      builder: (_) => const PortfolioDialog(),
+    );
+
+    if (result != null) {
+      context.read<HomeBloc>().add(
+        CreatePortfolioEvent(
+          name: result['name']!,
+          description: result['description'] ?? '',
+        ),
+      );
+    }
+  }
+
+  Future<void> _showEditPortfolioDialog(
+    BuildContext context,
+    PortfolioEntity portfolio,
+  ) async {
+    final result = await showDialog<Map<String, String>>(
+      context: context,
+      builder: (_) => PortfolioDialog(portfolio: portfolio),
+    );
+
+    if (result != null) {
+      context.read<HomeBloc>().add(
+        UpdatePortfolioEvent(
+          id: portfolio.id,
+          name: result['name']!,
+          description: result['description'] ?? '',
+        ),
+      );
+    }
+  }
+
+  Future<void> _confirmDeletePortfolio(
+    BuildContext context,
+    int portfolioId,
+    String portfolioName,
+  ) async {
+    final confirmed = await showDialog<bool>(
+      context: context,
+      builder: (_) => AlertDialog(
+        title: const Text('Delete Portfolio'),
+        content: Text(
+          'Are you sure you want to delete "$portfolioName"? This will also delete all assets and transactions within it. This action cannot be undone.',
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(false),
+            child: const Text('Cancel'),
+          ),
+          FilledButton(
+            style: FilledButton.styleFrom(backgroundColor: Colors.red),
+            onPressed: () => Navigator.of(context).pop(true),
+            child: const Text('Delete'),
+          ),
+        ],
+      ),
+    );
+
+    if (confirmed == true) {
+      context.read<HomeBloc>().add(DeletePortfolioEvent(portfolioId));
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -47,9 +115,30 @@ class HomeScreen extends StatelessWidget {
           ),
         ],
       ),
+      floatingActionButton: BlocBuilder<HomeBloc, HomeState>(
+        builder: (context, state) {
+          if (state is HomeLoaded) {
+            return FloatingActionButton.extended(
+              onPressed: () => _showCreatePortfolioDialog(context),
+              icon: const Icon(Icons.add),
+              label: const Text('Portfolio'),
+            );
+          }
+          return const SizedBox.shrink();
+        },
+      ),
       body: SafeArea(
         child: BlocListener<HomeBloc, HomeState>(
-          listener: (context, state) {},
+          listener: (context, state) {
+            if (state is HomeError &&
+                state.message.contains('Failed to') &&
+                !state.message.contains('load data')) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                SnackBar(content: Text(state.message)),
+              );
+              context.read<HomeBloc>().add(const LoadHomeEvent());
+            }
+          },
           child: BlocBuilder<HomeBloc, HomeState>(
             builder: (context, state) {
               if (state is HomeLoading) {
@@ -72,11 +161,6 @@ class HomeScreen extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              // Text(
-                              //   'Portfolio Summary',
-                              //   style: Theme.of(context).textTheme.headlineSmall
-                              //       ?.copyWith(fontWeight: FontWeight.bold),
-                              // ),
                               const SizedBox(height: 8),
                               _buildMetricsRow(context, state.summary),
                               const SizedBox(height: 16),
@@ -100,16 +184,25 @@ class HomeScreen extends StatelessWidget {
                             top: 16,
                             right: 16,
                           ),
-                          // child: Text(
-                          //   'Portfolios',
-                          //   style: Theme.of(context).textTheme.titleLarge
-                          //       ?.copyWith(fontWeight: FontWeight.bold),
-                          // ),
                         ),
                         PortfolioList(
                           portfolios: state.portfolios,
                           onPortfolioTap: (id) =>
                               _navigateToPortfolio(context, id),
+                          onPortfolioEdit: (id) {
+                            final portfolio = state.portfolios
+                                .firstWhere((p) => p.id == id);
+                            _showEditPortfolioDialog(context, portfolio);
+                          },
+                          onPortfolioDelete: (id) {
+                            final portfolio = state.portfolios
+                                .firstWhere((p) => p.id == id);
+                            _confirmDeletePortfolio(
+                              context,
+                              id,
+                              portfolio.name,
+                            );
+                          },
                         ),
                       ],
                     ),

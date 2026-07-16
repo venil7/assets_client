@@ -21,6 +21,29 @@ class HomeRepositoryImpl implements HomeRepository {
     return models.map(_mapPortfolioModelToEntity).toList();
   }
 
+  @override
+  Future<void> createPortfolio(String name, String description) async {
+    final request = CreatePortfolioRequestModel(
+      name: name,
+      description: description,
+    );
+    await apiClient.createPortfolio(request);
+  }
+
+  @override
+  Future<void> updatePortfolio(int id, String name, String description) async {
+    final request = UpdatePortfolioRequestModel(
+      name: name,
+      description: description,
+    );
+    await apiClient.updatePortfolio(id, request);
+  }
+
+  @override
+  Future<void> deletePortfolio(int id) async {
+    await apiClient.deletePortfolio(id);
+  }
+
   SummaryEntity _mapSummaryModelToEntity(SummaryModel model) {
     return SummaryEntity(
       numPortfolios: model.numPortfolios,

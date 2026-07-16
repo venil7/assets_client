@@ -28,6 +28,51 @@ class ChangeRangeEvent extends PortfolioEvent {
   const ChangeRangeEvent(this.range);
 }
 
+class CreateAssetEvent extends PortfolioEvent {
+  final int portfolioId;
+  final String ticker;
+  final String name;
+
+  const CreateAssetEvent({
+    required this.portfolioId,
+    required this.ticker,
+    required this.name,
+  });
+
+  @override
+  List<Object?> get props => [portfolioId, ticker, name];
+}
+
+class UpdateAssetEvent extends PortfolioEvent {
+  final int portfolioId;
+  final int assetId;
+  final String ticker;
+  final String name;
+
+  const UpdateAssetEvent({
+    required this.portfolioId,
+    required this.assetId,
+    required this.ticker,
+    required this.name,
+  });
+
+  @override
+  List<Object?> get props => [portfolioId, assetId, ticker, name];
+}
+
+class DeleteAssetEvent extends PortfolioEvent {
+  final int portfolioId;
+  final int assetId;
+
+  const DeleteAssetEvent({
+    required this.portfolioId,
+    required this.assetId,
+  });
+
+  @override
+  List<Object?> get props => [portfolioId, assetId];
+}
+
 // == States ==
 abstract class PortfolioState extends Equatable {
   const PortfolioState();
@@ -75,6 +120,9 @@ class PortfolioBloc extends Bloc<PortfolioEvent, PortfolioState> {
   PortfolioBloc({required this.repository}) : super(PortfolioInitial()) {
     on<LoadPortfolioEvent>(_onLoadPortfolio);
     on<ChangeRangeEvent>(_onChangeRange);
+    on<CreateAssetEvent>(_onCreateAsset);
+    on<UpdateAssetEvent>(_onUpdateAsset);
+    on<DeleteAssetEvent>(_onDeleteAsset);
   }
 
   Future<void> _onLoadPortfolio(
@@ -118,5 +166,56 @@ class PortfolioBloc extends Bloc<PortfolioEvent, PortfolioState> {
     add(
       LoadPortfolioEvent(portfolioId: _currentPortfolioId!, range: event.range),
     );
+  }
+
+  Future<void> _onCreateAsset(
+    CreateAssetEvent event,
+    Emitter<PortfolioState> emit,
+  ) async {
+    if (state is! PortfolioLoaded) return;
+    try {
+      await repository.createAsset(
+        event.portfolioId,
+        event.ticker,
+        event.name,
+      );
+    } catch (e) {
+      emit(PortfolioError('Failed to create asset: $e'));
+      return;
+    }
+    add(LoadPortfolioEvent(portfolioId: event.portfolioId));
+  }
+
+  Future<void> _onUpdateAsset(
+    UpdateAssetEvent event,
+    Emitter<PortfolioState> emit,
+  ) async {
+    if (state is! PortfolioLoaded) return;
+    try {
+      await repository.updateAsset(
+        event.portfolioId,
+        event.assetId,
+        event.ticker,
+        event.name,
+      );
+    } catch (e) {
+      emit(PortfolioError('Failed to update asset: $e'));
+      return;
+    }
+    add(LoadPortfolioEvent(portfolioId: event.portfolioId));
+  }
+
+  Future<void> _onDeleteAsset(
+    DeleteAssetEvent event,
+    Emitter<PortfolioState> emit,
+  ) async {
+    if (state is! PortfolioLoaded) return;
+    try {
+      await repository.deleteAsset(event.portfolioId, event.assetId);
+    } catch (e) {
+      emit(PortfolioError('Failed to delete asset: $e'));
+      return;
+    }
+    add(LoadPortfolioEvent(portfolioId: event.portfolioId));
   }
 }
