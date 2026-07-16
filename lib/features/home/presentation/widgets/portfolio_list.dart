@@ -53,18 +53,20 @@ class PortfolioList extends StatelessWidget {
           if (onPortfolioEdit != null)
             SlidableAction(
               onPressed: (_) => onPortfolioEdit?.call(portfolio.id),
-              backgroundColor: Colors.blue.shade600,
-              foregroundColor: Colors.white,
+              backgroundColor: Colors.blue.shade200,
+              foregroundColor: Colors.blue.shade900,
               icon: Icons.edit,
               label: 'Edit',
+              borderRadius: BorderRadius.circular(12),
             ),
           if (onPortfolioDelete != null)
             SlidableAction(
               onPressed: (_) => onPortfolioDelete?.call(portfolio.id),
-              backgroundColor: Colors.red.shade600,
-              foregroundColor: Colors.white,
+              backgroundColor: Colors.red.shade200,
+              foregroundColor: Colors.red.shade900,
               icon: Icons.delete,
               label: 'Delete',
+              borderRadius: BorderRadius.circular(12),
             ),
         ],
       ),

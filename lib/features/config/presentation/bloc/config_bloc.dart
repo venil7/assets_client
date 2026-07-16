@@ -72,14 +72,42 @@ class ConfigBloc extends Bloc<ConfigEvent, ConfigState> {
         setBaseUrl(activeConn.apiUrl);
         updateDioToken(activeConn.jwtToken);
         await tokenManager.setActiveConnection(activeConn);
-        emit(
-          ConfigReady(
-            apiUrl: activeConn.apiUrl,
-            username: activeConn.username,
-            token: activeConn.jwtToken,
-            refreshBefore: activeConn.refreshBefore,
-          ),
-        );
+
+        // Auto-refresh token on app start so stored JWT is always fresh
+        try {
+          final authEntity = await authRepository.refreshToken();
+          final exp = _parseJwtExp(authEntity.token);
+          final expiresAt = exp * 1000;
+          final refreshAt = expiresAt - authEntity.refreshBefore;
+          final updated = activeConn.copyWith(
+            jwtToken: authEntity.token,
+            refreshBefore: authEntity.refreshBefore,
+            expiresAt: expiresAt,
+            refreshAt: refreshAt,
+            lastUsedAt: DateTime.now().millisecondsSinceEpoch,
+          );
+          await repository.saveConnection(updated);
+          updateDioToken(authEntity.token);
+          await tokenManager.setActiveConnection(updated);
+          emit(
+            ConfigReady(
+              apiUrl: updated.apiUrl,
+              username: updated.username,
+              token: authEntity.token,
+              refreshBefore: authEntity.refreshBefore,
+            ),
+          );
+        } catch (_) {
+          // Refresh failed (network, server down, etc.) — continue with existing token
+          emit(
+            ConfigReady(
+              apiUrl: activeConn.apiUrl,
+              username: activeConn.username,
+              token: activeConn.jwtToken,
+              refreshBefore: activeConn.refreshBefore,
+            ),
+          );
+        }
         return;
       }
 
