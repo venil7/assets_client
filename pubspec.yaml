@@ -49,10 +49,20 @@ dev_dependencies:
   retrofit_generator: ^10.0.1
   build_runner: ^2.6.0
   json_serializable: ^6.10.0
+  flutter_launcher_icons: ^0.14.4
 
 flutter:
   uses-material-design: true
+  assets:
+    - assets/icons/
 
 analyzer:
   errors:
     invalid_annotation_target: ignore
+
+flutter_launcher_icons:
+  android: "launcher_icon"
+  ios: true
+  image_path: "./assets/icons/icon.png"
+  min_sdk_android: 21 # android min sdk min:16, default 21
+
