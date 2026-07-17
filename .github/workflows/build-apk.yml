@@ -26,6 +26,9 @@ jobs:
       - name: Install dependencies
         run: flutter pub get
 
+      - run: echo "${{secrets.KEY_PROPERTIES}}" | base64 --decode > ${{env.KEY_PROPERTIES_PATH}}
+      - run: echo "${{secrets.KEY_JKS}}" | base64 --decode > ${{env.KEY_JKS_PATH}}
+
       - name: Build APK
         run: flutter build apk --release --target-platform android-arm64 --split-per-abi
 
@@ -35,3 +38,7 @@ jobs:
           name: apk-release
           path: build/app/outputs/flutter-apk/*.apk
           retention-days: 30
+
+env:
+  KEY_PROPERTIES_PATH: "./android/key.properties"
+  KEY_JKS_PATH: "./android/keystore.jks"

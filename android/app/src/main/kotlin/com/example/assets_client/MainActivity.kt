@@ -1,4 +1,4 @@
-package com.example.assets_client
+package uk.co.darkruby.assets_client
 
 import io.flutter.embedding.android.FlutterActivity
 
