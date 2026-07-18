@@ -17,6 +17,7 @@ abstract class AssetEntity with _$AssetEntity {
     @JsonKey(name: 'num_txs') required int numTxs,
     @JsonKey(name: 'base_ccy') required String baseCcy,
     double? weight,
+    double? endPrice,
     @JsonKey(name: 'returnPct') double? returnPct,
     double? returnValue,
     double? totalReturnPct,
