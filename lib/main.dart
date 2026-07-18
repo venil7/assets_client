@@ -5,6 +5,8 @@ import 'package:assets_client/config/theme.dart';
 import 'package:assets_client/core/network/api_client.dart';
 import 'package:assets_client/core/network/auth_interceptor.dart';
 import 'package:assets_client/core/network/error_interceptor.dart';
+import 'package:assets_client/core/services/biometric_service.dart';
+import 'package:assets_client/core/services/biometric_session.dart';
 import 'package:assets_client/core/services/dio_accessor.dart';
 import 'package:assets_client/core/services/token_manager.dart';
 import 'package:assets_client/core/services/token_manager_accessor.dart';
@@ -15,6 +17,7 @@ import 'package:assets_client/features/config/data/datasources/config_local_data
 import 'package:assets_client/features/config/data/repositories/config_repository_impl.dart';
 import 'package:assets_client/features/config/presentation/bloc/config_bloc.dart';
 import 'package:assets_client/features/config/presentation/pages/api_url_screen.dart';
+import 'package:assets_client/features/config/presentation/pages/biometric_lock_screen.dart';
 import 'package:assets_client/features/config/presentation/pages/login_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:dio/io.dart';
@@ -27,11 +30,24 @@ void main() async {
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
   const MyApp({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp>
+    with WidgetsBindingObserver {
+  late final ConfigBloc _configBloc;
+  final _biometric = BiometricService();
+  final _navigatorKey = GlobalKey<NavigatorState>();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+
     final configLocalDataSource = ConfigLocalDataSourceImpl();
     final configRepository = ConfigRepositoryImpl(
       localDataSource: configLocalDataSource,
@@ -39,24 +55,83 @@ class MyApp extends StatelessWidget {
     final tm = TokenManager(configRepository: configRepository);
     initTokenManager(tm);
 
+    final dio = _createBaseDio();
+    initDio(dio);
+
+    final apiClient = ApiClient(dio);
+    final authRepository = AuthRepositoryImpl(
+      remoteDataSource: AuthRemoteDataSourceImpl(apiClient: apiClient),
+    );
+
+    _addAuthInterceptor(dio, authRepository);
+
+    _configBloc = ConfigBloc(
+      repository: configRepository,
+      authRepository: authRepository,
+    )..add(const CheckConfigEvent());
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  /// On app resume: if biometric enabled and not authenticated this session,
+  /// show lock screen.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      if (BiometricServiceSession.authenticated) return; // already cleared
+
+      _checkBiometricAndLock();
+    }
+  }
+
+  Future<void> _checkBiometricAndLock() async {
+    final supported = await _biometric.isDeviceSupported();
+    if (!supported) return;
+    final enabled = await _biometric.isEnabled();
+    if (!enabled) return;
+
+    // Show lock screen.
+    final navigator = _navigatorKey.currentState;
+    if (navigator != null && navigator.canPop()) {
+      navigator.pushReplacement(
+        MaterialPageRoute(
+          builder: (_) => const BiometricLockScreen(),
+        ),
+      );
+    }
+  }
+
+  Future<void> _checkBiometricStartup() async {
+    final supported = await _biometric.isDeviceSupported();
+    if (!supported) {
+      _navigateHome();
+      return;
+    }
+
+    final enabled = await _biometric.isEnabled();
+    if (!enabled) {
+      _navigateHome();
+      return;
+    }
+
+    // Biometric enabled — show lock screen.
+    _navigatorKey.currentState?.pushReplacementNamed('/biometric-lock');
+  }
+
+  void _navigateHome() {
+    _navigatorKey.currentState?.pushReplacementNamed('/home');
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return BlocProvider(
-      create: (_) {
-        final dio = _createBaseDio();
-        initDio(dio);
-
-        final apiClient = ApiClient(dio);
-        final authRepository = AuthRepositoryImpl(
-          remoteDataSource: AuthRemoteDataSourceImpl(apiClient: apiClient),
-        );
-
-        _addAuthInterceptor(dio, authRepository);
-
-        return ConfigBloc(
-          repository: configRepository,
-          authRepository: authRepository,
-        )..add(const CheckConfigEvent());
-      },
+      create: (_) => _configBloc,
       child: MaterialApp(
+        navigatorKey: _navigatorKey,
         title: 'Assets Client',
         theme: AppTheme.lightTheme,
         darkTheme: AppTheme.darkTheme,
@@ -70,10 +145,13 @@ class MyApp extends StatelessWidget {
               );
             }
             if (state is ConfigReady || state is AuthSuccess) {
+              // Trigger async biometric check after frame.
               WidgetsBinding.instance.addPostFrameCallback((_) {
-                Navigator.of(context).pushReplacementNamed('/home');
+                _checkBiometricStartup();
               });
-              return const SizedBox.shrink();
+              return const Scaffold(
+                body: Center(child: CircularProgressIndicator()),
+              );
             }
             if (state is UrlsMissing) {
               return const ApiUrlScreen();
