@@ -2,6 +2,7 @@ import 'package:assets_client/core/network/api_client.dart';
 import 'package:assets_client/core/services/dio_accessor.dart';
 import 'package:assets_client/features/config/presentation/bloc/settings_bloc.dart';
 import 'package:assets_client/features/config/presentation/pages/api_url_screen.dart';
+import 'package:assets_client/features/config/presentation/pages/biometric_lock_screen.dart';
 import 'package:assets_client/features/config/presentation/pages/init_screen.dart';
 import 'package:assets_client/features/config/presentation/pages/login_screen.dart';
 import 'package:assets_client/features/config/presentation/pages/settings_screen.dart';
@@ -24,6 +25,8 @@ class RouteGenerator {
         return MaterialPageRoute(builder: (_) => const InitScreen());
       case '/api-url':
         return MaterialPageRoute(builder: (_) => const ApiUrlScreen());
+      case '/biometric-lock':
+        return MaterialPageRoute(builder: (_) => const BiometricLockScreen());
       case '/login':
         final args = settings.arguments as Map<String, dynamic>?;
         final url = args?['url'] as String? ?? '';
