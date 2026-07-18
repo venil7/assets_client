@@ -72,8 +72,13 @@ class AssetList extends StatelessWidget {
   }
 
   Widget _buildCard(BuildContext context, AssetEntity asset) {
-    final periodPos = (asset.totalReturnPct ?? 0) >= 0;
-    final color = periodPos ? Colors.green : Colors.red;
+    final periodPct = asset.returnPct ?? 0;
+    final totalPct = asset.totalReturnPct ?? 0;
+    final periodPos = periodPct >= 0;
+    final totalPos = totalPct >= 0;
+    final periodColor = periodPos ? Colors.green : Colors.red;
+    final totalColor = totalPos ? Colors.green : Colors.red;
+    final currentPrice = asset.endPrice ?? asset.holdings * asset.avgPrice;
 
     return Card(
       elevation: 2,
@@ -85,72 +90,143 @@ class AssetList extends StatelessWidget {
         onTap: () => onAssetTap?.call(asset.id),
         child: Padding(
           padding: const EdgeInsets.all(16),
-          child: Row(
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      asset.ticker,
-                      style: const TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                    const SizedBox(height: 2),
-                    Text(
-                      asset.name,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: TextStyle(
-                        fontSize: 13,
-                        color: Colors.grey[600],
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.end,
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    formatCurrency(
-                      asset.totalReturnValue ?? asset.invested,
-                    ),
-                    style: const TextStyle(
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
+                  Expanded(
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Row(
+                          children: [
+                            Flexible(
+                              child: Text(
+                                asset.name,
+                                overflow: TextOverflow.ellipsis,
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              formatCurrency(currentPrice),
+                              style: const TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w600,
+                              ),
+                            ),
+                          ],
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.only(top: 2),
+                          child: Text(
+                            asset.ticker,
+                            overflow: TextOverflow.ellipsis,
+                            style: TextStyle(
+                              color: Colors.grey[600],
+                              fontSize: 14,
+                            ),
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  const SizedBox(height: 2),
-                  Row(
-                    mainAxisSize: MainAxisSize.min,
+                  const SizedBox(width: 12),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
-                      Text(
-                        formatPct(asset.totalReturnPct ?? 0),
-                        style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.bold,
-                          color: color,
-                        ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            formatPct(periodPct),
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: periodColor,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            formatCurrency(
+                              asset.returnValue ?? 0,
+                              showSign: true,
+                            ),
+                            style: TextStyle(
+                              fontSize: 18,
+                              color: periodColor,
+                            ),
+                          ),
+                        ],
                       ),
-                      const SizedBox(width: 6),
-                      Text(
-                        '${formatCurrency(asset.invested)} invested',
-                        style: TextStyle(
-                          fontSize: 12,
-                          color: Colors.grey[600],
-                        ),
+                      const SizedBox(height: 2),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            formatPct(totalPct),
+                            style: TextStyle(
+                              fontSize: 14,
+                              fontWeight: FontWeight.bold,
+                              color: totalColor,
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Text(
+                            formatCurrency(
+                              asset.totalReturnValue ?? 0,
+                              showSign: true,
+                            ),
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: totalColor,
+                            ),
+                          ),
+                        ],
                       ),
                     ],
                   ),
                 ],
               ),
+              const SizedBox(height: 12),
+              _buildBottomRow(asset),
             ],
           ),
         ),
       ),
     );
   }
+
+  Widget _buildBottomRow(AssetEntity asset) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      children: [
+        _infoColumn('Holdings', asset.holdings.toStringAsFixed(2)),
+        asset.weight == null
+            ? _infoColumn('Weight', '—')
+            : _infoColumn('Weight', formatPct(asset.weight!, showSign: false)),
+        _infoColumn('Invested', formatCurrency(asset.invested)),
+        _infoColumn('Avg Price', formatCurrency(asset.avgPrice)),
+      ],
+    );
+  }
+
+  Widget _infoColumn(String label, String value) {
+    return Column(
+      children: [
+        Text(
+          value,
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+        ),
+        Text(label, style: TextStyle(fontSize: 12, color: Colors.grey[600])),
+      ],
+    );
+  }
+
 }
