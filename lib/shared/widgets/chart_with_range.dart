@@ -31,6 +31,7 @@ class ChartWithRange extends StatelessWidget {
             ranges: validRanges,
             currentRange: currentRange,
             onRangeChanged: onRangeChanged,
+            isPositive: isPositive,
           ),
         ),
       ],

@@ -116,7 +116,7 @@ class _InitScreenState extends State<InitScreen> {
                     labelText: 'API Server URL',
                     hintText: 'https://api.example.com',
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(4),
                     ),
                     prefixIcon: const Icon(Icons.link),
                   ),
@@ -131,7 +131,7 @@ class _InitScreenState extends State<InitScreen> {
                     labelText: 'Username',
                     hintText: 'your_username',
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(4),
                     ),
                     prefixIcon: const Icon(Icons.person),
                   ),
@@ -145,7 +145,7 @@ class _InitScreenState extends State<InitScreen> {
                     labelText: 'Password',
                     hintText: 'your_password',
                     border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(4),
                     ),
                     prefixIcon: const Icon(Icons.lock),
                     suffixIcon: IconButton(
@@ -166,7 +166,7 @@ class _InitScreenState extends State<InitScreen> {
                     padding: const EdgeInsets.all(12),
                     decoration: BoxDecoration(
                       color: Colors.blue[50],
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(4),
                       border: Border.all(color: Colors.blue[200]!),
                     ),
                     child: Row(

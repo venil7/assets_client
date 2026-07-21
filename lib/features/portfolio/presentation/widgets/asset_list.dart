@@ -47,24 +47,28 @@ class AssetList extends StatelessWidget {
         motion: const ScrollMotion(),
         extentRatio: 0.45,
         children: [
-          if (onAssetEdit != null)
+          if (onAssetEdit != null) ...[
+            const SizedBox(width: 8), // Gap between actions
             SlidableAction(
               onPressed: (_) => onAssetEdit?.call(asset.id),
-              backgroundColor: Colors.blue.shade200,
+              backgroundColor: Colors.blue.shade900.withAlpha(50),
               foregroundColor: Colors.blue.shade900,
               icon: Icons.edit,
               label: 'Edit',
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(4),
             ),
-          if (onAssetDelete != null)
+          ],
+          if (onAssetDelete != null) ...[
+            const SizedBox(width: 8), // Gap between actions
             SlidableAction(
               onPressed: (_) => onAssetDelete?.call(asset.id),
-              backgroundColor: Colors.red.shade200,
+              backgroundColor: Colors.red.shade900.withAlpha(50),
               foregroundColor: Colors.red.shade900,
               icon: Icons.delete,
               label: 'Delete',
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(4),
             ),
+          ],
         ],
       ),
       child: _buildCard(context, asset),
@@ -79,124 +83,129 @@ class AssetList extends StatelessWidget {
     final periodColor = periodPos ? Colors.green : Colors.red;
     final totalColor = totalPos ? Colors.green : Colors.red;
     final currentPrice = asset.endPrice ?? asset.holdings * asset.avgPrice;
+    final borderGradient = periodPos
+        ? LinearGradient(colors: [Colors.green, Colors.lightGreen])
+        : LinearGradient(colors: [Colors.deepOrange, Colors.red]);
 
-    return Card(
-      elevation: 2,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
+    return Container(
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(4),
+        gradient: borderGradient,
       ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: () => onAssetTap?.call(asset.id),
-        child: Padding(
-          padding: const EdgeInsets.all(16),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Expanded(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Row(
-                          children: [
-                            Flexible(
-                              child: Text(
-                                asset.name,
-                                overflow: TextOverflow.ellipsis,
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+      child: Card(
+        margin: const EdgeInsets.all(1),
+        elevation: 2,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(4),
+          onTap: () => onAssetTap?.call(asset.id),
+          child: Padding(
+            padding: const EdgeInsets.all(16),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Row(
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  asset.name,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
+                              const SizedBox(width: 8),
+                              Text(
+                                formatCurrency(currentPrice),
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 2),
+                            child: Text(
+                              asset.ticker,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: Colors.grey[600],
+                                fontSize: 14,
+                              ),
                             ),
-                            const SizedBox(width: 8),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 12),
+                    Column(
+                      crossAxisAlignment: CrossAxisAlignment.end,
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
                             Text(
-                              formatCurrency(currentPrice),
-                              style: const TextStyle(
+                              formatPct(periodPct),
+                              style: TextStyle(
                                 fontSize: 18,
-                                fontWeight: FontWeight.w600,
+                                fontWeight: FontWeight.bold,
+                                color: periodColor,
+                              ),
+                            ),
+                            const SizedBox(width: 6),
+                            Text(
+                              formatCurrency(
+                                asset.returnValue ?? 0,
+                                showSign: true,
+                              ),
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: periodColor,
                               ),
                             ),
                           ],
                         ),
-                        Padding(
-                          padding: const EdgeInsets.only(top: 2),
-                          child: Text(
-                            asset.ticker,
-                            overflow: TextOverflow.ellipsis,
-                            style: TextStyle(
-                              color: Colors.grey[600],
-                              fontSize: 14,
+                        const SizedBox(height: 2),
+                        Row(
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Text(
+                              formatPct(totalPct),
+                              style: TextStyle(
+                                fontSize: 14,
+                                fontWeight: FontWeight.bold,
+                                color: totalColor,
+                              ),
                             ),
-                          ),
+                            const SizedBox(width: 6),
+                            Text(
+                              formatCurrency(
+                                asset.totalReturnValue ?? 0,
+                                showSign: true,
+                              ),
+                              style: TextStyle(fontSize: 14, color: totalColor),
+                            ),
+                          ],
                         ),
                       ],
                     ),
-                  ),
-                  const SizedBox(width: 12),
-                  Column(
-                    crossAxisAlignment: CrossAxisAlignment.end,
-                    children: [
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            formatPct(periodPct),
-                            style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                              color: periodColor,
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            formatCurrency(
-                              asset.returnValue ?? 0,
-                              showSign: true,
-                            ),
-                            style: TextStyle(
-                              fontSize: 18,
-                              color: periodColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 2),
-                      Row(
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Text(
-                            formatPct(totalPct),
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: totalColor,
-                            ),
-                          ),
-                          const SizedBox(width: 6),
-                          Text(
-                            formatCurrency(
-                              asset.totalReturnValue ?? 0,
-                              showSign: true,
-                            ),
-                            style: TextStyle(
-                              fontSize: 14,
-                              color: totalColor,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-              const SizedBox(height: 12),
-              _buildBottomRow(asset),
-            ],
+                  ],
+                ),
+                const SizedBox(height: 12),
+                _buildBottomRow(asset),
+              ],
+            ),
           ),
         ),
       ),
@@ -228,5 +237,4 @@ class AssetList extends StatelessWidget {
       ],
     );
   }
-
 }

@@ -28,7 +28,7 @@ class TransactionDetailDialog extends StatelessWidget {
               color: isBuy
                   ? Colors.green.withValues(alpha: 0.1)
                   : Colors.red.withValues(alpha: 0.1),
-              borderRadius: BorderRadius.circular(6),
+              borderRadius: BorderRadius.circular(4),
             ),
             child: Text(
               tx.type.toUpperCase(),
