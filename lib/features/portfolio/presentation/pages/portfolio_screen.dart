@@ -74,10 +74,7 @@ class PortfolioScreen extends StatelessWidget {
   ) async {
     final result = await showDialog<Map<String, String>>(
       context: context,
-      builder: (_) => AssetDialog(
-        portfolioId: portfolioId,
-        asset: asset,
-      ),
+      builder: (_) => AssetDialog(portfolioId: portfolioId, asset: asset),
     );
 
     if (result != null) {
@@ -166,9 +163,9 @@ class PortfolioScreen extends StatelessWidget {
             if (state is PortfolioError &&
                 state.message.contains('Failed to') &&
                 !state.message.contains('load data')) {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(content: Text(state.message)),
-              );
+              ScaffoldMessenger.of(
+                context,
+              ).showSnackBar(SnackBar(content: Text(state.message)));
               context.read<PortfolioBloc>().add(
                 LoadPortfolioEvent(portfolioId: portfolioId),
               );
@@ -189,9 +186,7 @@ class PortfolioScreen extends StatelessWidget {
                         range: state.currentRange,
                       ),
                     );
-                    await Future.delayed(
-                      const Duration(milliseconds: 500),
-                    );
+                    await Future.delayed(const Duration(milliseconds: 500));
                   },
                   child: SingleChildScrollView(
                     child: Column(
@@ -203,12 +198,8 @@ class PortfolioScreen extends StatelessWidget {
                             children: [
                               Text(
                                 state.portfolio.name,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .headlineSmall
-                                    ?.copyWith(
-                                      fontWeight: FontWeight.bold,
-                                    ),
+                                style: Theme.of(context).textTheme.headlineSmall
+                                    ?.copyWith(fontWeight: FontWeight.bold),
                               ),
                               if (state.portfolio.description.isNotEmpty)
                                 Text(
@@ -249,30 +240,21 @@ class PortfolioScreen extends StatelessWidget {
                             top: 16,
                             right: 16,
                           ),
-                          child: Text(
-                            'Assets',
-                            style: Theme.of(context)
-                                .textTheme
-                                .titleLarge
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
                         ),
                         AssetList(
                           assets: state.assets,
                           onAssetTap: (id) => _navigateToAsset(context, id),
                           onAssetEdit: (id) {
-                            final asset =
-                                state.assets.firstWhere((a) => a.id == id);
+                            final asset = state.assets.firstWhere(
+                              (a) => a.id == id,
+                            );
                             _showEditAssetDialog(context, asset);
                           },
                           onAssetDelete: (id) {
-                            final asset =
-                                state.assets.firstWhere((a) => a.id == id);
-                            _confirmDeleteAsset(
-                              context,
-                              id,
-                              asset.ticker,
+                            final asset = state.assets.firstWhere(
+                              (a) => a.id == id,
                             );
+                            _confirmDeleteAsset(context, id, asset.ticker);
                           },
                         ),
                       ],

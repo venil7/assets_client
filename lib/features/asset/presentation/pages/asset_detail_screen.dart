@@ -21,11 +21,11 @@ class AssetDetailScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final title = context.select<AssetDetailBloc, String>((bloc) {
       final s = bloc.state;
-      if (s is AssetDetailLoaded) return s.detail.ticker;
+      if (s is AssetDetailLoaded) return s.detail.name;
       return 'Asset Details';
     });
 
-return Scaffold(
+    return Scaffold(
       appBar: AppBar(
         title: Text(title),
         elevation: 0,
@@ -57,128 +57,132 @@ return Scaffold(
       }),
       body: SafeArea(
         child: BlocBuilder<AssetDetailBloc, AssetDetailState>(
-        builder: (context, state) {
-          if (state is AssetDetailLoading) {
-            return const Center(child: CircularProgressIndicator());
-          }
+          builder: (context, state) {
+            if (state is AssetDetailLoading) {
+              return const Center(child: CircularProgressIndicator());
+            }
 
-          if (state is AssetDetailLoaded) {
-            return RefreshIndicator(
-              onRefresh: () async {
-                context.read<AssetDetailBloc>().add(
-                  LoadAssetDetailEvent(
-                    portfolioId: portfolioId,
-                    assetId: assetId,
-                    range: state.currentRange,
-                  ),
-                );
-                await Future.delayed(const Duration(milliseconds: 500));
-              },
-              child: SingleChildScrollView(
-                child: Column(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Row(
-                            children: [
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      state.detail.ticker,
-                                      style: Theme.of(context)
-                                          .textTheme
-                                          .headlineSmall
-                                          ?.copyWith(
-                                            fontWeight: FontWeight.bold,
-                                          ),
-                                    ),
-                                    if (state.detail.name.isNotEmpty)
-                                      Text(
-                                        state.detail.name,
-                                        style: TextStyle(
-                                          color: Colors.grey[600],
-                                          fontSize: 14,
-                                        ),
-                                      ),
-                                  ],
-                                ),
-                              ),
-                            ],
-                          ),
-                          const SizedBox(height: 16),
-                          _buildMetricsRow(context, state.detail),
-                          const SizedBox(height: 16),
-                          ChartWithRange(
-                            data: state.detail.chart,
-                            isPositive: state.detail.changes.returnPct >= 0,
-                            currentRange: state.currentRange,
-                            validRanges: state.validRanges,
-                            onRangeChanged: (range) => context
-                                .read<AssetDetailBloc>()
-                                .add(ChangeRangeEvent(range)),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Divider(height: 1),
-                    Padding(
-                      padding: const EdgeInsets.only(
-                        left: 16,
-                        top: 16,
-                        right: 16,
-                      ),
-                      child: Text(
-                        'Transactions',
-                        style: Theme.of(context).textTheme.titleLarge?.copyWith(
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                    ),
-                    TransactionList(
+            if (state is AssetDetailLoaded) {
+              return RefreshIndicator(
+                onRefresh: () async {
+                  context.read<AssetDetailBloc>().add(
+                    LoadAssetDetailEvent(
                       portfolioId: portfolioId,
                       assetId: assetId,
-                      transactions: state.transactions,
+                      range: state.currentRange,
+                    ),
+                  );
+                  await Future.delayed(const Duration(milliseconds: 500));
+                },
+                child: SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.all(16),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: Column(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      Text(
+                                        state.detail.name,
+                                        style: Theme.of(context)
+                                            .textTheme
+                                            .headlineSmall
+                                            ?.copyWith(
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                      if (state.detail.ticker.isNotEmpty)
+                                        Text(
+                                          state.detail.ticker,
+                                          style: TextStyle(
+                                            color: Colors.grey[600],
+                                            fontSize: 14,
+                                          ),
+                                        ),
+                                    ],
+                                  ),
+                                ),
+                              ],
+                            ),
+                            const SizedBox(height: 16),
+                            _buildMetricsRow(context, state.detail),
+                            const SizedBox(height: 16),
+                            ChartWithRange(
+                              data: state.detail.chart,
+                              isPositive: state.detail.changes.returnPct >= 0,
+                              currentRange: state.currentRange,
+                              validRanges: state.validRanges,
+                              onRangeChanged: (range) => context
+                                  .read<AssetDetailBloc>()
+                                  .add(ChangeRangeEvent(range)),
+                            ),
+                          ],
+                        ),
+                      ),
+                      const Divider(height: 1),
+                      Padding(
+                        padding: const EdgeInsets.only(
+                          left: 16,
+                          top: 16,
+                          right: 16,
+                        ),
+                        child: Text(
+                          'Transactions',
+                          style: Theme.of(context).textTheme.titleLarge
+                              ?.copyWith(fontWeight: FontWeight.bold),
+                        ),
+                      ),
+                      TransactionList(
+                        portfolioId: portfolioId,
+                        assetId: assetId,
+                        transactions: state.transactions,
+                      ),
+                    ],
+                  ),
+                ),
+              );
+            }
+
+            if (state is AssetDetailError) {
+              return Center(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Icon(
+                      Icons.error_outline,
+                      size: 64,
+                      color: Colors.red,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(state.message, textAlign: TextAlign.center),
+                    const SizedBox(height: 16),
+                    ElevatedButton.icon(
+                      onPressed: () {
+                        context.read<AssetDetailBloc>().add(
+                          LoadAssetDetailEvent(
+                            portfolioId: portfolioId,
+                            assetId: assetId,
+                          ),
+                        );
+                      },
+                      icon: const Icon(Icons.refresh),
+                      label: const Text('Retry'),
                     ),
                   ],
                 ),
-              ),
-            );
-          }
+              );
+            }
 
-          if (state is AssetDetailError) {
-            return Center(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.error_outline, size: 64, color: Colors.red),
-                  const SizedBox(height: 16),
-                  Text(state.message, textAlign: TextAlign.center),
-                  const SizedBox(height: 16),
-                  ElevatedButton.icon(
-                    onPressed: () {
-                      context.read<AssetDetailBloc>().add(
-                        LoadAssetDetailEvent(
-                          portfolioId: portfolioId,
-                          assetId: assetId,
-                        ),
-                      );
-                    },
-                    icon: const Icon(Icons.refresh),
-                    label: const Text('Retry'),
-                  ),
-                ],
-              ),
-            );
-          }
-
-          return const Center(child: Text('Loading asset...'));
-        },
-      ),
+            return const Center(child: Text('Loading asset...'));
+          },
+        ),
       ),
     );
   }

@@ -47,24 +47,28 @@ class AssetList extends StatelessWidget {
         motion: const ScrollMotion(),
         extentRatio: 0.45,
         children: [
-          if (onAssetEdit != null)
+          if (onAssetEdit != null) ...[
+            const SizedBox(width: 8), // Gap between actions
             SlidableAction(
               onPressed: (_) => onAssetEdit?.call(asset.id),
-              backgroundColor: Colors.blue.shade200,
+              backgroundColor: Colors.blue.shade900.withAlpha(50),
               foregroundColor: Colors.blue.shade900,
               icon: Icons.edit,
               label: 'Edit',
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(4),
             ),
-          if (onAssetDelete != null)
+          ],
+          if (onAssetDelete != null) ...[
+            const SizedBox(width: 8), // Gap between actions
             SlidableAction(
               onPressed: (_) => onAssetDelete?.call(asset.id),
-              backgroundColor: Colors.red.shade200,
+              backgroundColor: Colors.red.shade900.withAlpha(50),
               foregroundColor: Colors.red.shade900,
               icon: Icons.delete,
               label: 'Delete',
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(4),
             ),
+          ],
         ],
       ),
       child: _buildCard(context, asset),
@@ -85,15 +89,15 @@ class AssetList extends StatelessWidget {
 
     return Container(
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(13),
+        borderRadius: BorderRadius.circular(4),
         gradient: borderGradient,
       ),
       child: Card(
         margin: const EdgeInsets.all(1),
         elevation: 2,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
         child: InkWell(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(4),
           onTap: () => onAssetTap?.call(asset.id),
           child: Padding(
             padding: const EdgeInsets.all(16),

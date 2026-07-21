@@ -10,11 +10,7 @@ class AssetDialog extends StatefulWidget {
   final int portfolioId;
   final AssetEntity? asset; // null = create mode
 
-  const AssetDialog({
-    super.key,
-    required this.portfolioId,
-    this.asset,
-  });
+  const AssetDialog({super.key, required this.portfolioId, this.asset});
 
   @override
   State<AssetDialog> createState() => _AssetDialogState();
@@ -97,10 +93,7 @@ class _AssetDialogState extends State<AssetDialog> {
       dense: true,
       title: Text(
         item.symbol,
-        style: const TextStyle(
-          fontWeight: FontWeight.w600,
-          fontSize: 13,
-        ),
+        style: const TextStyle(fontWeight: FontWeight.w600, fontSize: 13),
       ),
       subtitle: Text(
         item.shortname ?? item.longname ?? '',
@@ -110,10 +103,7 @@ class _AssetDialogState extends State<AssetDialog> {
       ),
       trailing: Text(
         '${item.exchange}  ${item.quoteType}',
-        style: TextStyle(
-          fontSize: 10,
-          color: Colors.grey[600],
-        ),
+        style: TextStyle(fontSize: 10, color: Colors.grey[600]),
       ),
       onTap: () => _selectTicker(item),
     );
@@ -168,14 +158,12 @@ class _AssetDialogState extends State<AssetDialog> {
                     margin: const EdgeInsets.only(top: 6),
                     decoration: BoxDecoration(
                       border: Border.all(color: Colors.grey.shade300),
-                      borderRadius: BorderRadius.circular(8),
+                      borderRadius: BorderRadius.circular(4),
                     ),
                     child: Column(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        for (var i = 0;
-                            i < _searchResults.length && i < 3;
-                            i++)
+                        for (var i = 0; i < _searchResults.length && i < 3; i++)
                           _buildSearchItem(_searchResults[i]),
                       ],
                     ),
@@ -216,9 +204,8 @@ class _AssetDialogState extends State<AssetDialog> {
 
   void _submit() {
     if (!_formKey.currentState!.validate()) return;
-    Navigator.of(context).pop({
-      'ticker': _tickerCtrl.text.trim(),
-      'name': _nameCtrl.text.trim(),
-    });
+    Navigator.of(
+      context,
+    ).pop({'ticker': _tickerCtrl.text.trim(), 'name': _nameCtrl.text.trim()});
   }
 }
