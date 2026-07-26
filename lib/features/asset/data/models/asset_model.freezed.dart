@@ -15,7 +15,7 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AssetMetaModel {
 
- String get range;@JsonKey(name: 'validRanges') List<String> get validRanges;@JsonKey(name: 'fiftyTwoWeekLow') double get fiftyTwoWeekLow;@JsonKey(name: 'fiftyTwoWeekHigh') double get fiftyTwoWeekHigh;
+ String get range;@JsonKey(name: 'validRanges') List<String> get validRanges;@JsonKey(name: 'fiftyTwoWeekLow') double get fiftyTwoWeekLow;@JsonKey(name: 'fiftyTwoWeekHigh') double get fiftyTwoWeekHigh;@JsonKey(name: 'regularMarketPrice') double get regularMarketPrice;
 /// Create a copy of AssetMetaModel
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -28,16 +28,16 @@ $AssetMetaModelCopyWith<AssetMetaModel> get copyWith => _$AssetMetaModelCopyWith
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AssetMetaModel&&(identical(other.range, range) || other.range == range)&&const DeepCollectionEquality().equals(other.validRanges, validRanges)&&(identical(other.fiftyTwoWeekLow, fiftyTwoWeekLow) || other.fiftyTwoWeekLow == fiftyTwoWeekLow)&&(identical(other.fiftyTwoWeekHigh, fiftyTwoWeekHigh) || other.fiftyTwoWeekHigh == fiftyTwoWeekHigh));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AssetMetaModel&&(identical(other.range, range) || other.range == range)&&const DeepCollectionEquality().equals(other.validRanges, validRanges)&&(identical(other.fiftyTwoWeekLow, fiftyTwoWeekLow) || other.fiftyTwoWeekLow == fiftyTwoWeekLow)&&(identical(other.fiftyTwoWeekHigh, fiftyTwoWeekHigh) || other.fiftyTwoWeekHigh == fiftyTwoWeekHigh)&&(identical(other.regularMarketPrice, regularMarketPrice) || other.regularMarketPrice == regularMarketPrice));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,range,const DeepCollectionEquality().hash(validRanges),fiftyTwoWeekLow,fiftyTwoWeekHigh);
+int get hashCode => Object.hash(runtimeType,range,const DeepCollectionEquality().hash(validRanges),fiftyTwoWeekLow,fiftyTwoWeekHigh,regularMarketPrice);
 
 @override
 String toString() {
-  return 'AssetMetaModel(range: $range, validRanges: $validRanges, fiftyTwoWeekLow: $fiftyTwoWeekLow, fiftyTwoWeekHigh: $fiftyTwoWeekHigh)';
+  return 'AssetMetaModel(range: $range, validRanges: $validRanges, fiftyTwoWeekLow: $fiftyTwoWeekLow, fiftyTwoWeekHigh: $fiftyTwoWeekHigh, regularMarketPrice: $regularMarketPrice)';
 }
 
 
@@ -48,7 +48,7 @@ abstract mixin class $AssetMetaModelCopyWith<$Res>  {
   factory $AssetMetaModelCopyWith(AssetMetaModel value, $Res Function(AssetMetaModel) _then) = _$AssetMetaModelCopyWithImpl;
 @useResult
 $Res call({
- String range,@JsonKey(name: 'validRanges') List<String> validRanges,@JsonKey(name: 'fiftyTwoWeekLow') double fiftyTwoWeekLow,@JsonKey(name: 'fiftyTwoWeekHigh') double fiftyTwoWeekHigh
+ String range,@JsonKey(name: 'validRanges') List<String> validRanges,@JsonKey(name: 'fiftyTwoWeekLow') double fiftyTwoWeekLow,@JsonKey(name: 'fiftyTwoWeekHigh') double fiftyTwoWeekHigh,@JsonKey(name: 'regularMarketPrice') double regularMarketPrice
 });
 
 
@@ -65,12 +65,13 @@ class _$AssetMetaModelCopyWithImpl<$Res>
 
 /// Create a copy of AssetMetaModel
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? range = null,Object? validRanges = null,Object? fiftyTwoWeekLow = null,Object? fiftyTwoWeekHigh = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? range = null,Object? validRanges = null,Object? fiftyTwoWeekLow = null,Object? fiftyTwoWeekHigh = null,Object? regularMarketPrice = null,}) {
   return _then(_self.copyWith(
 range: null == range ? _self.range : range // ignore: cast_nullable_to_non_nullable
 as String,validRanges: null == validRanges ? _self.validRanges : validRanges // ignore: cast_nullable_to_non_nullable
 as List<String>,fiftyTwoWeekLow: null == fiftyTwoWeekLow ? _self.fiftyTwoWeekLow : fiftyTwoWeekLow // ignore: cast_nullable_to_non_nullable
 as double,fiftyTwoWeekHigh: null == fiftyTwoWeekHigh ? _self.fiftyTwoWeekHigh : fiftyTwoWeekHigh // ignore: cast_nullable_to_non_nullable
+as double,regularMarketPrice: null == regularMarketPrice ? _self.regularMarketPrice : regularMarketPrice // ignore: cast_nullable_to_non_nullable
 as double,
   ));
 }
@@ -156,10 +157,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String range, @JsonKey(name: 'validRanges')  List<String> validRanges, @JsonKey(name: 'fiftyTwoWeekLow')  double fiftyTwoWeekLow, @JsonKey(name: 'fiftyTwoWeekHigh')  double fiftyTwoWeekHigh)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( String range, @JsonKey(name: 'validRanges')  List<String> validRanges, @JsonKey(name: 'fiftyTwoWeekLow')  double fiftyTwoWeekLow, @JsonKey(name: 'fiftyTwoWeekHigh')  double fiftyTwoWeekHigh, @JsonKey(name: 'regularMarketPrice')  double regularMarketPrice)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AssetMetaModel() when $default != null:
-return $default(_that.range,_that.validRanges,_that.fiftyTwoWeekLow,_that.fiftyTwoWeekHigh);case _:
+return $default(_that.range,_that.validRanges,_that.fiftyTwoWeekLow,_that.fiftyTwoWeekHigh,_that.regularMarketPrice);case _:
   return orElse();
 
 }
@@ -177,10 +178,10 @@ return $default(_that.range,_that.validRanges,_that.fiftyTwoWeekLow,_that.fiftyT
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String range, @JsonKey(name: 'validRanges')  List<String> validRanges, @JsonKey(name: 'fiftyTwoWeekLow')  double fiftyTwoWeekLow, @JsonKey(name: 'fiftyTwoWeekHigh')  double fiftyTwoWeekHigh)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( String range, @JsonKey(name: 'validRanges')  List<String> validRanges, @JsonKey(name: 'fiftyTwoWeekLow')  double fiftyTwoWeekLow, @JsonKey(name: 'fiftyTwoWeekHigh')  double fiftyTwoWeekHigh, @JsonKey(name: 'regularMarketPrice')  double regularMarketPrice)  $default,) {final _that = this;
 switch (_that) {
 case _AssetMetaModel():
-return $default(_that.range,_that.validRanges,_that.fiftyTwoWeekLow,_that.fiftyTwoWeekHigh);case _:
+return $default(_that.range,_that.validRanges,_that.fiftyTwoWeekLow,_that.fiftyTwoWeekHigh,_that.regularMarketPrice);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -197,10 +198,10 @@ return $default(_that.range,_that.validRanges,_that.fiftyTwoWeekLow,_that.fiftyT
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String range, @JsonKey(name: 'validRanges')  List<String> validRanges, @JsonKey(name: 'fiftyTwoWeekLow')  double fiftyTwoWeekLow, @JsonKey(name: 'fiftyTwoWeekHigh')  double fiftyTwoWeekHigh)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( String range, @JsonKey(name: 'validRanges')  List<String> validRanges, @JsonKey(name: 'fiftyTwoWeekLow')  double fiftyTwoWeekLow, @JsonKey(name: 'fiftyTwoWeekHigh')  double fiftyTwoWeekHigh, @JsonKey(name: 'regularMarketPrice')  double regularMarketPrice)?  $default,) {final _that = this;
 switch (_that) {
 case _AssetMetaModel() when $default != null:
-return $default(_that.range,_that.validRanges,_that.fiftyTwoWeekLow,_that.fiftyTwoWeekHigh);case _:
+return $default(_that.range,_that.validRanges,_that.fiftyTwoWeekLow,_that.fiftyTwoWeekHigh,_that.regularMarketPrice);case _:
   return null;
 
 }
@@ -212,7 +213,7 @@ return $default(_that.range,_that.validRanges,_that.fiftyTwoWeekLow,_that.fiftyT
 @JsonSerializable()
 
 class _AssetMetaModel implements AssetMetaModel {
-  const _AssetMetaModel({required this.range, @JsonKey(name: 'validRanges') required final  List<String> validRanges, @JsonKey(name: 'fiftyTwoWeekLow') required this.fiftyTwoWeekLow, @JsonKey(name: 'fiftyTwoWeekHigh') required this.fiftyTwoWeekHigh}): _validRanges = validRanges;
+  const _AssetMetaModel({required this.range, @JsonKey(name: 'validRanges') required final  List<String> validRanges, @JsonKey(name: 'fiftyTwoWeekLow') required this.fiftyTwoWeekLow, @JsonKey(name: 'fiftyTwoWeekHigh') required this.fiftyTwoWeekHigh, @JsonKey(name: 'regularMarketPrice') required this.regularMarketPrice}): _validRanges = validRanges;
   factory _AssetMetaModel.fromJson(Map<String, dynamic> json) => _$AssetMetaModelFromJson(json);
 
 @override final  String range;
@@ -225,6 +226,7 @@ class _AssetMetaModel implements AssetMetaModel {
 
 @override@JsonKey(name: 'fiftyTwoWeekLow') final  double fiftyTwoWeekLow;
 @override@JsonKey(name: 'fiftyTwoWeekHigh') final  double fiftyTwoWeekHigh;
+@override@JsonKey(name: 'regularMarketPrice') final  double regularMarketPrice;
 
 /// Create a copy of AssetMetaModel
 /// with the given fields replaced by the non-null parameter values.
@@ -239,16 +241,16 @@ Map<String, dynamic> toJson() {
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AssetMetaModel&&(identical(other.range, range) || other.range == range)&&const DeepCollectionEquality().equals(other._validRanges, _validRanges)&&(identical(other.fiftyTwoWeekLow, fiftyTwoWeekLow) || other.fiftyTwoWeekLow == fiftyTwoWeekLow)&&(identical(other.fiftyTwoWeekHigh, fiftyTwoWeekHigh) || other.fiftyTwoWeekHigh == fiftyTwoWeekHigh));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AssetMetaModel&&(identical(other.range, range) || other.range == range)&&const DeepCollectionEquality().equals(other._validRanges, _validRanges)&&(identical(other.fiftyTwoWeekLow, fiftyTwoWeekLow) || other.fiftyTwoWeekLow == fiftyTwoWeekLow)&&(identical(other.fiftyTwoWeekHigh, fiftyTwoWeekHigh) || other.fiftyTwoWeekHigh == fiftyTwoWeekHigh)&&(identical(other.regularMarketPrice, regularMarketPrice) || other.regularMarketPrice == regularMarketPrice));
 }
 
 @JsonKey(includeFromJson: false, includeToJson: false)
 @override
-int get hashCode => Object.hash(runtimeType,range,const DeepCollectionEquality().hash(_validRanges),fiftyTwoWeekLow,fiftyTwoWeekHigh);
+int get hashCode => Object.hash(runtimeType,range,const DeepCollectionEquality().hash(_validRanges),fiftyTwoWeekLow,fiftyTwoWeekHigh,regularMarketPrice);
 
 @override
 String toString() {
-  return 'AssetMetaModel(range: $range, validRanges: $validRanges, fiftyTwoWeekLow: $fiftyTwoWeekLow, fiftyTwoWeekHigh: $fiftyTwoWeekHigh)';
+  return 'AssetMetaModel(range: $range, validRanges: $validRanges, fiftyTwoWeekLow: $fiftyTwoWeekLow, fiftyTwoWeekHigh: $fiftyTwoWeekHigh, regularMarketPrice: $regularMarketPrice)';
 }
 
 
@@ -259,7 +261,7 @@ abstract mixin class _$AssetMetaModelCopyWith<$Res> implements $AssetMetaModelCo
   factory _$AssetMetaModelCopyWith(_AssetMetaModel value, $Res Function(_AssetMetaModel) _then) = __$AssetMetaModelCopyWithImpl;
 @override @useResult
 $Res call({
- String range,@JsonKey(name: 'validRanges') List<String> validRanges,@JsonKey(name: 'fiftyTwoWeekLow') double fiftyTwoWeekLow,@JsonKey(name: 'fiftyTwoWeekHigh') double fiftyTwoWeekHigh
+ String range,@JsonKey(name: 'validRanges') List<String> validRanges,@JsonKey(name: 'fiftyTwoWeekLow') double fiftyTwoWeekLow,@JsonKey(name: 'fiftyTwoWeekHigh') double fiftyTwoWeekHigh,@JsonKey(name: 'regularMarketPrice') double regularMarketPrice
 });
 
 
@@ -276,12 +278,13 @@ class __$AssetMetaModelCopyWithImpl<$Res>
 
 /// Create a copy of AssetMetaModel
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? range = null,Object? validRanges = null,Object? fiftyTwoWeekLow = null,Object? fiftyTwoWeekHigh = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? range = null,Object? validRanges = null,Object? fiftyTwoWeekLow = null,Object? fiftyTwoWeekHigh = null,Object? regularMarketPrice = null,}) {
   return _then(_AssetMetaModel(
 range: null == range ? _self.range : range // ignore: cast_nullable_to_non_nullable
 as String,validRanges: null == validRanges ? _self._validRanges : validRanges // ignore: cast_nullable_to_non_nullable
 as List<String>,fiftyTwoWeekLow: null == fiftyTwoWeekLow ? _self.fiftyTwoWeekLow : fiftyTwoWeekLow // ignore: cast_nullable_to_non_nullable
 as double,fiftyTwoWeekHigh: null == fiftyTwoWeekHigh ? _self.fiftyTwoWeekHigh : fiftyTwoWeekHigh // ignore: cast_nullable_to_non_nullable
+as double,regularMarketPrice: null == regularMarketPrice ? _self.regularMarketPrice : regularMarketPrice // ignore: cast_nullable_to_non_nullable
 as double,
   ));
 }

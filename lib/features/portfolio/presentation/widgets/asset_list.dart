@@ -31,37 +31,26 @@ class AssetList extends StatelessWidget {
         return FinancialListCardProps(
           title: a.name,
           amount: formatCurrency(currentPrice),
-          subtitle: a.ticker,
+          subtitle:
+              '${a.ticker} ${formatCurrency(a.regularMarketPrice ?? currentPrice)}',
           periodPct: periodPct,
           periodValue: a.returnValue ?? 0,
           totalPct: totalPct,
           totalValue: a.totalReturnValue ?? 0,
           bottomInfos: [
-            BottomInfo(
-              'Holdings',
-              a.holdings.toStringAsFixed(2),
-            ),
+            BottomInfo('Holdings', a.holdings.toStringAsFixed(2)),
             a.weight == null
                 ? const BottomInfo('Weight', '—')
-                : BottomInfo(
-                    'Weight',
-                    formatPct(a.weight!, showSign: false),
-                  ),
+                : BottomInfo('Weight', formatPct(a.weight!, showSign: false)),
             BottomInfo('Invested', formatCurrency(a.invested)),
             BottomInfo('Avg Price', formatCurrency(a.avgPrice)),
           ],
           sparklineData: a.baseChart,
         );
       },
-      onItemTap: onAssetTap != null
-          ? (a) => onAssetTap!(a.id)
-          : null,
-      onItemEdit: onAssetEdit != null
-          ? (a) => onAssetEdit!(a.id)
-          : null,
-      onItemDelete: onAssetDelete != null
-          ? (a) => onAssetDelete!(a.id)
-          : null,
+      onItemTap: onAssetTap != null ? (a) => onAssetTap!(a.id) : null,
+      onItemEdit: onAssetEdit != null ? (a) => onAssetEdit!(a.id) : null,
+      onItemDelete: onAssetDelete != null ? (a) => onAssetDelete!(a.id) : null,
     );
   }
 }

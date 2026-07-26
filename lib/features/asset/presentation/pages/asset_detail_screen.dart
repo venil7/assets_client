@@ -204,6 +204,15 @@ class AssetDetailScreen extends StatelessWidget {
           const SizedBox(width: 10),
           _metricCard(
             context,
+            'Market Price',
+            detail.regularMarketPrice != null
+                ? formatCurrency(detail.regularMarketPrice!)
+                : '—',
+            Icons.payments,
+          ),
+          const SizedBox(width: 10),
+          _metricCard(
+            context,
             'Period Return',
             '${formatCurrency(detail.changes.returnValue)} (${formatPct(detail.changes.returnPct)})',
             Icons.schedule,

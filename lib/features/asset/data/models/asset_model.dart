@@ -11,6 +11,7 @@ abstract class AssetMetaModel with _$AssetMetaModel {
     @JsonKey(name: 'validRanges') required List<String> validRanges,
     @JsonKey(name: 'fiftyTwoWeekLow') required double fiftyTwoWeekLow,
     @JsonKey(name: 'fiftyTwoWeekHigh') required double fiftyTwoWeekHigh,
+    @JsonKey(name: 'regularMarketPrice') required double regularMarketPrice,
   }) = _AssetMetaModel;
 
   factory AssetMetaModel.fromJson(Map<String, Object?> json) =>

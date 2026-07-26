@@ -19,6 +19,7 @@ abstract class AssetDetailEntity with _$AssetDetailEntity {
     required int numTxs,
     required String baseCcy,
     double? weight,
+    @JsonKey(name: 'regularMarketPrice') double? regularMarketPrice,
     required double fxImpact,
     required double volatilityRange,
     required double volatilityPct,
