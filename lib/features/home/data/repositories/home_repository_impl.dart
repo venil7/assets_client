@@ -44,6 +44,12 @@ class HomeRepositoryImpl implements HomeRepository {
     await apiClient.deletePortfolio(id);
   }
 
+  @override
+  Future<String> getBaseCurrency() async {
+    final prefs = await apiClient.getPreferences();
+    return prefs.baseCcy;
+  }
+
   SummaryEntity _mapSummaryModelToEntity(SummaryModel model) {
     return SummaryEntity(
       numPortfolios: model.numPortfolios,

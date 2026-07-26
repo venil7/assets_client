@@ -112,13 +112,14 @@ class AssetDetailScreen extends StatelessWidget {
                               ],
                             ),
                             const SizedBox(height: 16),
-                            _buildMetricsRow(context, state.detail),
+                            _buildMetricsRow(context, state.detail, state.detail.baseCcy),
                             const SizedBox(height: 16),
                             ChartWithRange(
                               data: state.detail.chart,
                               isPositive: state.detail.changes.returnPct >= 0,
                               currentRange: state.currentRange,
                               validRanges: state.validRanges,
+                              currency: state.detail.baseCcy,
                               onRangeChanged: (range) => context
                                   .read<AssetDetailBloc>()
                                   .add(ChangeRangeEvent(range)),
@@ -143,6 +144,7 @@ class AssetDetailScreen extends StatelessWidget {
                         portfolioId: portfolioId,
                         assetId: assetId,
                         transactions: state.transactions,
+                        baseCcy: state.detail.baseCcy,
                       ),
                     ],
                   ),
@@ -187,7 +189,7 @@ class AssetDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMetricsRow(BuildContext context, AssetDetailEntity detail) {
+  Widget _buildMetricsRow(BuildContext context, AssetDetailEntity detail, String baseCcy) {
     final periodPos = detail.changes.returnPct >= 0;
     final totalPos = detail.totals.returnPct >= 0;
 
@@ -198,7 +200,7 @@ class AssetDetailScreen extends StatelessWidget {
           _metricCard(
             context,
             'Current Value',
-            formatCurrency(detail.changes.endPrice),
+            formatCurrency(detail.changes.endPrice, currency: baseCcy),
             Icons.trending_up,
           ),
           const SizedBox(width: 10),
@@ -206,7 +208,7 @@ class AssetDetailScreen extends StatelessWidget {
             context,
             'Market Price',
             detail.regularMarketPrice != null
-                ? formatCurrency(detail.regularMarketPrice!)
+                ? formatCurrency(detail.regularMarketPrice!, currency: baseCcy)
                 : '—',
             Icons.payments,
           ),
@@ -214,7 +216,7 @@ class AssetDetailScreen extends StatelessWidget {
           _metricCard(
             context,
             'Period Return',
-            '${formatCurrency(detail.changes.returnValue)} (${formatPct(detail.changes.returnPct)})',
+            '${formatCurrency(detail.changes.returnValue, currency: baseCcy)} (${formatPct(detail.changes.returnPct)})',
             Icons.schedule,
             color: periodPos ? Colors.green : Colors.red,
           ),
@@ -222,7 +224,7 @@ class AssetDetailScreen extends StatelessWidget {
           _metricCard(
             context,
             'Total Return',
-            '${formatCurrency(detail.totals.returnValue)} (${formatPct(detail.totals.returnPct)})',
+            '${formatCurrency(detail.totals.returnValue, currency: baseCcy)} (${formatPct(detail.totals.returnPct)})',
             Icons.show_chart,
             color: totalPos ? Colors.green : Colors.red,
           ),
@@ -237,28 +239,28 @@ class AssetDetailScreen extends StatelessWidget {
           _metricCard(
             context,
             'Avg Price',
-            formatCurrency(detail.avgPrice),
+            formatCurrency(detail.avgPrice, currency: baseCcy),
             Icons.attach_money,
           ),
           const SizedBox(width: 10),
           _metricCard(
             context,
             'Invested',
-            formatCurrency(detail.invested),
+            formatCurrency(detail.invested, currency: baseCcy),
             Icons.account_balance,
           ),
           const SizedBox(width: 10),
           _metricCard(
             context,
             'Break Even',
-            formatCurrency(detail.breakEven),
+            formatCurrency(detail.breakEven, currency: baseCcy),
             Icons.ev_station,
           ),
           const SizedBox(width: 10),
           _metricCard(
             context,
             'FX Impact',
-            formatCurrency(detail.fxImpact, showSign: true),
+            formatCurrency(detail.fxImpact, currency: baseCcy, showSign: true),
             Icons.currency_exchange,
             color: detail.fxImpact >= 0 ? Colors.green : Colors.red,
           ),

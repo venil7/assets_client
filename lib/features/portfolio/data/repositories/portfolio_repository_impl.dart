@@ -225,4 +225,9 @@ class PortfolioRepositoryImpl implements PortfolioRepository {
       totalReturnPct: model.totals.returnPct,
     );
   }
+
+  @override
+  Future<String> getBaseCurrency() async {
+    return remoteDataSource.getBaseCurrency();
+  }
 }

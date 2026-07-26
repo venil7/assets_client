@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 class PortfolioList extends StatelessWidget {
   final List<PortfolioEntity> portfolios;
+  final String baseCcy;
   final void Function(int portfolioId)? onPortfolioTap;
   final void Function(int portfolioId)? onPortfolioEdit;
   final void Function(int portfolioId)? onPortfolioDelete;
@@ -12,6 +13,7 @@ class PortfolioList extends StatelessWidget {
   const PortfolioList({
     super.key,
     required this.portfolios,
+    required this.baseCcy,
     this.onPortfolioTap,
     this.onPortfolioEdit,
     this.onPortfolioDelete,
@@ -26,24 +28,26 @@ class PortfolioList extends StatelessWidget {
       sort: (a, b) => b.changes.returnPct.compareTo(a.changes.returnPct),
       itemMapper: (p) => FinancialListCardProps(
         title: p.name,
-        amount: formatCurrency(p.changes.endPrice),
+        amount: formatCurrency(p.changes.endPrice, currency: baseCcy),
         subtitle: p.description.isNotEmpty ? p.description : null,
         periodPct: p.changes.returnPct,
         periodValue: p.changes.returnValue,
+        periodCurrency: baseCcy,
         totalPct: p.totals.returnPct,
         totalValue: p.totals.returnValue,
+        totalCurrency: baseCcy,
         bottomInfos: [
           BottomInfo('Assets', '${p.numAssets}'),
           BottomInfo(
             'Weight',
             formatPct(p.weight ?? 0, showSign: false),
           ),
-          BottomInfo('Invested', formatCurrency(p.invested)),
+          BottomInfo('Invested', formatCurrency(p.invested, currency: baseCcy)),
           p.fxImpact == 0
               ? const BottomInfo('FX Impact', '—')
               : BottomInfo(
                   'FX Impact',
-                  formatCurrency(p.fxImpact, showSign: true),
+                  formatCurrency(p.fxImpact, currency: baseCcy, showSign: true),
                   p.fxImpact >= 0 ? Colors.green : Colors.red,
                 ),
         ],

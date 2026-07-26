@@ -210,7 +210,7 @@ class PortfolioScreen extends StatelessWidget {
                                   ),
                                 ),
                               const SizedBox(height: 16),
-                              _buildMetricsRow(context, state.portfolio),
+                              _buildMetricsRow(context, state.portfolio, state.baseCcy),
                               const SizedBox(height: 16),
                               ChartWithRange(
                                 data: state.portfolio.chart
@@ -226,6 +226,7 @@ class PortfolioScreen extends StatelessWidget {
                                     state.portfolio.changes.returnPct >= 0,
                                 currentRange: state.currentRange,
                                 validRanges: state.validRanges,
+                                currency: state.baseCcy,
                                 onRangeChanged: (range) => context
                                     .read<PortfolioBloc>()
                                     .add(ChangeRangeEvent(range)),
@@ -301,6 +302,7 @@ class PortfolioScreen extends StatelessWidget {
   Widget _buildMetricsRow(
     BuildContext context,
     PortfolioDetailEntity portfolio,
+    String baseCcy,
   ) {
     final periodPos = portfolio.changes.returnPct >= 0;
     final totalPos = portfolio.totalReturnPct >= 0;
@@ -312,14 +314,14 @@ class PortfolioScreen extends StatelessWidget {
           _metricCard(
             context,
             'Current Value',
-            formatCurrency(portfolio.changes.endPrice),
+            formatCurrency(portfolio.changes.endPrice, currency: baseCcy),
             Icons.trending_up,
           ),
           const SizedBox(width: 10),
           _metricCard(
             context,
             'Period Return',
-            '${formatCurrency(portfolio.changes.returnValue)} (${formatPct(portfolio.changes.returnPct)})',
+            '${formatCurrency(portfolio.changes.returnValue, currency: baseCcy)} (${formatPct(portfolio.changes.returnPct)})',
             Icons.schedule,
             color: periodPos ? Colors.green : Colors.red,
           ),
@@ -327,7 +329,7 @@ class PortfolioScreen extends StatelessWidget {
           _metricCard(
             context,
             'Total Return',
-            '${formatCurrency(portfolio.totalReturnValue)} (${formatPct(portfolio.totalReturnPct)})',
+            '${formatCurrency(portfolio.totalReturnValue, currency: baseCcy)} (${formatPct(portfolio.totalReturnPct)})',
             Icons.show_chart,
             color: totalPos ? Colors.green : Colors.red,
           ),
@@ -335,21 +337,21 @@ class PortfolioScreen extends StatelessWidget {
           _metricCard(
             context,
             'Invested',
-            formatCurrency(portfolio.invested),
+            formatCurrency(portfolio.invested, currency: baseCcy),
             Icons.account_balance,
           ),
           const SizedBox(width: 10),
           _metricCard(
             context,
             'Break Even',
-            formatCurrency(portfolio.breakEven),
+            formatCurrency(portfolio.breakEven, currency: baseCcy),
             Icons.ev_station,
           ),
           const SizedBox(width: 10),
           _metricCard(
             context,
             'Realized P&L',
-            formatCurrency(portfolio.realizedPnl, showSign: true),
+            formatCurrency(portfolio.realizedPnl, currency: baseCcy, showSign: true),
             Icons.account_balance_wallet,
             color: portfolio.realizedPnl >= 0 ? Colors.green : Colors.red,
           ),
@@ -357,7 +359,7 @@ class PortfolioScreen extends StatelessWidget {
           _metricCard(
             context,
             'FX Impact',
-            formatCurrency(portfolio.fxImpact, showSign: true),
+            formatCurrency(portfolio.fxImpact, currency: baseCcy, showSign: true),
             Icons.currency_exchange,
             color: portfolio.fxImpact >= 0 ? Colors.green : Colors.red,
           ),

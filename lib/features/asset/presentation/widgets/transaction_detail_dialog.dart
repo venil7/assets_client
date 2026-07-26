@@ -4,13 +4,14 @@ import 'package:flutter/material.dart';
 
 class TransactionDetailDialog extends StatelessWidget {
   final TransactionEntity transaction;
+  final String currency;
 
-  const TransactionDetailDialog({super.key, required this.transaction});
+  const TransactionDetailDialog({super.key, required this.transaction, required this.currency});
 
-  static void show(BuildContext context, TransactionEntity tx) {
+  static void show(BuildContext context, TransactionEntity tx, {String currency = 'USD'}) {
     showDialog(
       context: context,
-      builder: (_) => TransactionDetailDialog(transaction: tx),
+      builder: (_) => TransactionDetailDialog(transaction: tx, currency: currency),
     );
   }
 
@@ -55,26 +56,26 @@ class TransactionDetailDialog extends StatelessWidget {
           children: [
             _row('Date', formatTxDate(tx.date)),
             _row('Quantity', tx.quantity.toString()),
-            _row('Price', formatCurrency(tx.price)),
-            _row('Value', formatCurrency(tx.price * tx.quantity)),
+            _row('Price', formatCurrency(tx.price, currency: currency)),
+            _row('Value', formatCurrency(tx.price * tx.quantity, currency: currency)),
             if (tx.comments != null && tx.comments!.isNotEmpty)
               _row('Comments', tx.comments!),
             const Divider(height: 24),
             if (tx.runningHolding > 0)
               _row('Running Holding', tx.runningHolding.toStringAsFixed(4)),
             if (tx.runningAveragePrice > 0)
-              _row('Avg Price', formatCurrency(tx.runningAveragePrice)),
+              _row('Avg Price', formatCurrency(tx.runningAveragePrice, currency: currency)),
             if (tx.runningBreakEven > 0)
-              _row('Break Even', formatCurrency(tx.runningBreakEven)),
+              _row('Break Even', formatCurrency(tx.runningBreakEven, currency: currency)),
             if (tx.realizedPnl != 0)
               _row(
                 'Realized P&L',
-                formatCurrency(tx.realizedPnl, showSign: true),
+                formatCurrency(tx.realizedPnl, currency: currency, showSign: true),
                 valueColor: tx.realizedPnl >= 0 ? Colors.green : Colors.red,
               ),
-            _row('Cost', formatCurrency(tx.cost)),
-            _row('Cost Basis', formatCurrency(tx.costBasis)),
-            _row('Contribution', formatCurrency(tx.contribution)),
+            _row('Cost', formatCurrency(tx.cost, currency: currency)),
+            _row('Cost Basis', formatCurrency(tx.costBasis, currency: currency)),
+            _row('Contribution', formatCurrency(tx.contribution, currency: currency)),
           ],
         ),
       ),

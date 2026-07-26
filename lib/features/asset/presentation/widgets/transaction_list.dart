@@ -10,12 +10,14 @@ class TransactionList extends StatelessWidget {
   final int portfolioId;
   final int assetId;
   final List<TransactionEntity> transactions;
+  final String baseCcy;
 
   const TransactionList({
     super.key,
     required this.portfolioId,
     required this.assetId,
     required this.transactions,
+    required this.baseCcy,
   });
 
   @override
@@ -55,8 +57,8 @@ class TransactionList extends StatelessWidget {
                 DataCell(_typeBadge(tx.type, isBuy)),
                 DataCell(Text(formatTxDate(tx.date))),
                 DataCell(Text(tx.quantity.toStringAsFixed(4))),
-                DataCell(Text(formatCurrency(tx.price))),
-                DataCell(Text(formatCurrency(tx.quantity * tx.price))),
+                DataCell(Text(formatCurrency(tx.price, currency: baseCcy))),
+                DataCell(Text(formatCurrency(tx.quantity * tx.price, currency: baseCcy))),
                 DataCell(
                   Row(
                     mainAxisSize: MainAxisSize.min,
@@ -64,7 +66,7 @@ class TransactionList extends StatelessWidget {
                       IconButton(
                         icon: const Icon(Icons.visibility, size: 18),
                         onPressed: () =>
-                            TransactionDetailDialog.show(context, tx),
+                            TransactionDetailDialog.show(context, tx, currency: baseCcy),
                       ),
                       IconButton(
                         icon: const Icon(Icons.edit, size: 18),
@@ -101,7 +103,7 @@ class TransactionList extends StatelessWidget {
       builder: (ctx) => AlertDialog(
         title: const Text('Delete Transaction'),
         content: Text(
-          'Delete transaction from ${formatTxDate(tx.date)} (${tx.type.toUpperCase()} ${tx.quantity} @ ${formatCurrency(tx.price)})?',
+          'Delete transaction from ${formatTxDate(tx.date)} (${tx.type.toUpperCase()} ${tx.quantity} @ ${formatCurrency(tx.price, currency: baseCcy)})?',
         ),
         actions: [
           TextButton(

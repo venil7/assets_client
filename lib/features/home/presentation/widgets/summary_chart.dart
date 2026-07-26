@@ -7,12 +7,14 @@ class SummaryChart extends StatelessWidget {
   final List<SummaryChartEntity> data;
   final bool? isPositive;
   final String range;
+  final String? currency;
 
   const SummaryChart({
     super.key,
     required this.data,
     this.isPositive,
     this.range = '1m',
+    this.currency,
   });
 
   @override
@@ -33,7 +35,7 @@ class SummaryChart extends StatelessWidget {
                 reservedSize: 50,
                 getTitlesWidget: (value, meta) {
                   return Text(
-                    formatCurrency(value),
+                    formatCurrency(value, currency: currency),
                     style: TextStyle(fontSize: 10, color: Colors.grey[500]),
                   );
                 },
@@ -73,7 +75,7 @@ class SummaryChart extends StatelessWidget {
                       : null;
                   final dateStr = ts != null ? formatChartDate(ts, range) : '';
                   return LineTooltipItem(
-                    '${formatCurrency(spot.y)}\n$dateStr',
+                    '${formatCurrency(spot.y, currency: currency)}\n$dateStr',
                     const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,

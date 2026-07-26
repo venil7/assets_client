@@ -30,20 +30,22 @@ class AssetList extends StatelessWidget {
 
         return FinancialListCardProps(
           title: a.name,
-          amount: formatCurrency(currentPrice),
+          amount: formatCurrency(currentPrice, currency: a.baseCcy),
           subtitle:
-              '${a.ticker} ${formatCurrency(a.regularMarketPrice ?? currentPrice)}',
+              '${a.ticker} ${formatCurrency(a.regularMarketPrice ?? currentPrice, currency: a.baseCcy)}',
           periodPct: periodPct,
           periodValue: a.returnValue ?? 0,
+          periodCurrency: a.baseCcy,
           totalPct: totalPct,
           totalValue: a.totalReturnValue ?? 0,
+          totalCurrency: a.baseCcy,
           bottomInfos: [
             BottomInfo('Holdings', a.holdings.toStringAsFixed(2)),
             a.weight == null
                 ? const BottomInfo('Weight', '—')
                 : BottomInfo('Weight', formatPct(a.weight!, showSign: false)),
-            BottomInfo('Invested', formatCurrency(a.invested)),
-            BottomInfo('Avg Price', formatCurrency(a.avgPrice)),
+            BottomInfo('Invested', formatCurrency(a.invested, currency: a.baseCcy)),
+            BottomInfo('Avg Price', formatCurrency(a.avgPrice, currency: a.baseCcy)),
           ],
           sparklineData: a.baseChart,
         );

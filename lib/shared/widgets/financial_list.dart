@@ -108,8 +108,10 @@ class FinancialList<T> extends StatelessWidget {
         subtitle: props.subtitle,
         periodPct: props.periodPct,
         periodValue: props.periodValue,
+        periodCurrency: props.periodCurrency,
         totalPct: props.totalPct,
         totalValue: props.totalValue,
+        totalCurrency: props.totalCurrency,
         bottomInfos: props.bottomInfos,
         sparklineData: props.sparklineData,
       ),
@@ -125,8 +127,10 @@ class FinancialListCardProps {
   final String? subtitle;
   final double periodPct;
   final double periodValue;
+  final String? periodCurrency;
   final double totalPct;
   final double totalValue;
+  final String? totalCurrency;
   final List<BottomInfo> bottomInfos;
 
   /// Optional sparkline price points. Null = no sparkline.
@@ -138,8 +142,10 @@ class FinancialListCardProps {
     this.subtitle,
     required this.periodPct,
     required this.periodValue,
+    this.periodCurrency,
     required this.totalPct,
     required this.totalValue,
+    this.totalCurrency,
     required this.bottomInfos,
     this.sparklineData,
   });

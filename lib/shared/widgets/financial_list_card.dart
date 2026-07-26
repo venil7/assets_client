@@ -25,11 +25,15 @@ class FinancialListCard extends StatelessWidget {
   final double periodPct;
   /// Period change in currency (e.g. 123.45).
   final double periodValue;
+  /// Currency code for period value (e.g. 'USD', 'GBP').
+  final String? periodCurrency;
 
   /// All-time change percentage.
   final double totalPct;
   /// All-time change in currency.
   final double totalValue;
+  /// Currency code for total value.
+  final String? totalCurrency;
 
   /// Info chips shown at the bottom of the card.
   final List<BottomInfo> bottomInfos;
@@ -47,8 +51,10 @@ class FinancialListCard extends StatelessWidget {
     this.subtitle,
     required this.periodPct,
     required this.periodValue,
+    this.periodCurrency,
     required this.totalPct,
     required this.totalValue,
+    this.totalCurrency,
     required this.bottomInfos,
     this.sparklineData,
     this.sparklineHeight = 32,
@@ -148,7 +154,7 @@ class FinancialListCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            formatCurrency(periodValue, showSign: true),
+                            formatCurrency(periodValue, currency: periodCurrency, showSign: true),
                             style: TextStyle(
                               fontSize: 18,
                               color: periodColor,
@@ -170,7 +176,7 @@ class FinancialListCard extends StatelessWidget {
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            formatCurrency(totalValue, showSign: true),
+                            formatCurrency(totalValue, currency: totalCurrency, showSign: true),
                             style: TextStyle(
                               fontSize: 14,
                               color: totalColor,

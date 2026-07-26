@@ -1,13 +1,40 @@
 import 'package:intl/intl.dart';
 
-String formatCurrency(double value, {bool showSign = false}) {
+/// Currency code → symbol map.
+const Map<String, String> _currencySymbols = {
+  'USD': '\$',
+  'GBP': '£',
+  'EUR': '€',
+  'CAD': 'C\$',
+  'AUD': 'A\$',
+  'CHF': 'CHF',
+  'SEK': 'kr',
+  'NOK': 'kr',
+  'DKK': 'kr',
+  'NZD': 'NZ\$',
+  'JPY': '¥',
+  'INR': '₹',
+};
+
+String formatCurrency(double value, {String? currency, bool showSign = false}) {
   final sign = showSign && value >= 0 ? '+' : '';
+  final symbol = currency != null
+      ? (_currencySymbols[currency] ?? currency)
+      : '';
+
+  String amount;
   if (value >= 1000000) {
-    return '$sign${(value / 1000000).toStringAsFixed(2)}M';
+    amount = '${(value / 1000000).toStringAsFixed(2)}M';
   } else if (value >= 1000) {
-    return '$sign${(value / 1000).toStringAsFixed(2)}K';
+    amount = '${(value / 1000).toStringAsFixed(2)}K';
+  } else {
+    amount = value.toStringAsFixed(2);
   }
-  return '$sign${value.toStringAsFixed(2)}';
+
+  if (symbol.isNotEmpty) {
+    return '$sign$symbol$amount';
+  }
+  return '$sign$amount';
 }
 
 String formatPct(double value, {int decimals = 2, bool showSign = true}) {

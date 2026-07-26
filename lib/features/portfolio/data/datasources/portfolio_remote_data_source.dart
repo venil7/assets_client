@@ -29,6 +29,7 @@ abstract class PortfolioRemoteDataSource {
     String name,
   );
   Future<void> deleteAsset(int portfolioId, int assetId);
+  Future<String> getBaseCurrency();
 }
 
 class PortfolioRemoteDataSourceImpl implements PortfolioRemoteDataSource {
@@ -101,5 +102,11 @@ class PortfolioRemoteDataSourceImpl implements PortfolioRemoteDataSource {
   @override
   Future<void> deleteAsset(int portfolioId, int assetId) async {
     await apiClient.deleteAsset(portfolioId, assetId);
+  }
+
+  @override
+  Future<String> getBaseCurrency() async {
+    final prefs = await apiClient.getPreferences();
+    return prefs.baseCcy;
   }
 }
