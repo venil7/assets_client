@@ -22,5 +22,11 @@ abstract class AssetEntity with _$AssetEntity {
     double? returnValue,
     double? totalReturnPct,
     double? totalReturnValue,
+
+    /// Price points from API `base.chart` (in user's base currency).
+    List<double>? baseChart,
+
+    /// Price points from API `ccy.chart` (in asset's native currency).
+    List<double>? ccyChart,
   }) = _AssetEntity;
 }

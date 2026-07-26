@@ -47,6 +47,9 @@ class PortfolioList extends StatelessWidget {
                   p.fxImpact >= 0 ? Colors.green : Colors.red,
                 ),
         ],
+        sparklineData: p.chart.isNotEmpty
+            ? p.chart.map((c) => c.price).toList()
+            : null,
       ),
       onItemTap: onPortfolioTap != null
           ? (p) => onPortfolioTap!(p.id)

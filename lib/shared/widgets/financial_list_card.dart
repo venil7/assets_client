@@ -1,4 +1,5 @@
 import 'package:assets_client/shared/utils/format_utils.dart';
+import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 
 /// Small info chip shown in the bottom row of a [FinancialListCard].
@@ -12,8 +13,8 @@ class BottomInfo {
 
 /// Generic card for financial entities (portfolios, assets, etc).
 ///
-/// Layout: top-left title+amount, optional subtitle, top-right period/total
-/// changes, bottom row of [BottomInfo] chips.
+/// Layout: top-left title+amount, optional subtitle (+ sparkline below it),
+/// top-right period/total changes, bottom row of [BottomInfo] chips.
 /// Green border when periodPct >= 0, red gradient otherwise.
 class FinancialListCard extends StatelessWidget {
   final String title;
@@ -33,6 +34,12 @@ class FinancialListCard extends StatelessWidget {
   /// Info chips shown at the bottom of the card.
   final List<BottomInfo> bottomInfos;
 
+  /// Optional price points for sparkline (y-axis only).
+  /// Null or < 2 points = no sparkline rendered.
+  final List<double>? sparklineData;
+  /// Sparkline height; ignored if sparklineData is null.
+  final double sparklineHeight;
+
   const FinancialListCard({
     super.key,
     required this.title,
@@ -43,6 +50,8 @@ class FinancialListCard extends StatelessWidget {
     required this.totalPct,
     required this.totalValue,
     required this.bottomInfos,
+    this.sparklineData,
+    this.sparklineHeight = 32,
   });
 
   @override
@@ -101,7 +110,7 @@ class FinancialListCard extends StatelessWidget {
                             ),
                           ],
                         ),
-                        if (subtitle != null && subtitle!.isNotEmpty)
+                        if (subtitle != null && subtitle!.isNotEmpty) ...[
                           Padding(
                             padding: const EdgeInsets.only(top: 2),
                             child: Text(
@@ -113,6 +122,12 @@ class FinancialListCard extends StatelessWidget {
                               ),
                             ),
                           ),
+                          if (sparklineData != null && sparklineData!.length > 1)
+                            SizedBox(
+                              height: sparklineHeight,
+                              child: _buildSparkline(),
+                            ),
+                        ],
                       ],
                     ),
                   ),
@@ -176,6 +191,53 @@ class FinancialListCard extends StatelessWidget {
     );
   }
 
+  Widget _buildSparkline() {
+    final data = sparklineData!;
+    final color = periodPct >= 0 ? Colors.green : Colors.red;
+
+    final spots = List.generate(
+      data.length,
+      (i) => FlSpot(i.toDouble(), data[i]),
+    );
+
+    return LineChart(
+      LineChartData(
+        lineBarsData: [
+          LineChartBarData(
+            spots: spots,
+            isCurved: true,
+            curveSmoothness: 0.2,
+            color: color,
+            barWidth: 1.5,
+            isStrokeCapRound: true,
+            belowBarData: BarAreaData(
+              show: true,
+              color: color.withValues(alpha: 0.08),
+            ),
+            dotData: const FlDotData(show: false),
+          ),
+        ],
+        gridData: const FlGridData(show: false),
+        titlesData: const FlTitlesData(show: false),
+        borderData: FlBorderData(show: false),
+        minY: data.reduce((a, b) => a < b ? a : b) * 0.999,
+        maxY: data.reduce((a, b) => a > b ? a : b) * 1.001,
+        minX: 0,
+        maxX: (data.length - 1).toDouble(),
+        extraLinesData: ExtraLinesData(
+          horizontalLines: [
+            HorizontalLine(
+              y: data.first,
+              color: Colors.grey.shade300,
+              strokeWidth: 0.75,
+              dashArray: [4, 3],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _buildBottomRow(List<BottomInfo> infos) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -201,5 +263,4 @@ class FinancialListCard extends StatelessWidget {
       ],
     );
   }
-
 }

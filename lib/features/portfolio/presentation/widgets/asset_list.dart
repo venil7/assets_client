@@ -50,6 +50,7 @@ class AssetList extends StatelessWidget {
             BottomInfo('Invested', formatCurrency(a.invested)),
             BottomInfo('Avg Price', formatCurrency(a.avgPrice)),
           ],
+          sparklineData: a.baseChart,
         );
       },
       onItemTap: onAssetTap != null

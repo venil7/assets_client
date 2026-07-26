@@ -167,6 +167,12 @@ class PortfolioRepositoryImpl implements PortfolioRepository {
       returnValue: model.base.changes.returnValue,
       totalReturnPct: model.base.totals.returnPct,
       totalReturnValue: model.base.totals.returnValue,
+      baseChart: model.base.chart.isNotEmpty
+          ? model.base.chart.map((c) => c.price).toList()
+          : null,
+      ccyChart: model.ccy.chart.isNotEmpty
+          ? model.ccy.chart.map((c) => c.price).toList()
+          : null,
     );
   }
 
