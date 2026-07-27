@@ -90,16 +90,18 @@ class PortfolioLoaded extends PortfolioState {
   final List<AssetEntity> assets;
   final String currentRange;
   final List<String> validRanges;
+  final String baseCcy;
 
   const PortfolioLoaded({
     required this.portfolio,
     required this.assets,
     required this.currentRange,
     required this.validRanges,
+    this.baseCcy = 'USD',
   });
 
   @override
-  List<Object?> get props => [portfolio, assets, currentRange, validRanges];
+  List<Object?> get props => [portfolio, assets, currentRange, validRanges, baseCcy];
 }
 
 class PortfolioError extends PortfolioState {
@@ -142,6 +144,12 @@ class PortfolioBloc extends Bloc<PortfolioEvent, PortfolioState> {
         event.portfolioId,
         range,
       );
+      String baseCcy = 'USD';
+      try {
+        baseCcy = await repository.getBaseCurrency();
+      } catch (_) {
+        // ignore - use default
+      }
 
       _currentRange = range;
 
@@ -151,6 +159,7 @@ class PortfolioBloc extends Bloc<PortfolioEvent, PortfolioState> {
           assets: assets,
           currentRange: portfolio.meta.range,
           validRanges: portfolio.meta.validRanges,
+          baseCcy: baseCcy,
         ),
       );
     } catch (e) {

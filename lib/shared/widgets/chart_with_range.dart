@@ -8,6 +8,7 @@ class ChartWithRange extends StatelessWidget {
   final bool isPositive;
   final String currentRange;
   final List<String> validRanges;
+  final String? currency;
   final void Function(String range) onRangeChanged;
 
   const ChartWithRange({
@@ -16,6 +17,7 @@ class ChartWithRange extends StatelessWidget {
     required this.isPositive,
     required this.currentRange,
     required this.validRanges,
+    this.currency,
     required this.onRangeChanged,
   });
 
@@ -24,7 +26,7 @@ class ChartWithRange extends StatelessWidget {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        SummaryChart(data: data, isPositive: isPositive, range: currentRange),
+        SummaryChart(data: data, isPositive: isPositive, range: currentRange, currency: currency),
         const SizedBox(height: 12),
         Center(
           child: RangeSwitch(

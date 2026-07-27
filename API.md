@@ -1,18 +1,13 @@
 # API Documentation
 
-## Base URL Structure
-
-The API server uses the following endpoint structure:
-- **All endpoints**: Prefixed with `/api/v1`
-
-
+All API endpoints are prefixed with `/api/v1/`. The prefix is omitted in the endpoint tables below for brevity.
 
 ## Authentication Endpoints
 
 | Method | Endpoint                   | Description                              | Request Body | Response Body |
 | ------ | -------------------------- | ---------------------------------------- | ------------ | ------------- |
-| POST   | `/api/v1/auth/login`                   | Authenticate and get a bearer token      | See below    | See below     |
-| GET    | `/api/v1/auth/refresh_token`      | Gets a new token with extended expiry    | -            | See below     |
+| POST   | `/auth/login`             | Authenticate and get a bearer token      | See below    | See below     |
+| GET    | `/auth/refresh_token`      | Gets a new token with extended expiry    | -            | See below     |
 
 ### Login
 Authenticate with username and password to receive a JWT bearer token.
@@ -48,12 +43,12 @@ Get a new bearer token with extended expiry without credentials (requires valid 
 
 ## User/Profile Endpoints
 
-| Method | Endpoint           | Description                   | Request Body | Response Body |
-| ------ | ------------------ | ----------------------------- | ------------ | ------------- |
-| GET    | `/api/v1/profile`    | Get current user profile      | -            | See below     |
-| PUT    | `/api/v1/profile`    | Update current user profile   | See below    | See below     |
-| POST   | `/api/v1/profile`    | Update current user password  | See below    | See below     |
-| DELETE | `/api/v1/profile`    | Delete current user profile   | -            | See below     |
+| Method | Endpoint      | Description                   | Request Body | Response Body |
+| ------ | ------------- | ----------------------------- | ------------ | ------------- |
+| GET    | `/profile`    | Get current user profile      | -            | See below     |
+| PUT    | `/profile`    | Update current user profile   | See below    | See below     |
+| POST   | `/profile`    | Update current user password  | See below    | See below     |
+| DELETE | `/profile`    | Delete current user profile   | -            | See below     |
 
 ### Get Profile
 Retrieve the current authenticated user's profile information.
@@ -114,10 +109,10 @@ Delete the current user's profile and all associated data.
 
 ## User Preferences Endpoints
 
-| Method | Endpoint           | Description              | Request Body | Response Body |
-| ------ | ------------------ | ------------------------ | ------------ | ------------- |
-| GET    | `/api/v1/prefs`    | Get current user prefs   | -            | See below     |
-| PUT    | `/api/v1/prefs`    | Update current user prefs| See below    | See below     |
+| Method | Endpoint | Description              | Request Body | Response Body |
+| ------ | -------- | ------------------------ | ------------ | ------------- |
+| GET    | `/prefs` | Get current user prefs   | -            | See below     |
+| PUT    | `/prefs` | Update current user prefs| See below    | See below     |
 
 ### Get Preferences
 Retrieve the current user's preferences (e.g., base currency, display options).
@@ -154,13 +149,13 @@ Update the current user's preferences.
 
 ## User Management Endpoints (Admin Only)
 
-| Method | Endpoint                      | Description                       | Request Body | Response Body |
-| ------ | ----------------------------- | --------------------------------- | ------------ | ------------- |
-| GET    | `/api/v1/users`               | Get all users (admin only)        | -            | See below     |
-| GET    | `/api/v1/users/{user_id}`     | Get user by ID (admin only)       | -            | See below     |
-| DELETE | `/api/v1/users/{user_id}`     | Delete user by ID (admin only)    | -            | See below     |
-| POST   | `/api/v1/users`               | Create new user (admin only)      | See below    | See below     |
-| PUT    | `/api/v1/users/{user_id}`     | Update user (admin only)          | See below    | See below     |
+| Method | Endpoint             | Description                       | Request Body | Response Body |
+| ------ | -------------------- | --------------------------------- | ------------ | ------------- |
+| GET    | `/users`             | Get all users (admin only)        | -            | See below     |
+| GET    | `/users/{user_id}`   | Get user by ID (admin only)       | -            | See below     |
+| DELETE | `/users/{user_id}`   | Delete user by ID (admin only)    | -            | See below     |
+| POST   | `/users`             | Create new user (admin only)      | See below    | See below     |
+| PUT    | `/users/{user_id}`   | Update user (admin only)          | See below    | See below     |
 
 ### List All Users
 Retrieve all users in the system. **Requires admin privileges.**
@@ -230,9 +225,9 @@ Delete a user account. **Requires admin privileges.**
 
 ## Summary Endpoint
 
-| Method | Endpoint           | Description                      | Request Body | Response Body |
-| ------ | ------------------ | -------------------------------- | ------------ | ------------- |
-| GET    | `/api/v1/summary`  | Summary across all portfolios    | -            | See below     |
+| Method | Endpoint     | Description                      | Request Body | Response Body |
+| ------ | ------------ | -------------------------------- | ------------ | ------------- |
+| GET    | `/summary`   | Summary across all portfolios    | -            | See below     |
 
 ### Get Summary
 Retrieve aggregated summary data across all portfolios, including total invested, realized P&L, and charts.
@@ -298,13 +293,13 @@ Retrieve aggregated summary data across all portfolios, including total invested
 
 ## Portfolio Endpoints
 
-| Method | Endpoint                                 | Description                  | Request Body | Response Body |
-| ------ | ---------------------------------------- | ---------------------------- | ------------ | ------------- |
-| POST   | `/api/v1/portfolios`                     | Create a new portfolio       | See below    | See below     |
-| GET    | `/api/v1/portfolios`                     | List all portfolios          | -            | See below     |
-| GET    | `/api/v1/portfolios/{portfolio_id}`      | Get a portfolio by ID        | -            | See below     |
-| PUT    | `/api/v1/portfolios/{portfolio_id}`      | Update a portfolio           | See below    | See below     |
-| DELETE | `/api/v1/portfolios/{portfolio_id}`      | Delete a portfolio           | -            | See below     |
+| Method | Endpoint                          | Description                  | Request Body | Response Body |
+| ------ | --------------------------------- | ---------------------------- | ------------ | ------------- |
+| POST   | `/portfolios`                     | Create a new portfolio       | See below    | See below     |
+| GET    | `/portfolios`                     | List all portfolios          | -            | See below     |
+| GET    | `/portfolios/{portfolio_id}`      | Get a portfolio by ID        | -            | See below     |
+| PUT    | `/portfolios/{portfolio_id}`      | Update a portfolio           | See below    | See below     |
+| DELETE | `/portfolios/{portfolio_id}`      | Delete a portfolio           | -            | See below     |
 
 ### Create Portfolio
 Create a new portfolio for organizing assets.
@@ -452,14 +447,14 @@ Delete a portfolio. This will also delete all assets and transactions within it.
 
 ## Asset Endpoints
 
-| Method | Endpoint                                                    | Description                             | Request Body | Response Body |
-| ------ | ----------------------------------------------------------- | --------------------------------------- | ------------ | ------------- |
-| POST   | `/api/v1/portfolios/{portfolio_id}/assets`                  | Add an asset to a portfolio             | See below    | See below     |
-| GET    | `/api/v1/portfolios/{portfolio_id}/assets`                  | List assets in a portfolio              | -            | See below     |
-| GET    | `/api/v1/portfolios/{portfolio_id}/assets/{asset_id}`       | Get an asset by ID                      | -            | See below     |
-| PUT    | `/api/v1/portfolios/{portfolio_id}/assets/{asset_id}`       | Update an asset                         | See below    | See below     |
-| DELETE | `/api/v1/portfolios/{portfolio_id}/assets/{asset_id}`       | Delete an asset                         | -            | See below     |
-| PATCH  | `/api/v1/portfolios/{portfolio_id}/assets/{asset_id}/move/{new_portfolio_id}` | Move asset to another portfolio | - | See below |
+| Method | Endpoint                                           | Description                             | Request Body | Response Body |
+| ------ | -------------------------------------------------- | --------------------------------------- | ------------ | ------------- |
+| POST   | `/portfolios/{portfolio_id}/assets`                | Add an asset to a portfolio             | See below    | See below     |
+| GET    | `/portfolios/{portfolio_id}/assets`                | List assets in a portfolio              | -            | See below     |
+| GET    | `/portfolios/{portfolio_id}/assets/{asset_id}`    | Get an asset by ID                      | -            | See below     |
+| PUT    | `/portfolios/{portfolio_id}/assets/{asset_id}`    | Update an asset                         | See below    | See below     |
+| DELETE | `/portfolios/{portfolio_id}/assets/{asset_id}`    | Delete an asset                         | -            | See below     |
+| PATCH  | `/portfolios/{portfolio_id}/assets/{asset_id}/move/{new_portfolio_id}` | Move asset to another portfolio | - | See below |
 
 ### Create Asset
 Add a new asset (stock, ETF, etc.) to a portfolio.
@@ -492,12 +487,30 @@ Add a new asset (stock, ETF, etc.) to a portfolio.
   "created": "2026-04-21T16:55:49.000Z",
   "modified": "2026-04-21T16:55:49.000Z",
   "meta": {
-    "range": "1d",
-    "validRanges": ["1d", "5d", "1mo", "3mo", "6mo", "1y", "2y", "5y", "10y", "ytd", "max"],
-    "volatilityRange": 0,
-    "volatilityPct": 0,
+    "currency": "GBP",
+    "symbol": "VHVG.L",
+    "exchangeName": "LSE",
+    "fullExchangeName": "LSE",
+    "instrumentType": "ETF",
+    "firstTradeDate": 1569308400,
+    "regularMarketTime": 1784907324,
+    "hasPrePostMarketData": false,
+    "gmtoffset": 3600,
+    "timezone": "BST",
+    "exchangeTimezoneName": "Europe/London",
+    "regularMarketPrice": 0,
+    "fiftyTwoWeekHigh": 0,
     "fiftyTwoWeekLow": 0,
-    "fiftyTwoWeekHigh": 0
+    "regularMarketDayHigh": 0,
+    "regularMarketDayLow": 0,
+    "regularMarketVolume": 0,
+    "longName": "long name",
+    "shortName": "short name",
+    "chartPreviousClose": 0,
+    "previousClose": 0,
+    "dataGranularity": "5m",
+    "range": "1d",
+    "validRanges": ["1d", "5d", "1mo", "3mo", "6mo", "1y", "2y", "5y", "10y", "ytd", "max"]
   },
   "weight": null,
   "volatilityRange": 0,
@@ -627,15 +640,15 @@ Move an asset from one portfolio to another.
 
 ## Transaction Endpoints
 
-| Method | Endpoint                                                     | Description                            | Request Body | Response Body |
-| ------ | ------------------------------------------------------------ | -------------------------------------- | ------------ | ------------- |
-| POST   | `/api/v1/portfolios/{portfolio_id}/assets/{asset_id}/tx`     | Create a transaction for an asset      | See below    | See below     |
-| GET    | `/api/v1/portfolios/{portfolio_id}/assets/{asset_id}/tx`     | List all transactions for an asset     | -            | See below     |
-| GET    | `/api/v1/portfolios/{portfolio_id}/assets/{asset_id}/tx/{tx_id}` | Get a transaction by ID            | -            | See below     |
-| PUT    | `/api/v1/portfolios/{portfolio_id}/assets/{asset_id}/tx/{tx_id}` | Update a transaction               | See below    | See below     |
-| DELETE | `/api/v1/portfolios/{portfolio_id}/assets/{asset_id}/tx/{tx_id}` | Delete a transaction               | -            | See below     |
-| POST   | `/api/v1/portfolios/{portfolio_id}/assets/{asset_id}/txs`    | Bulk insert transactions (CSV upload)  | See below    | See below     |
-| DELETE | `/api/v1/portfolios/{portfolio_id}/assets/{asset_id}/txs`    | Delete all transactions for an asset   | -            | See below     |
+| Method | Endpoint                                               | Description                            | Request Body | Response Body |
+| ------ | ------------------------------------------------------ | -------------------------------------- | ------------ | ------------- |
+| POST   | `/portfolios/{portfolio_id}/assets/{asset_id}/tx`      | Create a transaction for an asset      | See below    | See below     |
+| GET    | `/portfolios/{portfolio_id}/assets/{asset_id}/tx`      | List all transactions for an asset     | -            | See below     |
+| GET    | `/portfolios/{portfolio_id}/assets/{asset_id}/tx/{tx_id}` | Get a transaction by ID            | -            | See below     |
+| PUT    | `/portfolios/{portfolio_id}/assets/{asset_id}/tx/{tx_id}` | Update a transaction               | See below    | See below     |
+| DELETE | `/portfolios/{portfolio_id}/assets/{asset_id}/tx/{tx_id}` | Delete a transaction               | -            | See below     |
+| POST   | `/portfolios/{portfolio_id}/assets/{asset_id}/txs`     | Bulk insert transactions (CSV upload)  | See below    | See below     |
+| DELETE | `/portfolios/{portfolio_id}/assets/{asset_id}/txs`     | Delete all transactions for an asset   | -            | See below     |
 
 ### Create Transaction
 Record a buy or sell transaction for an asset.
@@ -803,11 +816,11 @@ Delete all transactions for a specific asset.
 
 ## Lookup/Search Endpoints
 
-| Method | Endpoint                                     | Description                              | Request/Query | Response Body |
-| ------ | -------------------------------------------- | ---------------------------------------- | ------------- | ------------- |
-| GET    | `/api/v1/lookup/ticker`                      | Search for ticker details                | `term` (query param) | See below |
-| GET    | `/api/v1/lookup/quote/{base}/{date?}`        | Get quote for a ticker (with optional date) | Path params | See below |
-| GET    | `/api/v1/lookup/fx/{base}/{ccy}/{date?}`     | Get FX rates for base/currency pair (with optional date) | Path params | See below |
+| Method | Endpoint                           | Description                              | Request/Query | Response Body |
+| ------ | ---------------------------------- | ---------------------------------------- | ------------- | ------------- |
+| GET    | `/lookup/ticker`                   | Search for ticker details                | `term` (query param) | See below |
+| GET    | `/lookup/quote/{ticker}/{date?}`     | Get quote for a ticker (with optional date) | Path params | See below |
+| GET    | `/lookup/fx/{base}/{ccy}/{date?}`  | Get FX rates for base/currency pair (with optional date) | Path params | See below |
 
 ### Search Tickers
 Search for ticker symbols and company names. Returns matching results from Yahoo Finance.
@@ -850,7 +863,7 @@ Search for ticker symbols and company names. Returns matching results from Yahoo
 Retrieve the current or historical quote for a ticker symbol.
 
 **Path Parameters:**
-- `base` (required): Ticker symbol (e.g., "AAPL")
+- `ticker` (required): Ticker symbol (e.g., "AAPL")
 - `date` (optional): ISO 8601 date string (e.g., "2023-10-15"). If omitted, returns latest quote.
 
 **Example:** `GET /api/v1/lookup/quote/AAPL/2023-10-15`
@@ -941,10 +954,10 @@ All endpoints return error responses in the following format:
 
 ## Authentication
 
-All endpoints except `/login`, `/auth/refresh_token`, and `/api/v1/lookup/*` require authentication via bearer token:
+All endpoints except `/auth/login` and `/lookup/*` require authentication via bearer token:
 
 ```
 Authorization: Bearer eyJhbGc...
 ```
 
-Obtain a token by calling `/login` with credentials, then include it in the `Authorization` header for subsequent requests.
+Obtain a token by calling `/auth/login` with credentials, then include it in the `Authorization` header for subsequent requests.

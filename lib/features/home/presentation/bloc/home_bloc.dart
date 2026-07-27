@@ -69,16 +69,18 @@ class HomeLoaded extends HomeState {
   final List<PortfolioEntity> portfolios;
   final String currentRange;
   final List<String> validRanges;
+  final String baseCcy;
 
   const HomeLoaded({
     required this.summary,
     required this.portfolios,
     required this.currentRange,
     required this.validRanges,
+    this.baseCcy = 'USD',
   });
 
   @override
-  List<Object?> get props => [summary, portfolios, currentRange, validRanges];
+  List<Object?> get props => [summary, portfolios, currentRange, validRanges, baseCcy];
 }
 
 class HomeError extends HomeState {
@@ -107,6 +109,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
     try {
       final summary = await repository.getSummary(range: event.range);
       final portfolios = await repository.getPortfolios(range: event.range);
+      String baseCcy = 'USD';
+      try {
+        baseCcy = await repository.getBaseCurrency();
+      } catch (_) {
+        // ignore - use default
+      }
       _currentRange = summary.meta.range;
       emit(
         HomeLoaded(
@@ -114,6 +122,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
           portfolios: portfolios,
           currentRange: summary.meta.range,
           validRanges: summary.meta.validRanges,
+          baseCcy: baseCcy,
         ),
       );
     } catch (e) {

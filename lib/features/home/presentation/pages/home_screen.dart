@@ -162,7 +162,7 @@ class HomeScreen extends StatelessWidget {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               const SizedBox(height: 8),
-                              _buildMetricsRow(context, state.summary),
+                              _buildMetricsRow(context, state.summary, state.baseCcy),
                               const SizedBox(height: 16),
                               ChartWithRange(
                                 data: state.summary.chart,
@@ -170,6 +170,7 @@ class HomeScreen extends StatelessWidget {
                                     state.summary.changes.returnPct >= 0,
                                 currentRange: state.currentRange,
                                 validRanges: state.validRanges,
+                                currency: state.baseCcy,
                                 onRangeChanged: (range) => context
                                     .read<HomeBloc>()
                                     .add(ChangeRangeEvent(range)),
@@ -187,6 +188,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                         PortfolioList(
                           portfolios: state.portfolios,
+                          baseCcy: state.baseCcy,
                           onPortfolioTap: (id) =>
                               _navigateToPortfolio(context, id),
                           onPortfolioEdit: (id) {
@@ -245,7 +247,7 @@ class HomeScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildMetricsRow(BuildContext context, SummaryEntity summary) {
+  Widget _buildMetricsRow(BuildContext context, SummaryEntity summary, String baseCcy) {
     final periodPos = summary.changes.returnPct >= 0;
     final totalPos = summary.totals.returnPct >= 0;
 
@@ -256,14 +258,14 @@ class HomeScreen extends StatelessWidget {
           _metricCard(
             context,
             'Current Value',
-            formatCurrency(summary.changes.endPrice),
+            formatCurrency(summary.changes.endPrice, currency: baseCcy),
             Icons.trending_up,
           ),
           const SizedBox(width: 10),
           _metricCard(
             context,
             'Period Return',
-            '${formatCurrency(summary.changes.returnValue)} (${formatPct(summary.changes.returnPct)})',
+            '${formatCurrency(summary.changes.returnValue, currency: baseCcy)} (${formatPct(summary.changes.returnPct)})',
             Icons.schedule,
             color: periodPos ? Colors.green : Colors.red,
           ),
@@ -271,7 +273,7 @@ class HomeScreen extends StatelessWidget {
           _metricCard(
             context,
             'Total Return',
-            '${formatCurrency(summary.totals.returnValue)} (${formatPct(summary.totals.returnPct)})',
+            '${formatCurrency(summary.totals.returnValue, currency: baseCcy)} (${formatPct(summary.totals.returnPct)})',
             Icons.show_chart,
             color: totalPos ? Colors.green : Colors.red,
           ),
@@ -279,21 +281,21 @@ class HomeScreen extends StatelessWidget {
           _metricCard(
             context,
             'Invested',
-            formatCurrency(summary.invested),
+            formatCurrency(summary.invested, currency: baseCcy),
             Icons.account_balance,
           ),
           const SizedBox(width: 10),
           _metricCard(
             context,
             'Break Even',
-            formatCurrency(summary.breakEven),
+            formatCurrency(summary.breakEven, currency: baseCcy),
             Icons.ev_station,
           ),
           const SizedBox(width: 10),
           _metricCard(
             context,
             'Realized P&L',
-            formatCurrency(summary.realizedPnl, showSign: true),
+            formatCurrency(summary.realizedPnl, currency: baseCcy, showSign: true),
             Icons.account_balance_wallet,
             color: summary.realizedPnl >= 0 ? Colors.green : Colors.red,
           ),
@@ -301,7 +303,7 @@ class HomeScreen extends StatelessWidget {
           _metricCard(
             context,
             'FX Impact',
-            formatCurrency(summary.fxImpact, showSign: true),
+            formatCurrency(summary.fxImpact, currency: baseCcy, showSign: true),
             Icons.currency_exchange,
             color: summary.fxImpact >= 0 ? Colors.green : Colors.red,
           ),

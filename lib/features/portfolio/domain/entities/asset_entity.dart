@@ -16,11 +16,19 @@ abstract class AssetEntity with _$AssetEntity {
     @JsonKey(name: 'realized_pnl') required double realizedPnl,
     @JsonKey(name: 'num_txs') required int numTxs,
     @JsonKey(name: 'base_ccy') required String baseCcy,
+    required String currency, // asset's own trading currency (from meta.currency)
     double? weight,
     double? endPrice,
+    @JsonKey(name: 'regularMarketPrice') double? regularMarketPrice,
     @JsonKey(name: 'returnPct') double? returnPct,
     double? returnValue,
     double? totalReturnPct,
     double? totalReturnValue,
+
+    /// Price points from API `base.chart` (in user's base currency).
+    List<double>? baseChart,
+
+    /// Price points from API `ccy.chart` (in asset's native currency).
+    List<double>? ccyChart,
   }) = _AssetEntity;
 }

@@ -32,4 +32,5 @@ abstract class PortfolioRepository {
     int portfolioId,
     String? range,
   );
+  Future<String> getBaseCurrency();
 }

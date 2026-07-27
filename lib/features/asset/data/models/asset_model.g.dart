@@ -14,6 +14,8 @@ _AssetMetaModel _$AssetMetaModelFromJson(Map<String, dynamic> json) =>
           .toList(),
       fiftyTwoWeekLow: (json['fiftyTwoWeekLow'] as num).toDouble(),
       fiftyTwoWeekHigh: (json['fiftyTwoWeekHigh'] as num).toDouble(),
+      regularMarketPrice: (json['regularMarketPrice'] as num).toDouble(),
+      currency: json['currency'] as String,
     );
 
 Map<String, dynamic> _$AssetMetaModelToJson(_AssetMetaModel instance) =>
@@ -22,6 +24,8 @@ Map<String, dynamic> _$AssetMetaModelToJson(_AssetMetaModel instance) =>
       'validRanges': instance.validRanges,
       'fiftyTwoWeekLow': instance.fiftyTwoWeekLow,
       'fiftyTwoWeekHigh': instance.fiftyTwoWeekHigh,
+      'regularMarketPrice': instance.regularMarketPrice,
+      'currency': instance.currency,
     };
 
 _AssetCurrencyDataModel _$AssetCurrencyDataModelFromJson(

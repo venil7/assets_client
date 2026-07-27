@@ -161,12 +161,20 @@ class PortfolioRepositoryImpl implements PortfolioRepository {
       realizedPnl: model.realizedPnl,
       numTxs: model.numTxs,
       baseCcy: model.baseCcy,
+      currency: model.meta.currency,
       weight: model.weight,
       endPrice: model.base.changes.endPrice,
+      regularMarketPrice: model.meta.regularMarketPrice,
       returnPct: model.base.changes.returnPct,
       returnValue: model.base.changes.returnValue,
       totalReturnPct: model.base.totals.returnPct,
       totalReturnValue: model.base.totals.returnValue,
+      baseChart: model.base.chart.isNotEmpty
+          ? model.base.chart.map((c) => c.price).toList()
+          : null,
+      ccyChart: model.ccy.chart.isNotEmpty
+          ? model.ccy.chart.map((c) => c.price).toList()
+          : null,
     );
   }
 
@@ -217,5 +225,10 @@ class PortfolioRepositoryImpl implements PortfolioRepository {
       totalReturnValue: model.totals.returnValue,
       totalReturnPct: model.totals.returnPct,
     );
+  }
+
+  @override
+  Future<String> getBaseCurrency() async {
+    return remoteDataSource.getBaseCurrency();
   }
 }
