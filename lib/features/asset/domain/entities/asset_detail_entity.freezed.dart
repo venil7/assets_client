@@ -14,7 +14,8 @@ T _$identity<T>(T value) => value;
 /// @nodoc
 mixin _$AssetDetailEntity {
 
- int get id; int get portfolioId; String get ticker; String get name; int get userId; double get holdings; double get invested; double get avgPrice; double get breakEven; double get realizedPnl; int get numTxs; String get baseCcy; double? get weight;@JsonKey(name: 'regularMarketPrice') double? get regularMarketPrice; double get fxImpact; double get volatilityRange; double get volatilityPct; List<SummaryChartEntity> get chart; SummaryMetaEntity get meta; SummaryChangesEntity get changes; SummaryTotalsEntity get totals;
+ int get id; int get portfolioId; String get ticker; String get name; int get userId; double get holdings; double get invested; double get avgPrice; double get breakEven; double get realizedPnl; int get numTxs; String get baseCcy; String get currency;// asset's own trading currency (from meta.currency)
+ double? get weight;@JsonKey(name: 'regularMarketPrice') double? get regularMarketPrice; double get fxImpact; double get volatilityRange; double get volatilityPct; List<SummaryChartEntity> get chart; SummaryMetaEntity get meta; SummaryChangesEntity get changes; SummaryTotalsEntity get totals;
 /// Create a copy of AssetDetailEntity
 /// with the given fields replaced by the non-null parameter values.
 @JsonKey(includeFromJson: false, includeToJson: false)
@@ -25,16 +26,16 @@ $AssetDetailEntityCopyWith<AssetDetailEntity> get copyWith => _$AssetDetailEntit
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is AssetDetailEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.portfolioId, portfolioId) || other.portfolioId == portfolioId)&&(identical(other.ticker, ticker) || other.ticker == ticker)&&(identical(other.name, name) || other.name == name)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.holdings, holdings) || other.holdings == holdings)&&(identical(other.invested, invested) || other.invested == invested)&&(identical(other.avgPrice, avgPrice) || other.avgPrice == avgPrice)&&(identical(other.breakEven, breakEven) || other.breakEven == breakEven)&&(identical(other.realizedPnl, realizedPnl) || other.realizedPnl == realizedPnl)&&(identical(other.numTxs, numTxs) || other.numTxs == numTxs)&&(identical(other.baseCcy, baseCcy) || other.baseCcy == baseCcy)&&(identical(other.weight, weight) || other.weight == weight)&&(identical(other.regularMarketPrice, regularMarketPrice) || other.regularMarketPrice == regularMarketPrice)&&(identical(other.fxImpact, fxImpact) || other.fxImpact == fxImpact)&&(identical(other.volatilityRange, volatilityRange) || other.volatilityRange == volatilityRange)&&(identical(other.volatilityPct, volatilityPct) || other.volatilityPct == volatilityPct)&&const DeepCollectionEquality().equals(other.chart, chart)&&(identical(other.meta, meta) || other.meta == meta)&&(identical(other.changes, changes) || other.changes == changes)&&(identical(other.totals, totals) || other.totals == totals));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is AssetDetailEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.portfolioId, portfolioId) || other.portfolioId == portfolioId)&&(identical(other.ticker, ticker) || other.ticker == ticker)&&(identical(other.name, name) || other.name == name)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.holdings, holdings) || other.holdings == holdings)&&(identical(other.invested, invested) || other.invested == invested)&&(identical(other.avgPrice, avgPrice) || other.avgPrice == avgPrice)&&(identical(other.breakEven, breakEven) || other.breakEven == breakEven)&&(identical(other.realizedPnl, realizedPnl) || other.realizedPnl == realizedPnl)&&(identical(other.numTxs, numTxs) || other.numTxs == numTxs)&&(identical(other.baseCcy, baseCcy) || other.baseCcy == baseCcy)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.weight, weight) || other.weight == weight)&&(identical(other.regularMarketPrice, regularMarketPrice) || other.regularMarketPrice == regularMarketPrice)&&(identical(other.fxImpact, fxImpact) || other.fxImpact == fxImpact)&&(identical(other.volatilityRange, volatilityRange) || other.volatilityRange == volatilityRange)&&(identical(other.volatilityPct, volatilityPct) || other.volatilityPct == volatilityPct)&&const DeepCollectionEquality().equals(other.chart, chart)&&(identical(other.meta, meta) || other.meta == meta)&&(identical(other.changes, changes) || other.changes == changes)&&(identical(other.totals, totals) || other.totals == totals));
 }
 
 
 @override
-int get hashCode => Object.hashAll([runtimeType,id,portfolioId,ticker,name,userId,holdings,invested,avgPrice,breakEven,realizedPnl,numTxs,baseCcy,weight,regularMarketPrice,fxImpact,volatilityRange,volatilityPct,const DeepCollectionEquality().hash(chart),meta,changes,totals]);
+int get hashCode => Object.hashAll([runtimeType,id,portfolioId,ticker,name,userId,holdings,invested,avgPrice,breakEven,realizedPnl,numTxs,baseCcy,currency,weight,regularMarketPrice,fxImpact,volatilityRange,volatilityPct,const DeepCollectionEquality().hash(chart),meta,changes,totals]);
 
 @override
 String toString() {
-  return 'AssetDetailEntity(id: $id, portfolioId: $portfolioId, ticker: $ticker, name: $name, userId: $userId, holdings: $holdings, invested: $invested, avgPrice: $avgPrice, breakEven: $breakEven, realizedPnl: $realizedPnl, numTxs: $numTxs, baseCcy: $baseCcy, weight: $weight, regularMarketPrice: $regularMarketPrice, fxImpact: $fxImpact, volatilityRange: $volatilityRange, volatilityPct: $volatilityPct, chart: $chart, meta: $meta, changes: $changes, totals: $totals)';
+  return 'AssetDetailEntity(id: $id, portfolioId: $portfolioId, ticker: $ticker, name: $name, userId: $userId, holdings: $holdings, invested: $invested, avgPrice: $avgPrice, breakEven: $breakEven, realizedPnl: $realizedPnl, numTxs: $numTxs, baseCcy: $baseCcy, currency: $currency, weight: $weight, regularMarketPrice: $regularMarketPrice, fxImpact: $fxImpact, volatilityRange: $volatilityRange, volatilityPct: $volatilityPct, chart: $chart, meta: $meta, changes: $changes, totals: $totals)';
 }
 
 
@@ -45,7 +46,7 @@ abstract mixin class $AssetDetailEntityCopyWith<$Res>  {
   factory $AssetDetailEntityCopyWith(AssetDetailEntity value, $Res Function(AssetDetailEntity) _then) = _$AssetDetailEntityCopyWithImpl;
 @useResult
 $Res call({
- int id, int portfolioId, String ticker, String name, int userId, double holdings, double invested, double avgPrice, double breakEven, double realizedPnl, int numTxs, String baseCcy, double? weight,@JsonKey(name: 'regularMarketPrice') double? regularMarketPrice, double fxImpact, double volatilityRange, double volatilityPct, List<SummaryChartEntity> chart, SummaryMetaEntity meta, SummaryChangesEntity changes, SummaryTotalsEntity totals
+ int id, int portfolioId, String ticker, String name, int userId, double holdings, double invested, double avgPrice, double breakEven, double realizedPnl, int numTxs, String baseCcy, String currency, double? weight,@JsonKey(name: 'regularMarketPrice') double? regularMarketPrice, double fxImpact, double volatilityRange, double volatilityPct, List<SummaryChartEntity> chart, SummaryMetaEntity meta, SummaryChangesEntity changes, SummaryTotalsEntity totals
 });
 
 
@@ -62,7 +63,7 @@ class _$AssetDetailEntityCopyWithImpl<$Res>
 
 /// Create a copy of AssetDetailEntity
 /// with the given fields replaced by the non-null parameter values.
-@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? portfolioId = null,Object? ticker = null,Object? name = null,Object? userId = null,Object? holdings = null,Object? invested = null,Object? avgPrice = null,Object? breakEven = null,Object? realizedPnl = null,Object? numTxs = null,Object? baseCcy = null,Object? weight = freezed,Object? regularMarketPrice = freezed,Object? fxImpact = null,Object? volatilityRange = null,Object? volatilityPct = null,Object? chart = null,Object? meta = null,Object? changes = null,Object? totals = null,}) {
+@pragma('vm:prefer-inline') @override $Res call({Object? id = null,Object? portfolioId = null,Object? ticker = null,Object? name = null,Object? userId = null,Object? holdings = null,Object? invested = null,Object? avgPrice = null,Object? breakEven = null,Object? realizedPnl = null,Object? numTxs = null,Object? baseCcy = null,Object? currency = null,Object? weight = freezed,Object? regularMarketPrice = freezed,Object? fxImpact = null,Object? volatilityRange = null,Object? volatilityPct = null,Object? chart = null,Object? meta = null,Object? changes = null,Object? totals = null,}) {
   return _then(_self.copyWith(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,portfolioId: null == portfolioId ? _self.portfolioId : portfolioId // ignore: cast_nullable_to_non_nullable
@@ -76,6 +77,7 @@ as double,breakEven: null == breakEven ? _self.breakEven : breakEven // ignore: 
 as double,realizedPnl: null == realizedPnl ? _self.realizedPnl : realizedPnl // ignore: cast_nullable_to_non_nullable
 as double,numTxs: null == numTxs ? _self.numTxs : numTxs // ignore: cast_nullable_to_non_nullable
 as int,baseCcy: null == baseCcy ? _self.baseCcy : baseCcy // ignore: cast_nullable_to_non_nullable
+as String,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
 as String,weight: freezed == weight ? _self.weight : weight // ignore: cast_nullable_to_non_nullable
 as double?,regularMarketPrice: freezed == regularMarketPrice ? _self.regularMarketPrice : regularMarketPrice // ignore: cast_nullable_to_non_nullable
 as double?,fxImpact: null == fxImpact ? _self.fxImpact : fxImpact // ignore: cast_nullable_to_non_nullable
@@ -197,10 +199,10 @@ return $default(_that);case _:
 /// }
 /// ```
 
-@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  int portfolioId,  String ticker,  String name,  int userId,  double holdings,  double invested,  double avgPrice,  double breakEven,  double realizedPnl,  int numTxs,  String baseCcy,  double? weight, @JsonKey(name: 'regularMarketPrice')  double? regularMarketPrice,  double fxImpact,  double volatilityRange,  double volatilityPct,  List<SummaryChartEntity> chart,  SummaryMetaEntity meta,  SummaryChangesEntity changes,  SummaryTotalsEntity totals)?  $default,{required TResult orElse(),}) {final _that = this;
+@optionalTypeArgs TResult maybeWhen<TResult extends Object?>(TResult Function( int id,  int portfolioId,  String ticker,  String name,  int userId,  double holdings,  double invested,  double avgPrice,  double breakEven,  double realizedPnl,  int numTxs,  String baseCcy,  String currency,  double? weight, @JsonKey(name: 'regularMarketPrice')  double? regularMarketPrice,  double fxImpact,  double volatilityRange,  double volatilityPct,  List<SummaryChartEntity> chart,  SummaryMetaEntity meta,  SummaryChangesEntity changes,  SummaryTotalsEntity totals)?  $default,{required TResult orElse(),}) {final _that = this;
 switch (_that) {
 case _AssetDetailEntity() when $default != null:
-return $default(_that.id,_that.portfolioId,_that.ticker,_that.name,_that.userId,_that.holdings,_that.invested,_that.avgPrice,_that.breakEven,_that.realizedPnl,_that.numTxs,_that.baseCcy,_that.weight,_that.regularMarketPrice,_that.fxImpact,_that.volatilityRange,_that.volatilityPct,_that.chart,_that.meta,_that.changes,_that.totals);case _:
+return $default(_that.id,_that.portfolioId,_that.ticker,_that.name,_that.userId,_that.holdings,_that.invested,_that.avgPrice,_that.breakEven,_that.realizedPnl,_that.numTxs,_that.baseCcy,_that.currency,_that.weight,_that.regularMarketPrice,_that.fxImpact,_that.volatilityRange,_that.volatilityPct,_that.chart,_that.meta,_that.changes,_that.totals);case _:
   return orElse();
 
 }
@@ -218,10 +220,10 @@ return $default(_that.id,_that.portfolioId,_that.ticker,_that.name,_that.userId,
 /// }
 /// ```
 
-@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  int portfolioId,  String ticker,  String name,  int userId,  double holdings,  double invested,  double avgPrice,  double breakEven,  double realizedPnl,  int numTxs,  String baseCcy,  double? weight, @JsonKey(name: 'regularMarketPrice')  double? regularMarketPrice,  double fxImpact,  double volatilityRange,  double volatilityPct,  List<SummaryChartEntity> chart,  SummaryMetaEntity meta,  SummaryChangesEntity changes,  SummaryTotalsEntity totals)  $default,) {final _that = this;
+@optionalTypeArgs TResult when<TResult extends Object?>(TResult Function( int id,  int portfolioId,  String ticker,  String name,  int userId,  double holdings,  double invested,  double avgPrice,  double breakEven,  double realizedPnl,  int numTxs,  String baseCcy,  String currency,  double? weight, @JsonKey(name: 'regularMarketPrice')  double? regularMarketPrice,  double fxImpact,  double volatilityRange,  double volatilityPct,  List<SummaryChartEntity> chart,  SummaryMetaEntity meta,  SummaryChangesEntity changes,  SummaryTotalsEntity totals)  $default,) {final _that = this;
 switch (_that) {
 case _AssetDetailEntity():
-return $default(_that.id,_that.portfolioId,_that.ticker,_that.name,_that.userId,_that.holdings,_that.invested,_that.avgPrice,_that.breakEven,_that.realizedPnl,_that.numTxs,_that.baseCcy,_that.weight,_that.regularMarketPrice,_that.fxImpact,_that.volatilityRange,_that.volatilityPct,_that.chart,_that.meta,_that.changes,_that.totals);case _:
+return $default(_that.id,_that.portfolioId,_that.ticker,_that.name,_that.userId,_that.holdings,_that.invested,_that.avgPrice,_that.breakEven,_that.realizedPnl,_that.numTxs,_that.baseCcy,_that.currency,_that.weight,_that.regularMarketPrice,_that.fxImpact,_that.volatilityRange,_that.volatilityPct,_that.chart,_that.meta,_that.changes,_that.totals);case _:
   throw StateError('Unexpected subclass');
 
 }
@@ -238,10 +240,10 @@ return $default(_that.id,_that.portfolioId,_that.ticker,_that.name,_that.userId,
 /// }
 /// ```
 
-@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  int portfolioId,  String ticker,  String name,  int userId,  double holdings,  double invested,  double avgPrice,  double breakEven,  double realizedPnl,  int numTxs,  String baseCcy,  double? weight, @JsonKey(name: 'regularMarketPrice')  double? regularMarketPrice,  double fxImpact,  double volatilityRange,  double volatilityPct,  List<SummaryChartEntity> chart,  SummaryMetaEntity meta,  SummaryChangesEntity changes,  SummaryTotalsEntity totals)?  $default,) {final _that = this;
+@optionalTypeArgs TResult? whenOrNull<TResult extends Object?>(TResult? Function( int id,  int portfolioId,  String ticker,  String name,  int userId,  double holdings,  double invested,  double avgPrice,  double breakEven,  double realizedPnl,  int numTxs,  String baseCcy,  String currency,  double? weight, @JsonKey(name: 'regularMarketPrice')  double? regularMarketPrice,  double fxImpact,  double volatilityRange,  double volatilityPct,  List<SummaryChartEntity> chart,  SummaryMetaEntity meta,  SummaryChangesEntity changes,  SummaryTotalsEntity totals)?  $default,) {final _that = this;
 switch (_that) {
 case _AssetDetailEntity() when $default != null:
-return $default(_that.id,_that.portfolioId,_that.ticker,_that.name,_that.userId,_that.holdings,_that.invested,_that.avgPrice,_that.breakEven,_that.realizedPnl,_that.numTxs,_that.baseCcy,_that.weight,_that.regularMarketPrice,_that.fxImpact,_that.volatilityRange,_that.volatilityPct,_that.chart,_that.meta,_that.changes,_that.totals);case _:
+return $default(_that.id,_that.portfolioId,_that.ticker,_that.name,_that.userId,_that.holdings,_that.invested,_that.avgPrice,_that.breakEven,_that.realizedPnl,_that.numTxs,_that.baseCcy,_that.currency,_that.weight,_that.regularMarketPrice,_that.fxImpact,_that.volatilityRange,_that.volatilityPct,_that.chart,_that.meta,_that.changes,_that.totals);case _:
   return null;
 
 }
@@ -253,7 +255,7 @@ return $default(_that.id,_that.portfolioId,_that.ticker,_that.name,_that.userId,
 
 
 class _AssetDetailEntity implements AssetDetailEntity {
-  const _AssetDetailEntity({required this.id, required this.portfolioId, required this.ticker, required this.name, required this.userId, required this.holdings, required this.invested, required this.avgPrice, required this.breakEven, required this.realizedPnl, required this.numTxs, required this.baseCcy, this.weight, @JsonKey(name: 'regularMarketPrice') this.regularMarketPrice, required this.fxImpact, required this.volatilityRange, required this.volatilityPct, required final  List<SummaryChartEntity> chart, required this.meta, required this.changes, required this.totals}): _chart = chart;
+  const _AssetDetailEntity({required this.id, required this.portfolioId, required this.ticker, required this.name, required this.userId, required this.holdings, required this.invested, required this.avgPrice, required this.breakEven, required this.realizedPnl, required this.numTxs, required this.baseCcy, required this.currency, this.weight, @JsonKey(name: 'regularMarketPrice') this.regularMarketPrice, required this.fxImpact, required this.volatilityRange, required this.volatilityPct, required final  List<SummaryChartEntity> chart, required this.meta, required this.changes, required this.totals}): _chart = chart;
   
 
 @override final  int id;
@@ -268,6 +270,8 @@ class _AssetDetailEntity implements AssetDetailEntity {
 @override final  double realizedPnl;
 @override final  int numTxs;
 @override final  String baseCcy;
+@override final  String currency;
+// asset's own trading currency (from meta.currency)
 @override final  double? weight;
 @override@JsonKey(name: 'regularMarketPrice') final  double? regularMarketPrice;
 @override final  double fxImpact;
@@ -294,16 +298,16 @@ _$AssetDetailEntityCopyWith<_AssetDetailEntity> get copyWith => __$AssetDetailEn
 
 @override
 bool operator ==(Object other) {
-  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AssetDetailEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.portfolioId, portfolioId) || other.portfolioId == portfolioId)&&(identical(other.ticker, ticker) || other.ticker == ticker)&&(identical(other.name, name) || other.name == name)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.holdings, holdings) || other.holdings == holdings)&&(identical(other.invested, invested) || other.invested == invested)&&(identical(other.avgPrice, avgPrice) || other.avgPrice == avgPrice)&&(identical(other.breakEven, breakEven) || other.breakEven == breakEven)&&(identical(other.realizedPnl, realizedPnl) || other.realizedPnl == realizedPnl)&&(identical(other.numTxs, numTxs) || other.numTxs == numTxs)&&(identical(other.baseCcy, baseCcy) || other.baseCcy == baseCcy)&&(identical(other.weight, weight) || other.weight == weight)&&(identical(other.regularMarketPrice, regularMarketPrice) || other.regularMarketPrice == regularMarketPrice)&&(identical(other.fxImpact, fxImpact) || other.fxImpact == fxImpact)&&(identical(other.volatilityRange, volatilityRange) || other.volatilityRange == volatilityRange)&&(identical(other.volatilityPct, volatilityPct) || other.volatilityPct == volatilityPct)&&const DeepCollectionEquality().equals(other._chart, _chart)&&(identical(other.meta, meta) || other.meta == meta)&&(identical(other.changes, changes) || other.changes == changes)&&(identical(other.totals, totals) || other.totals == totals));
+  return identical(this, other) || (other.runtimeType == runtimeType&&other is _AssetDetailEntity&&(identical(other.id, id) || other.id == id)&&(identical(other.portfolioId, portfolioId) || other.portfolioId == portfolioId)&&(identical(other.ticker, ticker) || other.ticker == ticker)&&(identical(other.name, name) || other.name == name)&&(identical(other.userId, userId) || other.userId == userId)&&(identical(other.holdings, holdings) || other.holdings == holdings)&&(identical(other.invested, invested) || other.invested == invested)&&(identical(other.avgPrice, avgPrice) || other.avgPrice == avgPrice)&&(identical(other.breakEven, breakEven) || other.breakEven == breakEven)&&(identical(other.realizedPnl, realizedPnl) || other.realizedPnl == realizedPnl)&&(identical(other.numTxs, numTxs) || other.numTxs == numTxs)&&(identical(other.baseCcy, baseCcy) || other.baseCcy == baseCcy)&&(identical(other.currency, currency) || other.currency == currency)&&(identical(other.weight, weight) || other.weight == weight)&&(identical(other.regularMarketPrice, regularMarketPrice) || other.regularMarketPrice == regularMarketPrice)&&(identical(other.fxImpact, fxImpact) || other.fxImpact == fxImpact)&&(identical(other.volatilityRange, volatilityRange) || other.volatilityRange == volatilityRange)&&(identical(other.volatilityPct, volatilityPct) || other.volatilityPct == volatilityPct)&&const DeepCollectionEquality().equals(other._chart, _chart)&&(identical(other.meta, meta) || other.meta == meta)&&(identical(other.changes, changes) || other.changes == changes)&&(identical(other.totals, totals) || other.totals == totals));
 }
 
 
 @override
-int get hashCode => Object.hashAll([runtimeType,id,portfolioId,ticker,name,userId,holdings,invested,avgPrice,breakEven,realizedPnl,numTxs,baseCcy,weight,regularMarketPrice,fxImpact,volatilityRange,volatilityPct,const DeepCollectionEquality().hash(_chart),meta,changes,totals]);
+int get hashCode => Object.hashAll([runtimeType,id,portfolioId,ticker,name,userId,holdings,invested,avgPrice,breakEven,realizedPnl,numTxs,baseCcy,currency,weight,regularMarketPrice,fxImpact,volatilityRange,volatilityPct,const DeepCollectionEquality().hash(_chart),meta,changes,totals]);
 
 @override
 String toString() {
-  return 'AssetDetailEntity(id: $id, portfolioId: $portfolioId, ticker: $ticker, name: $name, userId: $userId, holdings: $holdings, invested: $invested, avgPrice: $avgPrice, breakEven: $breakEven, realizedPnl: $realizedPnl, numTxs: $numTxs, baseCcy: $baseCcy, weight: $weight, regularMarketPrice: $regularMarketPrice, fxImpact: $fxImpact, volatilityRange: $volatilityRange, volatilityPct: $volatilityPct, chart: $chart, meta: $meta, changes: $changes, totals: $totals)';
+  return 'AssetDetailEntity(id: $id, portfolioId: $portfolioId, ticker: $ticker, name: $name, userId: $userId, holdings: $holdings, invested: $invested, avgPrice: $avgPrice, breakEven: $breakEven, realizedPnl: $realizedPnl, numTxs: $numTxs, baseCcy: $baseCcy, currency: $currency, weight: $weight, regularMarketPrice: $regularMarketPrice, fxImpact: $fxImpact, volatilityRange: $volatilityRange, volatilityPct: $volatilityPct, chart: $chart, meta: $meta, changes: $changes, totals: $totals)';
 }
 
 
@@ -314,7 +318,7 @@ abstract mixin class _$AssetDetailEntityCopyWith<$Res> implements $AssetDetailEn
   factory _$AssetDetailEntityCopyWith(_AssetDetailEntity value, $Res Function(_AssetDetailEntity) _then) = __$AssetDetailEntityCopyWithImpl;
 @override @useResult
 $Res call({
- int id, int portfolioId, String ticker, String name, int userId, double holdings, double invested, double avgPrice, double breakEven, double realizedPnl, int numTxs, String baseCcy, double? weight,@JsonKey(name: 'regularMarketPrice') double? regularMarketPrice, double fxImpact, double volatilityRange, double volatilityPct, List<SummaryChartEntity> chart, SummaryMetaEntity meta, SummaryChangesEntity changes, SummaryTotalsEntity totals
+ int id, int portfolioId, String ticker, String name, int userId, double holdings, double invested, double avgPrice, double breakEven, double realizedPnl, int numTxs, String baseCcy, String currency, double? weight,@JsonKey(name: 'regularMarketPrice') double? regularMarketPrice, double fxImpact, double volatilityRange, double volatilityPct, List<SummaryChartEntity> chart, SummaryMetaEntity meta, SummaryChangesEntity changes, SummaryTotalsEntity totals
 });
 
 
@@ -331,7 +335,7 @@ class __$AssetDetailEntityCopyWithImpl<$Res>
 
 /// Create a copy of AssetDetailEntity
 /// with the given fields replaced by the non-null parameter values.
-@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? portfolioId = null,Object? ticker = null,Object? name = null,Object? userId = null,Object? holdings = null,Object? invested = null,Object? avgPrice = null,Object? breakEven = null,Object? realizedPnl = null,Object? numTxs = null,Object? baseCcy = null,Object? weight = freezed,Object? regularMarketPrice = freezed,Object? fxImpact = null,Object? volatilityRange = null,Object? volatilityPct = null,Object? chart = null,Object? meta = null,Object? changes = null,Object? totals = null,}) {
+@override @pragma('vm:prefer-inline') $Res call({Object? id = null,Object? portfolioId = null,Object? ticker = null,Object? name = null,Object? userId = null,Object? holdings = null,Object? invested = null,Object? avgPrice = null,Object? breakEven = null,Object? realizedPnl = null,Object? numTxs = null,Object? baseCcy = null,Object? currency = null,Object? weight = freezed,Object? regularMarketPrice = freezed,Object? fxImpact = null,Object? volatilityRange = null,Object? volatilityPct = null,Object? chart = null,Object? meta = null,Object? changes = null,Object? totals = null,}) {
   return _then(_AssetDetailEntity(
 id: null == id ? _self.id : id // ignore: cast_nullable_to_non_nullable
 as int,portfolioId: null == portfolioId ? _self.portfolioId : portfolioId // ignore: cast_nullable_to_non_nullable
@@ -345,6 +349,7 @@ as double,breakEven: null == breakEven ? _self.breakEven : breakEven // ignore: 
 as double,realizedPnl: null == realizedPnl ? _self.realizedPnl : realizedPnl // ignore: cast_nullable_to_non_nullable
 as double,numTxs: null == numTxs ? _self.numTxs : numTxs // ignore: cast_nullable_to_non_nullable
 as int,baseCcy: null == baseCcy ? _self.baseCcy : baseCcy // ignore: cast_nullable_to_non_nullable
+as String,currency: null == currency ? _self.currency : currency // ignore: cast_nullable_to_non_nullable
 as String,weight: freezed == weight ? _self.weight : weight // ignore: cast_nullable_to_non_nullable
 as double?,regularMarketPrice: freezed == regularMarketPrice ? _self.regularMarketPrice : regularMarketPrice // ignore: cast_nullable_to_non_nullable
 as double?,fxImpact: null == fxImpact ? _self.fxImpact : fxImpact // ignore: cast_nullable_to_non_nullable

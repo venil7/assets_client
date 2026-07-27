@@ -32,7 +32,7 @@ class AssetList extends StatelessWidget {
           title: a.name,
           amount: formatCurrency(currentPrice, currency: a.baseCcy),
           subtitle:
-              '${a.ticker} ${formatCurrency(a.regularMarketPrice ?? currentPrice, currency: a.baseCcy)}',
+              '${a.ticker} ${formatCurrency(a.regularMarketPrice ?? currentPrice, currency: a.currency)}',
           periodPct: periodPct,
           periodValue: a.returnValue ?? 0,
           periodCurrency: a.baseCcy,
@@ -45,7 +45,7 @@ class AssetList extends StatelessWidget {
                 ? const BottomInfo('Weight', '—')
                 : BottomInfo('Weight', formatPct(a.weight!, showSign: false)),
             BottomInfo('Invested', formatCurrency(a.invested, currency: a.baseCcy)),
-            BottomInfo('Avg Price', formatCurrency(a.avgPrice, currency: a.baseCcy)),
+            BottomInfo('Avg Price', formatCurrency(a.avgPrice, currency: a.currency)),
           ],
           sparklineData: a.baseChart,
         );

@@ -16,6 +16,7 @@ abstract class AssetEntity with _$AssetEntity {
     @JsonKey(name: 'realized_pnl') required double realizedPnl,
     @JsonKey(name: 'num_txs') required int numTxs,
     @JsonKey(name: 'base_ccy') required String baseCcy,
+    required String currency, // asset's own trading currency (from meta.currency)
     double? weight,
     double? endPrice,
     @JsonKey(name: 'regularMarketPrice') double? regularMarketPrice,

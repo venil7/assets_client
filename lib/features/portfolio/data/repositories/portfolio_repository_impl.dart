@@ -161,6 +161,7 @@ class PortfolioRepositoryImpl implements PortfolioRepository {
       realizedPnl: model.realizedPnl,
       numTxs: model.numTxs,
       baseCcy: model.baseCcy,
+      currency: model.meta.currency,
       weight: model.weight,
       endPrice: model.base.changes.endPrice,
       regularMarketPrice: model.meta.regularMarketPrice,

@@ -29,6 +29,7 @@ class AssetDetailRepositoryImpl implements AssetDetailRepository {
       realizedPnl: m.realizedPnl,
       numTxs: m.numTxs,
       baseCcy: m.baseCcy,
+      currency: m.meta.currency,
       weight: m.weight,
       regularMarketPrice: m.meta.regularMarketPrice,
       fxImpact: m.base.fxImpact,

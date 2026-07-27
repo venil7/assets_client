@@ -17,14 +17,16 @@ const Map<String, String> _currencySymbols = {
 };
 
 String formatCurrency(double value, {String? currency, bool showSign = false}) {
-  final sign = showSign && value >= 0 ? '+' : '';
+  final sign = value < 0 ? '-' : (showSign ? '+' : '');
+  value = value.abs();
+
   final symbol = currency != null
       ? (_currencySymbols[currency] ?? currency)
       : '';
 
   String amount;
   if (value >= 1000000) {
-    amount = '${(value / 1000000).toStringAsFixed(2)}M';
+    amount = '${(value / 1000_000).toStringAsFixed(2)}M';
   } else if (value >= 1000) {
     amount = '${(value / 1000).toStringAsFixed(2)}K';
   } else {
