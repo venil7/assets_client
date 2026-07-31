@@ -252,11 +252,13 @@ BLoC emits `Failure` states with user-friendly error messages.
 ---
 
 ## Testing Strategy
+**do not run api_client_test unless specifically asked, as it requires a running backend**
 
 ### Unit Tests
 - **Models**: Serialization/deserialization tests
 - **Use Cases**: Business logic tests with mocked repositories
 - **Repositories**: Data source interaction tests
+
 
 ### Widget Tests
 - **Screens**: UI rendering and interaction

@@ -6,6 +6,10 @@ import 'package:flutter/material.dart';
 class PortfolioList extends StatelessWidget {
   final List<PortfolioEntity> portfolios;
   final String baseCcy;
+
+  /// Period label shown as a badge on each card (e.g. '1d', '1w').
+  final String? periodLabel;
+
   final void Function(int portfolioId)? onPortfolioTap;
   final void Function(int portfolioId)? onPortfolioEdit;
   final void Function(int portfolioId)? onPortfolioDelete;
@@ -14,6 +18,7 @@ class PortfolioList extends StatelessWidget {
     super.key,
     required this.portfolios,
     required this.baseCcy,
+    this.periodLabel,
     this.onPortfolioTap,
     this.onPortfolioEdit,
     this.onPortfolioDelete,
@@ -30,6 +35,7 @@ class PortfolioList extends StatelessWidget {
         title: p.name,
         amount: formatCurrency(p.changes.endPrice, currency: baseCcy),
         subtitle: p.description.isNotEmpty ? p.description : null,
+        periodLabel: periodLabel,
         periodPct: p.changes.returnPct,
         periodValue: p.changes.returnValue,
         periodCurrency: baseCcy,

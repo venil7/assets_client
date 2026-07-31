@@ -244,6 +244,7 @@ class PortfolioScreen extends StatelessWidget {
                         ),
                         AssetList(
                           assets: state.assets,
+                          periodLabel: state.currentRange,
                           onAssetTap: (id) => _navigateToAsset(context, id),
                           onAssetEdit: (id) {
                             final asset = state.assets.firstWhere(

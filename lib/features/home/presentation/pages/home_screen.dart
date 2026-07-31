@@ -215,6 +215,7 @@ class _HomeScreenState extends State<HomeScreen> {
                         PortfolioList(
                           portfolios: state.portfolios,
                           baseCcy: state.baseCcy,
+                          periodLabel: state.currentRange,
                           onPortfolioTap: (id) =>
                               _navigateToPortfolio(context, id),
                           onPortfolioEdit: (id) {
