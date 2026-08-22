@@ -14,12 +14,16 @@ class BottomInfo {
 /// Generic card for financial entities (portfolios, assets, etc).
 ///
 /// Layout: top-left title+amount, optional subtitle (+ sparkline below it),
-/// top-right period/total changes, bottom row of [BottomInfo] chips.
+/// top-right total change, subtitle-row-right period change with a badge for
+/// the period label, bottom row of [BottomInfo] chips.
 /// Green border when periodPct >= 0, red gradient otherwise.
 class FinancialListCard extends StatelessWidget {
   final String title;
   final String amount;
   final String? subtitle; // null or empty = not shown
+
+  /// Period label shown as a badge (e.g. '1d', '1w'). Null = no badge.
+  final String? periodLabel;
 
   /// Period (selected range) change percentage (e.g. 5.2 for +5.2%).
   final double periodPct;
@@ -49,6 +53,7 @@ class FinancialListCard extends StatelessWidget {
     required this.title,
     required this.amount,
     this.subtitle,
+    this.periodLabel,
     required this.periodPct,
     required this.periodValue,
     this.periodCurrency,
@@ -141,45 +146,51 @@ class FinancialListCard extends StatelessWidget {
                   Column(
                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
+                      // Top row: TOTAL (all-time) change.
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            formatPct(periodPct),
+                            formatCurrency(
+                              totalValue,
+                              currency: totalCurrency,
+                              showSign: true,
+                              trimTrailingZeros: true,
+                            ),
                             style: TextStyle(
                               fontSize: 18,
                               fontWeight: FontWeight.bold,
-                              color: periodColor,
+                              color: totalColor,
                             ),
                           ),
                           const SizedBox(width: 6),
                           Text(
-                            formatCurrency(periodValue, currency: periodCurrency, showSign: true),
+                            '(${formatPct(totalPct, trimTrailingZeros: true)})',
                             style: TextStyle(
-                              fontSize: 18,
-                              color: periodColor,
+                              fontSize: 14,
+                              color: totalColor,
                             ),
                           ),
                         ],
                       ),
-                      const SizedBox(height: 2),
+                      const SizedBox(height: 4),
+                      // Subtitle row: PERIOD change with label badge.
                       Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Text(
-                            formatPct(totalPct),
-                            style: TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                              color: totalColor,
+                          if (periodLabel != null &&
+                              periodLabel!.isNotEmpty) ...[
+                            _PeriodBadge(
+                              label: periodLabel!,
+                              isPositive: periodPos,
                             ),
-                          ),
-                          const SizedBox(width: 6),
+                            const SizedBox(width: 6),
+                          ],
                           Text(
-                            formatCurrency(totalValue, currency: totalCurrency, showSign: true),
+                            '${formatCurrency(periodValue, currency: periodCurrency, showSign: true, trimTrailingZeros: true)} (${formatPct(periodPct, trimTrailingZeros: true)})',
                             style: TextStyle(
                               fontSize: 14,
-                              color: totalColor,
+                              color: periodColor,
                             ),
                           ),
                         ],
@@ -267,6 +278,39 @@ class FinancialListCard extends StatelessWidget {
           style: TextStyle(fontSize: 12, color: Colors.grey[600]),
         ),
       ],
+    );
+  }
+}
+
+/// Small pill badge showing the period label; background color follows
+/// whether the period change is a gain (green) or loss (red).
+class _PeriodBadge extends StatelessWidget {
+  final String label;
+  final bool isPositive;
+
+  const _PeriodBadge({
+    required this.label,
+    required this.isPositive,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    final color = isPositive ? Colors.green : Colors.red;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 1),
+      decoration: BoxDecoration(
+        color: color.withValues(alpha: 0.15),
+        borderRadius: BorderRadius.circular(4),
+        border: Border.all(color: color.withValues(alpha: 0.5)),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          fontSize: 12,
+          fontWeight: FontWeight.w600,
+          color: color,
+        ),
+      ),
     );
   }
 }

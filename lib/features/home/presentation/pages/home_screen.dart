@@ -1,5 +1,6 @@
 import 'package:assets_client/core/network/api_client.dart';
 import 'package:assets_client/core/services/dio_accessor.dart';
+import 'package:assets_client/core/services/refresh_manager.dart';
 import 'package:assets_client/core/services/token_manager_accessor.dart';
 import 'package:assets_client/features/home/domain/entities/summary_entity.dart';
 import 'package:assets_client/features/home/presentation/bloc/home_bloc.dart';
@@ -15,8 +16,33 @@ import 'package:assets_client/shared/widgets/chart_with_range.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
+  @override
+  void initState() {
+    super.initState();
+    refreshManager.setRefreshCallback(() {
+      if (mounted) {
+        final bloc = context.read<HomeBloc>();
+        final range = bloc.state is HomeLoaded
+            ? (bloc.state as HomeLoaded).currentRange
+            : null;
+        bloc.add(LoadHomeEvent(range: range));
+      }
+    });
+  }
+
+  @override
+  void dispose() {
+    refreshManager.setRefreshCallback(null);
+    super.dispose();
+  }
 
   void _navigateToPortfolio(BuildContext context, int portfolioId) {
     final apiClient = ApiClient(dioInstance);
@@ -189,6 +215,7 @@ class HomeScreen extends StatelessWidget {
                         PortfolioList(
                           portfolios: state.portfolios,
                           baseCcy: state.baseCcy,
+                          periodLabel: state.currentRange,
                           onPortfolioTap: (id) =>
                               _navigateToPortfolio(context, id),
                           onPortfolioEdit: (id) {

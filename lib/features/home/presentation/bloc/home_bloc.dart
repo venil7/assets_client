@@ -1,3 +1,4 @@
+import 'package:assets_client/core/services/refresh_manager.dart';
 import 'package:assets_client/features/home/domain/entities/summary_entity.dart';
 import 'package:assets_client/features/home/domain/repositories/home_repository.dart';
 import 'package:equatable/equatable.dart';
@@ -116,6 +117,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
         // ignore - use default
       }
       _currentRange = summary.meta.range;
+      refreshManager.markLoaded();
       emit(
         HomeLoaded(
           summary: summary,

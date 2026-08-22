@@ -7,6 +7,7 @@ import 'package:assets_client/core/network/auth_interceptor.dart';
 import 'package:assets_client/core/network/error_interceptor.dart';
 import 'package:assets_client/core/services/biometric_service.dart';
 import 'package:assets_client/core/services/biometric_session.dart';
+import 'package:assets_client/core/services/refresh_manager.dart';
 import 'package:assets_client/core/services/dio_accessor.dart';
 import 'package:assets_client/core/services/token_manager.dart';
 import 'package:assets_client/core/services/token_manager_accessor.dart';
@@ -82,6 +83,13 @@ class _MyAppState extends State<MyApp>
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) {
     if (state == AppLifecycleState.resumed) {
+      // Android: auto-refresh summary if stale after background
+      if (Platform.isAndroid) {
+        WidgetsBinding.instance.addPostFrameCallback((_) {
+          refreshManager.onAppResume();
+        });
+      }
+
       if (BiometricServiceSession.authenticated) return; // already cleared
 
       _checkBiometricAndLock();

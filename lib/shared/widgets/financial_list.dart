@@ -106,6 +106,7 @@ class FinancialList<T> extends StatelessWidget {
         title: props.title,
         amount: props.amount,
         subtitle: props.subtitle,
+        periodLabel: props.periodLabel,
         periodPct: props.periodPct,
         periodValue: props.periodValue,
         periodCurrency: props.periodCurrency,
@@ -125,6 +126,10 @@ class FinancialListCardProps {
   final String title;
   final String amount;
   final String? subtitle;
+
+  /// Period label shown as a badge in the card (e.g. '1d', '1w').
+  final String? periodLabel;
+
   final double periodPct;
   final double periodValue;
   final String? periodCurrency;
@@ -140,6 +145,7 @@ class FinancialListCardProps {
     required this.title,
     required this.amount,
     this.subtitle,
+    this.periodLabel,
     required this.periodPct,
     required this.periodValue,
     this.periodCurrency,
